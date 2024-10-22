@@ -1,8 +1,8 @@
 import React from 'react';
-import { Button, Text, Flex } from "@chakra-ui/react";
 import { useNavigate } from 'react-router-dom';
 import { useGoogleLogin } from '@react-oauth/google';
-import CommonLayout from './CommonLayout';
+import CommonLayout from '../components/CommonLayout';
+import CustomButton from '../components/CustomButton';
 
 function HomePage({ onLogin }) {
   const navigate = useNavigate();
@@ -23,62 +23,20 @@ function HomePage({ onLogin }) {
 
   return (
     <CommonLayout>
-      <Button
-        size="lg"
-        colorScheme="pink"
-        borderRadius="full"
-        boxShadow="md"
-        width="90%"
-        maxW="350px"
-        whiteSpace="normal"
-        fontSize="lg"
-        height="80px"
+      <CustomButton
+        icon="🚀"
+        text="Log in (Google Account)"
         onClick={() => login()}
-      >
-        <Flex align="center" justify="flex-start" width="100%">
-          <Text fontSize="3xl" mr={4}>🚀</Text>
-          <Text fontFamily="Comic Sans MS" color="yellow.300" textAlign="center" flex="1">
-            Log in <br /> (Google Account)
-          </Text>
-        </Flex>
-      </Button>
-      <Button
-        size="lg"
-        colorScheme="pink"
-        borderRadius="full"
-        boxShadow="md"
-        width="90%"
-        maxW="350px"
-        whiteSpace="normal"
-        fontSize="lg"
-        height="80px"
+      />
+      <CustomButton
+        icon="🏃‍♀️"
+        text="Solo Play (Guest Mode)"
         onClick={handleSoloPlay}
-      >
-        <Flex align="center" justify="flex-start" width="100%">
-          <Text fontSize="3xl" mr={4}>🏃‍♀️</Text>
-          <Text fontFamily="Comic Sans MS" color="yellow.300" textAlign="center" flex="1">
-            Solo Play <br /> (Guest Mode)
-          </Text>
-        </Flex>
-      </Button>
-      <Button
-        size="lg"
-        colorScheme="pink"
-        borderRadius="full"
-        boxShadow="md"
-        width="90%"
-        maxW="350px"
-        whiteSpace="normal"
-        fontSize="lg"
-        height="80px"
-      >
-        <Flex align="center" justify="flex-start" width="100%">
-          <Text fontSize="3xl" mr={4}>⚔️</Text>
-          <Text fontFamily="Comic Sans MS" color="yellow.300" textAlign="center" flex="1">
-            Battle with Friend <br /> (Guest Mode)
-          </Text>
-        </Flex>
-      </Button>
+      />
+      <CustomButton
+        icon="⚔️"
+        text="Battle with Friend (Guest Mode)"
+      />
     </CommonLayout>
   );
 }

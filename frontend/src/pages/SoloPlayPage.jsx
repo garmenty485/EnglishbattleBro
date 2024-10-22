@@ -1,7 +1,7 @@
 import { Text, VStack, Flex, useToast, Box, Container, Button, Image, Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalFooter } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
-import questions from './questions.json';
+import questions from '../assets/questions.json';
 import StyledBox from '../components/StyledBox';
 
 function SoloPlayPage({ userInfo }) {

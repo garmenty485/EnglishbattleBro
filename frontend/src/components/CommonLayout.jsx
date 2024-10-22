@@ -1,5 +1,5 @@
 import { Heading, VStack, Container, Text } from "@chakra-ui/react";
-import StyledBox from "../components/StyledBox";
+import StyledBox from "./StyledBox";
 
 function CommonLayout({ children }) {
   return (
