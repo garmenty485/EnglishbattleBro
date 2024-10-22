@@ -1,5 +1,6 @@
-import { Text, VStack, Flex, useToast, Box, Container, Button, Image } from "@chakra-ui/react";
+import { Text, VStack, Flex, useToast, Box, Container, Button, Image, Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalFooter } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
+import { useNavigate } from 'react-router-dom';
 import questions from './questions.json';
 import StyledBox from '../components/StyledBox';
 
@@ -12,7 +13,9 @@ function SoloPlayPage({ userInfo }) {
   const [showScoreBonus, setShowScoreBonus] = useState(false);
   const [showScorePenalty, setShowScorePenalty] = useState(false);
   const [isSecondDefinitionRevealed, setIsSecondDefinitionRevealed] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const toast = useToast();
+  const navigate = useNavigate();
 
   const currentQuestion = questions[currentQuestionIndex];
 
@@ -54,18 +57,22 @@ function SoloPlayPage({ userInfo }) {
   };
 
   const skipQuestion = () => {
-    setAnswer("");
-    setCurrentQuestionIndex((prev) => (prev + 1) % questions.length);
-    setIsButtonDisabled(false); // 重置按鈕狀態
-    setIsFirstLetterRevealed(false); // 重置揭露狀態
-    setIsSecondDefinitionRevealed(false); // 重置第二個定義揭露狀態
-    toast({
-      title: "Question skipped!",
-      status: "info",
-      duration: 1500,
-      isClosable: true,
-      position: "top"
-    });
+    if (currentQuestionIndex === questions.length - 1) {
+      setIsModalOpen(true);
+    } else {
+      setAnswer("");
+      setCurrentQuestionIndex((prev) => (prev + 1));
+      setIsButtonDisabled(false); // 重置按鈕狀態
+      setIsFirstLetterRevealed(false); // 重置揭露狀態
+      setIsSecondDefinitionRevealed(false); // 重置第二個定義揭露狀態
+      toast({
+        title: "Question skipped!",
+        status: "info",
+        duration: 1500,
+        isClosable: true,
+        position: "top"
+      });
+    }
   };
 
   useEffect(() => {
@@ -102,21 +109,25 @@ function SoloPlayPage({ userInfo }) {
   useEffect(() => {
     if (answer.length === currentQuestion.question.length) {
       if (answer === currentQuestion.question) {
-        toast({
-          title: "Correct!",
-          status: "success",
-          duration: 1500,
-          isClosable: true,
-          position: "top"
-        });
-        setScore((prev) => prev + 100);
-        setShowScoreBonus(true);
-        setTimeout(() => setShowScoreBonus(false), 750); // 0.75秒後隱藏 "+$100"
-        setAnswer("");
-        setCurrentQuestionIndex((prev) => (prev + 1) % questions.length);
-        setIsButtonDisabled(false); // 重置按鈕狀態
-        setIsFirstLetterRevealed(false); // 重置揭露狀態
-        setIsSecondDefinitionRevealed(false); // 重置第二個定義揭露狀態
+        if (currentQuestionIndex === questions.length - 1) {
+          setIsModalOpen(true);
+        } else {
+          toast({
+            title: "Correct!",
+            status: "success",
+            duration: 1500,
+            isClosable: true,
+            position: "top"
+          });
+          setScore((prev) => prev + 100);
+          setShowScoreBonus(true);
+          setTimeout(() => setShowScoreBonus(false), 750); // 0.75秒後隱藏 "+$100"
+          setAnswer("");
+          setCurrentQuestionIndex((prev) => (prev + 1));
+          setIsButtonDisabled(false); // 重置按鈕狀態
+          setIsFirstLetterRevealed(false); // 重置揭露狀態
+          setIsSecondDefinitionRevealed(false); // 重置第二個定義揭露狀態
+        }
       } else {
         toast({
           title: "Incorrect!",
@@ -128,7 +139,16 @@ function SoloPlayPage({ userInfo }) {
         setAnswer(isFirstLetterRevealed ? currentQuestion.question.charAt(0).toLowerCase() : "");
       }
     }
-  }, [answer, currentQuestion, toast, isFirstLetterRevealed]);
+  }, [answer, currentQuestion, toast, isFirstLetterRevealed, currentQuestionIndex]);
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    if (userInfo) {
+      navigate('/loggedin');
+    } else {
+      navigate('/');
+    }
+  };
 
   return (
     <Container
@@ -368,6 +388,21 @@ function SoloPlayPage({ userInfo }) {
           </Box>
         </Flex>
       </Box>
+
+      <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
+        <ModalOverlay />
+        <ModalContent bg="yellow.100" textAlign="center" border="4px solid" borderColor="yellow.300">
+          <ModalHeader fontFamily="Comic Sans MS" color="pink.600">
+            🎉🎉🎉&nbsp;&nbsp;&nbsp;&nbsp;COMPLETE&nbsp;&nbsp;&nbsp;&nbsp;🎉🎉🎉
+          </ModalHeader>
+          <ModalBody>
+            <Text fontSize="2xl" fontFamily="Comic Sans MS" color="pink.600">Your Score: {score}</Text>
+          </ModalBody>
+          <ModalFooter justifyContent="center">
+            <Button colorScheme="pink" fontFamily="Comic Sans MS" color="yellow.300" onClick={handleCloseModal}>Close</Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </Container>
   );
 }
