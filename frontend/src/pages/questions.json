@@ -1,52 +1,52 @@
 [
   {
-    "question": "abandon",
-    "definition1": "to give up completely",
-    "definition2": "to leave behind or desert"
+    "question": "absorb",
+    "definition1": "to take in or soak up",
+    "definition2": "to take in a liquid, gas, or other substance"
   },
   {
-    "question": "benevolent",
-    "definition1": "well meaning and kindly",
-    "definition2": "showing or motivated by sympathy and understanding"
+    "question": "benefit",
+    "definition1": "an advantage or profit gained from something",
+    "definition2": "a helpful or good effect"
   },
   {
-    "question": "contemplate",
-    "definition1": "to look at or view with continued attention",
-    "definition2": "to consider as a possibility"
+    "question": "calculate",
+    "definition1": "to determine the amount or number of something mathematically",
+    "definition2": "to work out by using arithmetic"
   },
   {
-    "question": "diligent",
-    "definition1": "having or showing care in one's work",
-    "definition2": "characterized by steady, earnest, and energetic effort"
+    "question": "demonstrate",
+    "definition1": "to show clearly and deliberately",
+    "definition2": "to show or make something clear"
   },
   {
-    "question": "exquisite",
-    "definition1": "extremely beautiful and delicate",
-    "definition2": "intensely felt"
+    "question": "efficient",
+    "definition1": "achieving maximum productivity with minimum wasted effort",
+    "definition2": "working in a well-organized and competent way"
   },
   {
-    "question": "formidable",
-    "definition1": "inspiring fear or respect through being impressively large, powerful, intense, or capable",
-    "definition2": "extremely impressive in strength or excellence"
+    "question": "frequent",
+    "definition1": "occurring or done on many occasions",
+    "definition2": "happening often"
   },
   {
-    "question": "gregarious",
-    "definition1": "fond of company; sociable",
-    "definition2": "seeking and enjoying the company of others"
+    "question": "generate",
+    "definition1": "to produce or create",
+    "definition2": "to cause something to exist"
   },
   {
-    "question": "hypothesis",
-    "definition1": "a supposition or proposed explanation made on the basis of limited evidence",
-    "definition2": "a tentative insight into the natural world"
+    "question": "hesitate",
+    "definition1": "to pause before saying or doing something",
+    "definition2": "to be slow to act because of uncertainty"
   },
   {
-    "question": "indispensable",
-    "definition1": "absolutely necessary",
-    "definition2": "not to be dispensed with; essential"
+    "question": "illustrate",
+    "definition1": "to explain or make something clear by using examples",
+    "definition2": "to provide with pictures"
   },
   {
-    "question": "juxtapose",
-    "definition1": "to place side by side for contrast",
-    "definition2": "to place close together or side by side, especially for comparison or contrast"
+    "question": "justify",
+    "definition1": "to show or prove to be right or reasonable",
+    "definition2": "to give a good reason for an action"
   }
 ]

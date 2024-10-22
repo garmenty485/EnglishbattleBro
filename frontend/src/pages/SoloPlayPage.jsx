@@ -17,7 +17,7 @@ function SoloPlayPage() {
   const currentQuestion = questions[currentQuestionIndex];
 
   const revealFirstLetter = () => {
-    if (score >= 30) {
+    if (score >= 30 && !isFirstLetterRevealed) {
       const firstLetter = currentQuestion.question.charAt(0).toLowerCase();
       setAnswer(firstLetter);
       setScore(prev => prev - 30);
@@ -25,7 +25,7 @@ function SoloPlayPage() {
       setIsFirstLetterRevealed(true);
       setShowScorePenalty(true);
       setTimeout(() => setShowScorePenalty(false), 750); // 0.75秒後隱藏 "-$30"
-    } else {
+    } else if (score < 30) {
       toast({
         title: "Not enough money!",
         status: "warning",
@@ -37,12 +37,12 @@ function SoloPlayPage() {
   };
 
   const revealSecondDefinition = () => {
-    if (score >= 30) {
+    if (score >= 30 && !isSecondDefinitionRevealed) {
       setScore(prev => prev - 30);
       setIsSecondDefinitionRevealed(true);
       setShowScorePenalty(true);
       setTimeout(() => setShowScorePenalty(false), 750); // 0.75秒後隱藏 "-$30"
-    } else {
+    } else if (score < 30) {
       toast({
         title: "Not enough money!",
         status: "warning",
@@ -62,7 +62,7 @@ function SoloPlayPage() {
     toast({
       title: "Question skipped!",
       status: "info",
-      duration: 2000,
+      duration: 1500,
       isClosable: true,
       position: "top"
     });
@@ -80,9 +80,15 @@ function SoloPlayPage() {
         if (answer.length > 1) {
           setAnswer(prev => prev.slice(0, -1));
         } else if (answer.length === 1 && !isFirstLetterRevealed) {
-          setAnswer("");
+          setAnswer("");// 如果第一個字母是揭露的，且只有一個字母，則不刪除
         }
-        // 如果第一個字母是揭露的，且只有一個字母，則不刪除
+        
+      } else if (e.key === 'ArrowLeft') {
+        revealFirstLetter();
+      } else if (e.key === 'ArrowDown') {
+        revealSecondDefinition();
+      } else if (e.key === 'ArrowRight') {
+        skipQuestion();
       }
     };
 
@@ -91,7 +97,7 @@ function SoloPlayPage() {
     return () => {
       window.removeEventListener("keydown", handleKeyPress);
     };
-  }, [answer, currentQuestion.question.length, isFirstLetterRevealed]);
+  }, [answer, currentQuestion.question.length, isFirstLetterRevealed, isSecondDefinitionRevealed]);
 
   useEffect(() => {
     if (answer.length === currentQuestion.question.length) {
@@ -99,7 +105,7 @@ function SoloPlayPage() {
         toast({
           title: "Correct!",
           status: "success",
-          duration: 2000,
+          duration: 1500,
           isClosable: true,
           position: "top"
         });
@@ -183,97 +189,167 @@ function SoloPlayPage() {
         </Box>
       </Flex>
 
-      <Flex justify="center" mb={4}>
+      <Flex justify="center" mb={1} mt={10}>
         <Box bg="pink.500" color="black" p={4} borderRadius="md" mb={4} w="90%" maxW="700px" textAlign="center">
           <Text fontSize="lg" whiteSpace="pre-wrap" fontFamily="Comic Sans MS" color="yellow.300">{currentQuestion.definition1}</Text>
         </Box>
       </Flex>
 
       <Flex justify="center" mb={4}>
-        <Box bg="pink.500" color="black" p={4} borderRadius="md" mb={4} w="90%" maxW="700px" textAlign="center" opacity={isSecondDefinitionRevealed ? 1 : 0.5}>
+        <Box bg="pink.500" color="black" p={4} borderRadius="md" mb={2} w="90%" maxW="700px" textAlign="center" opacity={isSecondDefinitionRevealed ? 1 : 0.5}>
           <Text fontSize="lg" whiteSpace="pre-wrap" fontFamily="Comic Sans MS" color="yellow.300">{isSecondDefinitionRevealed ? currentQuestion.definition2 : "** another definition **"}</Text>
         </Box>
       </Flex>
 
       <Box p={4} borderRadius="md" mb={4} textAlign="center">
         <Text fontSize="lg" fontWeight="bold" fontFamily="Comic Sans MS" color="pink.500">🛎️ Options 🛎️</Text>
-        <Button
-          size="md"
-          colorScheme="teal"
-          borderRadius="full"
-          boxShadow="md"
-          m={2}
-          position="relative"
-          _hover={{
-            _after: {
-              content: '"Reveal a letter (cost: $30)"',
-              position: "absolute",
-              bg: "gray.700",
-              color: "white",
-              p: 2,
-              borderRadius: "md",
-              mt: 16,
-              fontSize: "sm",
-              whiteSpace: "nowrap",
-              zIndex: 9999 // 設置最高優先級，確保不被覆蓋
-            }
-          }}
-          onClick={revealFirstLetter}
-          disabled={isButtonDisabled}
-        >
-          💡
-        </Button>
-        <Button
-          size="md"
-          colorScheme="yellow"
-          borderRadius="full"
-          boxShadow="md"
-          m={2}
-          position="relative"
-          _hover={{
-            _after: {
-              content: '"Show another definition (cost: $30)"',
-              position: "absolute",
-              bg: "gray.700",
-              color: "white",
-              p: 2,
-              borderRadius: "md",
-              mt: 16,
-              fontSize: "sm",
-              whiteSpace: "nowrap",
-              zIndex: 9999
-            }
-          }}
-          onClick={revealSecondDefinition}
-          disabled={isSecondDefinitionRevealed}
-        >
-          📖
-        </Button>
-        <Button
-          size="md"
-          colorScheme="red"
-          borderRadius="full"
-          boxShadow="md"
-          m={2}
-          position="relative"
-          _hover={{
-            _after: {
-              content: '"Skip this question"',
-              position: "absolute",
-              bg: "gray.700",
-              color: "white",
-              p: 2,
-              borderRadius: "md",
-              mt: 16,
-              fontSize: "sm",
-              whiteSpace: "nowrap",
-              zIndex: 9999
-            }
-          }}
-          onClick={skipQuestion}
-        >
-          ⏭️
-        </Button>
+        <Flex justify="center">
+          <Box textAlign="center">
+            <Button
+              size="md"
+              colorScheme="teal"
+              borderRadius="full"
+              boxShadow="md"
+              m={2}
+              position="relative"
+              _hover={{
+                _after: {
+                  content: '"Reveal a letter (cost: $30)"',
+                  position: "absolute",
+                  bg: "gray.700",
+                  color: "white",
+                  p: 2,
+                  borderRadius: "md",
+                  mt: 16,
+                  fontSize: "sm",
+                  whiteSpace: "nowrap",
+                  zIndex: 9999 // 設置最高優先級，確保不被覆蓋
+                }
+              }}
+              onClick={revealFirstLetter}
+              disabled={isButtonDisabled}
+            >
+              💡
+            </Button>
+            <Text
+              position="relative"
+              opacity={isButtonDisabled ? 0.5 : 1}
+              _hover={{
+                _after: {
+                  content: '"Hotkey"',
+                  position: "absolute",
+                  bg: "gray.700",
+                  color: "white",
+                  p: 2,
+                  borderRadius: "md",
+                  mt: 2,
+                  fontSize: "sm",
+                  whiteSpace: "nowrap",
+                  zIndex: 9999,
+                  fontWeight: "bold"
+                }
+              }}
+            >
+              ⬅️
+            </Text>
+          </Box>
+          <Box textAlign="center">
+            <Button
+              size="md"
+              colorScheme="yellow"
+              borderRadius="full"
+              boxShadow="md"
+              m={2}
+              position="relative"
+              _hover={{
+                _after: {
+                  content: '"Show another definition (cost: $30)"',
+                  position: "absolute",
+                  bg: "gray.700",
+                  color: "white",
+                  p: 2,
+                  borderRadius: "md",
+                  mt: 16,
+                  fontSize: "sm",
+                  whiteSpace: "nowrap",
+                  zIndex: 9999
+                }
+              }}
+              onClick={revealSecondDefinition}
+              disabled={isSecondDefinitionRevealed}
+            >
+              📖
+            </Button>
+            <Text
+              position="relative"
+              opacity={isSecondDefinitionRevealed ? 0.5 : 1}
+              _hover={{
+                _after: {
+                  content: '"Hotkey"',
+                  position: "absolute",
+                  bg: "gray.700",
+                  color: "white",
+                  p: 2,
+                  borderRadius: "md",
+                  mt: 2,
+                  fontSize: "sm",
+                  whiteSpace: "nowrap",
+                  zIndex: 9999,
+                  fontWeight: "bold"
+                }
+              }}
+            >
+              ⬇️
+            </Text>
+          </Box>
+          <Box textAlign="center">
+            <Button
+              size="md"
+              colorScheme="red"
+              borderRadius="full"
+              boxShadow="md"
+              m={2}
+              position="relative"
+              _hover={{
+                _after: {
+                  content: '"Skip this question"',
+                  position: "absolute",
+                  bg: "gray.700",
+                  color: "white",
+                  p: 2,
+                  borderRadius: "md",
+                  mt: 16,
+                  fontSize: "sm",
+                  whiteSpace: "nowrap",
+                  zIndex: 9999
+                }
+              }}
+              onClick={skipQuestion}
+            >
+              ⏭️
+            </Button>
+            <Text
+              position="relative"
+              _hover={{
+                _after: {
+                  content: '"Hotkey"',
+                  position: "absolute",
+                  bg: "gray.700",
+                  color: "white",
+                  p: 2,
+                  borderRadius: "md",
+                  mt: 2,
+                  fontSize: "sm",
+                  whiteSpace: "nowrap",
+                  zIndex: 9999,
+                  fontWeight: "bold"
+                }
+              }}
+            >
+              ➡️
+            </Text>
+          </Box>
+        </Flex>
       </Box>
     </Container>
   );
