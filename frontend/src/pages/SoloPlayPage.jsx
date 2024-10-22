@@ -1,164 +1,24 @@
-import { Text, VStack, Flex, useToast, Box, Container, Button, Image, Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalFooter } from "@chakra-ui/react";
-import { useState, useEffect } from "react";
-import { useNavigate } from 'react-router-dom';
-import questions from '../assets/questions.json';
-import StyledBox from '../components/StyledBox';
+import { Text, VStack, Flex, Box, Container, Button, Image, Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalFooter } from "@chakra-ui/react";
+import useSoloPlayLogic from '../hooks/useSoloPlayLogic';
 
 function SoloPlayPage({ userInfo }) {
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [answer, setAnswer] = useState("");
-  const [score, setScore] = useState(500);
-  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
-  const [isFirstLetterRevealed, setIsFirstLetterRevealed] = useState(false);
-  const [showScoreBonus, setShowScoreBonus] = useState(false);
-  const [showScorePenalty, setShowScorePenalty] = useState(false);
-  const [isSecondDefinitionRevealed, setIsSecondDefinitionRevealed] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [showHint, setShowHint] = useState(true);
-  const toast = useToast();
-  const navigate = useNavigate();
-
-  const currentQuestion = questions[currentQuestionIndex];
-
-  const revealFirstLetter = () => {
-    if (score >= 30 && !isFirstLetterRevealed) {
-      const firstLetter = currentQuestion.question.charAt(0).toLowerCase();
-      setAnswer(firstLetter);
-      setScore(prev => prev - 30);
-      setIsButtonDisabled(true);
-      setIsFirstLetterRevealed(true);
-      setShowScorePenalty(true);
-      setTimeout(() => setShowScorePenalty(false), 750); // 0.75秒後隱藏 "-$30"
-    } else if (score < 30) {
-      toast({
-        title: "Not enough money!",
-        status: "warning",
-        duration: 2000,
-        isClosable: true,
-        position: "top"
-      });
-    }
-  };
-
-  const revealSecondDefinition = () => {
-    if (score >= 30 && !isSecondDefinitionRevealed) {
-      setScore(prev => prev - 30);
-      setIsSecondDefinitionRevealed(true);
-      setShowScorePenalty(true);
-      setTimeout(() => setShowScorePenalty(false), 750); // 0.75秒後隱藏 "-$30"
-    } else if (score < 30) {
-      toast({
-        title: "Not enough money!",
-        status: "warning",
-        duration: 2000,
-        isClosable: true,
-        position: "top"
-      });
-    }
-  };
-
-  const skipQuestion = () => {
-    if (currentQuestionIndex === questions.length - 1) {
-      setIsModalOpen(true);
-    } else {
-      setAnswer("");
-      setCurrentQuestionIndex((prev) => (prev + 1));
-      setIsButtonDisabled(false); // 重置按鈕狀態
-      setIsFirstLetterRevealed(false); // 重置揭露狀態
-      setIsSecondDefinitionRevealed(false); // 重置第二個定義揭露狀態
-      toast({
-        title: "Question skipped!",
-        status: "info",
-        duration: 1500,
-        isClosable: true,
-        position: "top"
-      });
-    }
-  };
-
-  useEffect(() => {
-    const handleKeyPress = (e) => {
-      e.preventDefault();
-      if (e.key.match(/^[a-z]$/i)) {
-        if (answer.length < currentQuestion.question.length) {
-          setAnswer(prev => prev + e.key.toLowerCase());
-          setShowHint(false); // 玩家开始输入时隐藏提示
-        }
-      } else if (e.key === 'Backspace') {
-        // 根據不同情況處理刪除邏輯
-        if (answer.length > 1) {
-          setAnswer(prev => prev.slice(0, -1));
-        } else if (answer.length === 1 && !isFirstLetterRevealed) {
-          setAnswer("");// 如果第一個字母是揭露的，且只有一個字母，則不刪除
-        }
-        
-      } else if (e.key === 'ArrowLeft') {
-        revealFirstLetter();
-      } else if (e.key === 'ArrowDown') {
-        revealSecondDefinition();
-      } else if (e.key === 'ArrowRight') {
-        skipQuestion();
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyPress);
-
-    return () => {
-      window.removeEventListener("keydown", handleKeyPress);
-    };
-  }, [answer, currentQuestion.question.length, isFirstLetterRevealed, isSecondDefinitionRevealed]);
-
-  useEffect(() => {
-    if (answer.length === currentQuestion.question.length) {
-      if (answer === currentQuestion.question) {
-        if (currentQuestionIndex === questions.length - 1) {
-          setIsModalOpen(true);
-        } else {
-          toast({
-            title: "Correct!",
-            status: "success",
-            duration: 1500,
-            isClosable: true,
-            position: "top"
-          });
-          setScore((prev) => prev + 100);
-          setShowScoreBonus(true);
-          setTimeout(() => setShowScoreBonus(false), 750); // 0.75秒後隱藏 "+$100"
-          setAnswer("");
-          setCurrentQuestionIndex((prev) => (prev + 1));
-          setIsButtonDisabled(false); // 重置按鈕狀態
-          setIsFirstLetterRevealed(false); // 重置揭露狀態
-          setIsSecondDefinitionRevealed(false); // 重置第二個定義揭露狀態
-        }
-      } else {
-        toast({
-          title: "Incorrect!",
-          status: "error",
-          duration: 2000,
-          isClosable: true,
-          position: "top"
-        });
-        setAnswer(isFirstLetterRevealed ? currentQuestion.question.charAt(0).toLowerCase() : "");
-      }
-    }
-  }, [answer, currentQuestion, toast, isFirstLetterRevealed, currentQuestionIndex]);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowHint(false);
-    }, 15000); // 15秒后隐藏提示
-
-    return () => clearTimeout(timer);
-  }, []);
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-    if (userInfo) {
-      navigate('/loggedin');
-    } else {
-      navigate('/');
-    }
-  };
+  const {
+    currentQuestionIndex,
+    answer,
+    score,
+    isButtonDisabled,
+    isFirstLetterRevealed,
+    showScoreBonus,
+    showScorePenalty,
+    isSecondDefinitionRevealed,
+    isModalOpen,
+    showHint,
+    currentQuestion,
+    revealFirstLetter,
+    revealSecondDefinition,
+    skipQuestion,
+    handleCloseModal
+  } = useSoloPlayLogic(userInfo);
 
   return (
     <Container
@@ -172,6 +32,7 @@ function SoloPlayPage({ userInfo }) {
       minH="90vh"
       bg="yellow.100"
     >
+      {/* 视图代码保持不变 */}
       <Flex justify="space-between" align="center" mb={4} position="relative">
         <Box>
           {userInfo ? (
@@ -275,7 +136,7 @@ function SoloPlayPage({ userInfo }) {
                   mt: 16,
                   fontSize: "sm",
                   whiteSpace: "nowrap",
-                  zIndex: 9999 // 設置最高優先級，確保不被覆蓋
+                  zIndex: 9999
                 }
               }}
               onClick={revealFirstLetter}

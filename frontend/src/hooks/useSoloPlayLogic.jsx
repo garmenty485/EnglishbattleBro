@@ -3,7 +3,7 @@ import { useToast } from "@chakra-ui/react";
 import { useNavigate } from 'react-router-dom';
 import questions from '../assets/questions.json';
 
-function useSoloPlayLogic() {
+function useSoloPlayLogic(userInfo) {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answer, setAnswer] = useState("");
   const [score, setScore] = useState(500);
@@ -108,8 +108,14 @@ function useSoloPlayLogic() {
   useEffect(() => {
     if (answer.length === currentQuestion.question.length) {
       if (answer === currentQuestion.question) {
+        // 先加分
+        setScore((prev) => prev + 100);
+        setShowScoreBonus(true);
+        setTimeout(() => setShowScoreBonus(false), 750);
+
         if (currentQuestionIndex === questions.length - 1) {
-          setIsModalOpen(true);
+          // 最后一题答对后，显示模态框
+          setTimeout(() => setIsModalOpen(true), 400); // 延迟显示模态框，确保加分动画完成
         } else {
           toast({
             title: "Correct!",
@@ -118,9 +124,6 @@ function useSoloPlayLogic() {
             isClosable: true,
             position: "top"
           });
-          setScore((prev) => prev + 100);
-          setShowScoreBonus(true);
-          setTimeout(() => setShowScoreBonus(false), 750);
           setAnswer("");
           setCurrentQuestionIndex((prev) => (prev + 1));
           setIsButtonDisabled(false);

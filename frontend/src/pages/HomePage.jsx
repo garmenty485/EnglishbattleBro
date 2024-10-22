@@ -1,21 +1,12 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useGoogleLogin } from '@react-oauth/google';
 import CommonLayout from '../components/CommonLayout';
 import CustomButton from '../components/CustomButton';
+import useGoogleLoginLogic from '../hooks/useGoogleLoginLogic';
 
 function HomePage({ onLogin }) {
   const navigate = useNavigate();
-
-  const login = useGoogleLogin({
-    onSuccess: async (tokenResponse) => {
-      console.log('Login Success:', tokenResponse);
-      await onLogin(tokenResponse);
-      localStorage.setItem('isLoggedIn', 'true');
-      navigate('/loggedin');
-    },
-    onError: (error) => console.error('Login Failed:', error)
-  });
+  const login = useGoogleLoginLogic(onLogin);
 
   const handleSoloPlay = () => {
     navigate('/soloplay');
