@@ -1,9 +1,9 @@
-import { Text, VStack, Flex, useToast, Box, Container, Button } from "@chakra-ui/react";
+import { Text, VStack, Flex, useToast, Box, Container, Button, Image } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import questions from './questions.json';
 import StyledBox from '../components/StyledBox';
 
-function SoloPlayPage() {
+function SoloPlayPage({ userInfo }) {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answer, setAnswer] = useState("");
   const [score, setScore] = useState(500);
@@ -142,10 +142,27 @@ function SoloPlayPage() {
       minH="90vh"
       bg="yellow.100"
     >
-      <Flex justify="center" align="center" mb={4}>
-        <Text fontFamily="Comic Sans MS" color="pink.600" textShadow="2px 2px #FFA07A" fontSize="3xl" fontWeight="bold">
-          #{currentQuestionIndex + 1}
-        </Text>
+      <Flex justify="space-between" align="center" mb={4} position="relative">
+        <Box>
+          {userInfo ? (
+            <Image src={userInfo.picture} boxSize="40px" borderRadius="full" />
+          ) : (
+            <Text fontFamily="Comic Sans MS" color="pink.600" fontSize="xl" fontWeight="bold">
+              Guest Mode
+            </Text>
+          )}
+        </Box>
+        <Flex
+          position="absolute"
+          left="50%"
+          transform="translateX(-50%)"
+          justify="center"
+          align="center"
+        >
+          <Text fontFamily="Comic Sans MS" color="pink.600" textShadow="2px 2px #FFA07A" fontSize="3xl" fontWeight="bold">
+            #{currentQuestionIndex + 1}
+          </Text>
+        </Flex>
       </Flex>
 
       <Box bg="yellow.400" color="white" p={4} borderRadius="md" mb={4} w="450px">

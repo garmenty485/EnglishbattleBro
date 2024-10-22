@@ -1,7 +1,26 @@
+import React from 'react';
 import { Button, Text, Flex } from "@chakra-ui/react";
+import { useNavigate } from 'react-router-dom';
+import { useGoogleLogin } from '@react-oauth/google';
 import CommonLayout from './CommonLayout';
 
-function HomePage({ onLogin, onSoloPlay }) {
+function HomePage({ onLogin }) {
+  const navigate = useNavigate();
+
+  const login = useGoogleLogin({
+    onSuccess: async (tokenResponse) => {
+      console.log('Login Success:', tokenResponse);
+      await onLogin(tokenResponse);
+      localStorage.setItem('isLoggedIn', 'true');
+      navigate('/loggedin');
+    },
+    onError: (error) => console.error('Login Failed:', error)
+  });
+
+  const handleSoloPlay = () => {
+    navigate('/soloplay');
+  };
+
   return (
     <CommonLayout>
       <Button
@@ -14,7 +33,7 @@ function HomePage({ onLogin, onSoloPlay }) {
         whiteSpace="normal"
         fontSize="lg"
         height="80px"
-        onClick={onLogin}
+        onClick={() => login()}
       >
         <Flex align="center" justify="flex-start" width="100%">
           <Text fontSize="3xl" mr={4}>🚀</Text>
@@ -33,7 +52,7 @@ function HomePage({ onLogin, onSoloPlay }) {
         whiteSpace="normal"
         fontSize="lg"
         height="80px"
-        onClick={onSoloPlay}
+        onClick={handleSoloPlay}
       >
         <Flex align="center" justify="flex-start" width="100%">
           <Text fontSize="3xl" mr={4}>🏃‍♀️</Text>

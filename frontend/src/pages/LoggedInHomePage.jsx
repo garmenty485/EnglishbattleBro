@@ -1,7 +1,15 @@
+import React from 'react';
 import { Button, Text, Flex, Image } from "@chakra-ui/react";
+import { useNavigate } from 'react-router-dom';
 import CommonLayout from './CommonLayout';
 
-function LoggedInHomePage({ onSoloPlay }) {
+function LoggedInHomePage({ userInfo }) {
+  const navigate = useNavigate();
+
+  const handleSoloPlay = () => {
+    navigate('/soloplay'); // 跳转到 SoloPlayPage
+  };
+
   return (
     <CommonLayout>
       <Button
@@ -16,9 +24,9 @@ function LoggedInHomePage({ onSoloPlay }) {
         height="80px"
       >
         <Flex align="center" justify="flex-start" width="100%">
-          <Image src="https://pbs.twimg.com/media/GSzM-FkXoAAtfxm?format=jpg&name=small" boxSize="40px" borderRadius="full" mr={4} />
+          <Image src={userInfo?.picture} boxSize="40px" borderRadius="full" mr={4} />
           <Text fontFamily="Comic Sans MS" color="yellow.300" textAlign="center" flex="1">
-            Your Records & Words
+            {userInfo?.name}'s Records & Words
           </Text>
         </Flex>
       </Button>
@@ -32,7 +40,7 @@ function LoggedInHomePage({ onSoloPlay }) {
         whiteSpace="normal"
         fontSize="lg"
         height="80px"
-        onClick={onSoloPlay}
+        onClick={handleSoloPlay} // 绑定点击事件
       >
         <Flex align="center" justify="flex-start" width="100%">
           <Text fontSize="3xl" mr={4}>🏃‍♀️</Text>

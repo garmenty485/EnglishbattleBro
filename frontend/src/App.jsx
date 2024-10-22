@@ -1,20 +1,36 @@
-import { useState } from "react";
+import React, { useState } from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { GoogleOAuthProvider } from '@react-oauth/google';
 import HomePage from './pages/HomePage';
 import LoggedInHomePage from './pages/LoggedInHomePage';
 import SoloPlayPage from './pages/SoloPlayPage';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [isSoloPlay, setIsSoloPlay] = useState(false);
+  const [userInfo, setUserInfo] = useState(null);
 
-  if (isSoloPlay) {
-    return <SoloPlayPage />;
-  }
+  const handleLogin = async (tokenResponse) => {
+    // 使用 Google API 获取用户信息
+    const userInfoResponse = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+      headers: {
+        Authorization: `Bearer ${tokenResponse.access_token}`,
+      },
+    });
+    const userInfo = await userInfoResponse.json();
+    setUserInfo(userInfo);
+    setIsLoggedIn(true);
+  };
 
   return (
-    isLoggedIn
-      ? <LoggedInHomePage onSoloPlay={() => setIsSoloPlay(true)} />
-      : <HomePage onLogin={() => setIsLoggedIn(true)} onSoloPlay={() => setIsSoloPlay(true)} />
+    <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+      <Router>
+        <Routes>
+          <Route path="/" element={<HomePage onLogin={handleLogin} />} />
+          <Route path="/loggedin" element={<LoggedInHomePage userInfo={userInfo} />} />
+          <Route path="/soloplay" element={<SoloPlayPage userInfo={userInfo} />} />
+        </Routes>
+      </Router>
+    </GoogleOAuthProvider>
   );
 }
 
