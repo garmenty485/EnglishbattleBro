@@ -14,6 +14,7 @@ function SoloPlayPage({ userInfo }) {
   const [showScorePenalty, setShowScorePenalty] = useState(false);
   const [isSecondDefinitionRevealed, setIsSecondDefinitionRevealed] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [showHint, setShowHint] = useState(true);
   const toast = useToast();
   const navigate = useNavigate();
 
@@ -81,6 +82,7 @@ function SoloPlayPage({ userInfo }) {
       if (e.key.match(/^[a-z]$/i)) {
         if (answer.length < currentQuestion.question.length) {
           setAnswer(prev => prev + e.key.toLowerCase());
+          setShowHint(false); // 玩家开始输入时隐藏提示
         }
       } else if (e.key === 'Backspace') {
         // 根據不同情況處理刪除邏輯
@@ -140,6 +142,14 @@ function SoloPlayPage({ userInfo }) {
       }
     }
   }, [answer, currentQuestion, toast, isFirstLetterRevealed, currentQuestionIndex]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowHint(false);
+    }, 15000); // 15秒后隐藏提示
+
+    return () => clearTimeout(timer);
+  }, []);
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
@@ -212,7 +222,7 @@ function SoloPlayPage({ userInfo }) {
         </Text>
       </Box>
 
-      <Flex justify="center" mb={4}>
+      <Flex justify="center" mb={4} position="relative">
         <Box bg="pink.500" color="black" p={4} borderRadius="md">
           <Text fontSize="2xl" letterSpacing={4}>
             {isFirstLetterRevealed ? (
@@ -224,6 +234,11 @@ function SoloPlayPage({ userInfo }) {
             {Array(currentQuestion.question.length - answer.length).fill("_").join("")}
           </Text>
         </Box>
+        {showHint && (
+          <Box position="absolute" right="-30px" top="-30%" transform="translateY(-50%)" bg="pink.500" color="black" p={2} borderRadius="md" border="2px solid white" boxShadow="5px 5px 0px #000">
+            Type the Answer
+          </Box>
+        )}
       </Flex>
 
       <Flex justify="center" mb={1} mt={10}>
