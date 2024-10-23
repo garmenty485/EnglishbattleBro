@@ -15,7 +15,8 @@ const useSendRecord = (isModalOpen, score) => {
           score: score
         };
 
-        const response = await axios.post('http://localhost:5000/api/records', recordData, {
+        // 直接使用相對路徑
+        const response = await axios.post('/api/records', recordData, {
           headers: {
             'Content-Type': 'application/json'
           }
@@ -30,7 +31,7 @@ const useSendRecord = (isModalOpen, score) => {
     if (isModalOpen && typeof score === 'number') {
       sendRecordToBackend();
     }
-  }, [isModalOpen, score]);
+  }, [isModalOpen, score]); // 這行是 useEffect 的依賴陣列，當 isModalOpen 或 score 改變時，useEffect 會重新執行
 };
 
 export default useSendRecord;
