@@ -19,13 +19,13 @@ function BattlePage() {
   };
 
   // 模拟对战ID
-  const battleId = 'test_battle_66';
+  const battleId = 'test_battle_001';
 
   // 模拟小华先完成游戏，得分450
   useSendRecord(true, 450, xiaohuaData, 'battle', battleId);
 
   // 模拟小明后完成游戏，得分380
-  useSendRecord(true, 451, xiaomingData, 'battle', battleId);
+  useSendRecord(true, 380, xiaomingData, 'battle', battleId);
 
   return (
     <div>Testing Battle Mode...</div>

@@ -2,7 +2,8 @@ import Record from '../models/recordModel.js';
 
 export const createRecord = async (req, res) => {
   try {
-    const { gameType, battleId, player1, words, submitted } = req.body;
+    // 改用更清楚的命名
+    const { gameType, battleId, player1: currentPlayer, words, submitted } = req.body;
 
     if (gameType === 'battle' && battleId) {
       // 使用 findOneAndUpdate 来确保原子性操作
@@ -13,28 +14,27 @@ export const createRecord = async (req, res) => {
             gameType,
             battleId,
             words,
-            player1,
+            player1: currentPlayer,  // 這裡比較清楚：把當前玩家設為 player1
             submitted: false
           }
         },
         { 
-          upsert: true,  // 如果记录不存在则创建
-          new: true,     // 返回更新后的文档
-          setDefaultsOnInsert: true  // 设置默认值
+          upsert: true,
+          new: true,
+          setDefaultsOnInsert: true
         }
       );
 
-      // 如果记录已经有 player1，说明这是第二个玩家
-      if (record.player1 && record.player1.googleId !== player1.googleId) {
-        // 更新为完整的对战记录
+      // 這裡的判斷邏輯更清晰了
+      if (record.player1 && record.player1.googleId !== currentPlayer.googleId) {
         const finalRecord = await Record.findOneAndUpdate(
           { battleId },
           {
-            player2: player1,
+            player2: currentPlayer,  // 把當前玩家設為 player2
             submitted: true,
-            winnerId: record.player1.score > player1.score 
+            winnerId: record.player1.score > currentPlayer.score 
               ? record.player1.googleId 
-              : player1.googleId
+              : currentPlayer.googleId
           },
           { new: true }
         );
@@ -44,8 +44,11 @@ export const createRecord = async (req, res) => {
       return res.json(record);
     }
 
-    // 单人模式逻辑保持不变
-    const record = new Record(req.body);
+    // 單人模式
+    const record = new Record({
+      ...req.body,
+      player1: currentPlayer  // 這裡也更清楚了
+    });
     const savedRecord = await record.save();
     return res.json(savedRecord);
 
