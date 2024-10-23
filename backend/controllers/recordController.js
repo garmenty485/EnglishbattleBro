@@ -1,65 +1,74 @@
 import Record from '../models/recordModel.js';
 
-// @desc    Create a new record
-// @route   POST /api/records
-// @access  Private
-const createRecord = async (req, res) => {
+export const createRecord = async (req, res) => {
   try {
-    const { gameType = 'solo', player1, words, battleId } = req.body;
-    
-    console.log('Received request body:', req.body);
+    const { gameType, battleId, player1, words, submitted } = req.body;
 
-    // 添加详细的验证
-    if (!player1) {
-      return res.status(400).json({ 
-        message: 'Missing player1 data',
-        receivedData: req.body
-      });
+    if (gameType === 'battle' && battleId) {
+      // 使用 findOneAndUpdate 来确保原子性操作
+      const record = await Record.findOneAndUpdate(
+        { battleId },
+        {
+          $setOnInsert: {  // 如果是新记录，设置这些字段
+            gameType,
+            battleId,
+            words,
+            player1,
+            submitted: false
+          }
+        },
+        { 
+          upsert: true,  // 如果记录不存在则创建
+          new: true,     // 返回更新后的文档
+          setDefaultsOnInsert: true  // 设置默认值
+        }
+      );
+
+      // 如果记录已经有 player1，说明这是第二个玩家
+      if (record.player1 && record.player1.googleId !== player1.googleId) {
+        // 更新为完整的对战记录
+        const finalRecord = await Record.findOneAndUpdate(
+          { battleId },
+          {
+            player2: player1,
+            submitted: true,
+            winnerId: record.player1.score > player1.score 
+              ? record.player1.googleId 
+              : player1.googleId
+          },
+          { new: true }
+        );
+        return res.json(finalRecord);
+      }
+
+      return res.json(record);
     }
 
-    if (!player1.googleId || !player1.googleName) {
-      return res.status(400).json({ 
-        message: 'Missing required player fields',
-        required: ['googleId', 'googleName'],
-        received: player1
-      });
-    }
-
-    if (typeof player1.score !== 'number') {
-      return res.status(400).json({ 
-        message: 'Invalid score type',
-        required: 'number',
-        received: typeof player1.score
-      });
-    }
-
-    if (!Array.isArray(words) || words.length === 0) {
-      return res.status(400).json({ 
-        message: 'Invalid words data',
-        required: 'non-empty array',
-        received: words
-      });
-    }
-
-    const recordData = {
-      gameType,
-      player1,
-      words,
-      ...(battleId && { battleId }),
-      submitted: true
-    };
-
-    const record = new Record(recordData);
+    // 单人模式逻辑保持不变
+    const record = new Record(req.body);
     const savedRecord = await record.save();
-    
-    res.status(201).json(savedRecord);
+    return res.json(savedRecord);
+
   } catch (error) {
-    console.error('Error creating record:', error);
-    res.status(400).json({ 
+    console.error('Error in createRecord:', error);
+    return res.status(400).json({ 
       message: error.message,
-      stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
+      details: error.stack 
     });
   }
 };
 
-export { createRecord };
+export const getBattleRecord = async (req, res) => {
+  try {
+    const { battleId } = req.params;
+    const record = await Record.findOne({ battleId });
+    
+    if (!record) {
+      return res.status(404).json({ message: 'Battle record not found' });
+    }
+    
+    res.json(record);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};

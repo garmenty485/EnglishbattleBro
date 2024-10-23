@@ -4,6 +4,7 @@ import { GoogleOAuthProvider } from '@react-oauth/google';
 import HomePage from './pages/HomePage';
 import LoggedInHomePage from './pages/LoggedInHomePage';
 import SoloPlayPage from './pages/SoloPlayPage';
+import BattlePage from './pages/BattlePage';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -35,6 +36,7 @@ function App() {
           <Route path="/" element={<HomePage onLogin={handleLogin} />} />
           <Route path="/loggedin" element={<LoggedInHomePage userInfo={userInfo} />} />
           <Route path="/soloplay" element={<SoloPlayPage userInfo={userInfo} />} />
+          <Route path="/battle" element={<BattlePage />} /> {/* 新增这一行 */}
         </Routes>
       </Router>
     </GoogleOAuthProvider>

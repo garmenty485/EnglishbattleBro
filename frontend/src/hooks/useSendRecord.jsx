@@ -13,7 +13,6 @@ function useSendRecord(isModalOpen, score, userInfo, gameType = 'solo', battleId
           return;
         }
 
-        // 从 questions.json 获取单词数据并转换格式
         const words = questions.map(q => ({
           word: q.question,
           definition1: q.definition1,
@@ -22,6 +21,7 @@ function useSendRecord(isModalOpen, score, userInfo, gameType = 'solo', battleId
 
         const recordData = {
           gameType,
+          ...(battleId && { battleId }),
           player1: {
             googleId: userInfo.email,
             googleName: userInfo.name,
@@ -29,16 +29,17 @@ function useSendRecord(isModalOpen, score, userInfo, gameType = 'solo', battleId
             score: score
           },
           words,
-          ...(battleId && { battleId })  // 只在對戰模式添加 battleId
+          submitted: gameType === 'solo'
         };
 
-        console.log('Sending record data:', recordData); // 添加调试日志
+        console.log('Sending record data:', recordData);
 
         const response = await axios.post('/api/records', recordData, {
           headers: {
             'Content-Type': 'application/json'
           }
         });
+        
         console.log('Record sent successfully:', response.data);
         console.log('userInfo check', userInfo);
       } catch (error) {
