@@ -1,5 +1,6 @@
 import { Text, VStack, Flex, Box, Container, Button, Image, Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalFooter } from "@chakra-ui/react";
 import useSoloPlayLogic from '../hooks/useSoloPlayLogic';
+import useSendRecord from '../hooks/useSendRecord'; // 引入自定义 Hook
 
 function SoloPlayPage({ userInfo }) {
   const {
@@ -19,6 +20,9 @@ function SoloPlayPage({ userInfo }) {
     skipQuestion,
     handleCloseModal
   } = useSoloPlayLogic(userInfo);
+
+  // 修改這裡，只傳入 isModalOpen 和 score
+  useSendRecord(isModalOpen, score);
 
   return (
     <Container

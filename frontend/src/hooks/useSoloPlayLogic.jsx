@@ -6,7 +6,7 @@ import questions from '../assets/questions.json';
 function useSoloPlayLogic(userInfo) {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answer, setAnswer] = useState("");
-  const [score, setScore] = useState(500);
+  const [score, setScore] = useState(500); // 修改 score 的初始化
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const [isFirstLetterRevealed, setIsFirstLetterRevealed] = useState(false);
   const [showScoreBonus, setShowScoreBonus] = useState(false);
@@ -23,7 +23,7 @@ function useSoloPlayLogic(userInfo) {
     if (score >= 30 && !isFirstLetterRevealed) {
       const firstLetter = currentQuestion.question.charAt(0).toLowerCase();
       setAnswer(firstLetter);
-      setScore(prev => prev - 30);
+      setScore(prevScore => Number(prevScore) - 30); // 修改所有更新 score 的地方
       setIsButtonDisabled(true);
       setIsFirstLetterRevealed(true);
       setShowScorePenalty(true);
@@ -41,7 +41,7 @@ function useSoloPlayLogic(userInfo) {
 
   const revealSecondDefinition = () => {
     if (score >= 30 && !isSecondDefinitionRevealed) {
-      setScore(prev => prev - 30);
+      setScore(prevScore => Number(prevScore) - 30); // 修改所有更新 score 的地方
       setIsSecondDefinitionRevealed(true);
       setShowScorePenalty(true);
       setTimeout(() => setShowScorePenalty(false), 750);
@@ -109,7 +109,7 @@ function useSoloPlayLogic(userInfo) {
     if (answer.length === currentQuestion.question.length) {
       if (answer === currentQuestion.question) {
         // 先加分
-        setScore((prev) => prev + 100);
+        setScore(prevScore => Number(prevScore) + 100); // 修改所有更新 score 的地方
         setShowScoreBonus(true);
         setTimeout(() => setShowScoreBonus(false), 750);
 

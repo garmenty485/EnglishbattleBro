@@ -5,33 +5,44 @@ import Record from '../models/recordModel.js';
 // @access  Private
 const createRecord = async (req, res) => {
   try {
-    const { result, score, opponentScore, words } = req.body;
+    const { score } = req.body;
+    
+    console.log('Received request body:', req.body);
+    console.log('Score value:', score, 'Type:', typeof score);
 
-    const record = new Record({
-      userId: req.user._id,
-      result,
-      score,
-      opponentScore,
-      words,
-    });
-
-    // 保存新记录
-    const createdRecord = await record.save();
-
-    // 获取用户的所有记录
-    const userRecords = await Record.find({ userId: req.user._id }).sort({ createdAt: -1 });
-
-    // 如果记录超过三条，删除最旧的记录
-    if (userRecords.length > 3) {
-      const recordsToDelete = userRecords.slice(3);
-      for (const record of recordsToDelete) {
-        await Record.findByIdAndDelete(record._id);
-      }
+    // 更严格的类型检查
+    if (score === undefined || score === null) {
+      return res.status(400).json({ 
+        message: 'Score is required',
+        receivedValue: score 
+      });
     }
 
+    // 尝试转换为数字
+    const numericScore = Number(score);
+    
+    if (isNaN(numericScore)) {
+      return res.status(400).json({ 
+        message: 'Score must be a valid number',
+        receivedValue: score,
+        receivedType: typeof score
+      });
+    }
+
+    const record = new Record({
+      score: numericScore
+    });
+
+    const createdRecord = await record.save();
+    console.log('Record created:', createdRecord);
+    
     res.status(201).json(createdRecord);
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    console.error('Error creating record:', error);
+    res.status(400).json({ 
+      message: error.message,
+      stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
+    });
   }
 };
 

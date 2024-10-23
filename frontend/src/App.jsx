@@ -17,7 +17,14 @@ function App() {
       },
     });
     const userInfo = await userInfoResponse.json();
-    setUserInfo(userInfo);
+
+    // 将令牌信息添加到 userInfo 对象中
+    const userInfoWithToken = {
+      ...userInfo,
+      token: tokenResponse.access_token, // 添加令牌
+    };
+
+    setUserInfo(userInfoWithToken);
     setIsLoggedIn(true);
   };
 
