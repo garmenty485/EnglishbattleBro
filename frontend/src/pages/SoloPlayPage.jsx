@@ -21,8 +21,8 @@ function SoloPlayPage({ userInfo }) {
     handleCloseModal
   } = useSoloPlayLogic(userInfo);
 
-  // 修改這裡，只傳入 isModalOpen 和 score
-  useSendRecord(isModalOpen, score);
+  // 傳入 userInfo
+  useSendRecord(isModalOpen, score, userInfo);
 
   return (
     <Container
