@@ -1,6 +1,7 @@
-import { Text, VStack, Flex, Box, Container, Button, Image, Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalFooter } from "@chakra-ui/react";
+import { Text, Flex, Box, Container, Button, Image, Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalFooter } from "@chakra-ui/react";
 import useSoloPlayLogic from '../hooks/useSoloPlayLogic';
-import useSendRecord from '../hooks/useSendRecord'; // 引入自定义 Hook
+import useSendRecord from '../hooks/useSendRecord';
+
 
 function SoloPlayPage({ userInfo }) {
   const {
@@ -21,7 +22,7 @@ function SoloPlayPage({ userInfo }) {
     handleCloseModal
   } = useSoloPlayLogic(userInfo);
 
-  // 傳入 userInfo
+  // 使用 useSendRecord hook
   useSendRecord(isModalOpen, score, userInfo);
 
   return (

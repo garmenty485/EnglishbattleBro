@@ -5,38 +5,54 @@ import Record from '../models/recordModel.js';
 // @access  Private
 const createRecord = async (req, res) => {
   try {
-    const { score } = req.body;
+    const { gameType = 'solo', player1, words, battleId } = req.body;
     
     console.log('Received request body:', req.body);
-    console.log('Score value:', score, 'Type:', typeof score);
 
-    // 更严格的类型检查
-    if (score === undefined || score === null) {
+    // 添加详细的验证
+    if (!player1) {
       return res.status(400).json({ 
-        message: 'Score is required',
-        receivedValue: score 
+        message: 'Missing player1 data',
+        receivedData: req.body
       });
     }
 
-    // 尝试转换为数字
-    const numericScore = Number(score);
-    
-    if (isNaN(numericScore)) {
+    if (!player1.googleId || !player1.googleName) {
       return res.status(400).json({ 
-        message: 'Score must be a valid number',
-        receivedValue: score,
-        receivedType: typeof score
+        message: 'Missing required player fields',
+        required: ['googleId', 'googleName'],
+        received: player1
       });
     }
 
-    const record = new Record({
-      score: numericScore
-    });
+    if (typeof player1.score !== 'number') {
+      return res.status(400).json({ 
+        message: 'Invalid score type',
+        required: 'number',
+        received: typeof player1.score
+      });
+    }
 
-    const createdRecord = await record.save();
-    console.log('Record created:', createdRecord);
+    if (!Array.isArray(words) || words.length === 0) {
+      return res.status(400).json({ 
+        message: 'Invalid words data',
+        required: 'non-empty array',
+        received: words
+      });
+    }
+
+    const recordData = {
+      gameType,
+      player1,
+      words,
+      ...(battleId && { battleId }),
+      submitted: true
+    };
+
+    const record = new Record(recordData);
+    const savedRecord = await record.save();
     
-    res.status(201).json(createdRecord);
+    res.status(201).json(savedRecord);
   } catch (error) {
     console.error('Error creating record:', error);
     res.status(400).json({ 
