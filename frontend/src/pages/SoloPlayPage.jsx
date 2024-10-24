@@ -90,31 +90,25 @@ function SoloPlayPage({ userInfo }) {
 
       <Flex justify="center" mb={4} position="relative">
         <Box bg="pink.500" color="black" p={4} borderRadius="md" position="relative">
-          <Box
-            as="input"
-            fontSize="2xl"
-            letterSpacing={4}
+          <Text 
+            fontSize="2xl" 
+            letterSpacing={4} 
+            pointerEvents="none" 
+            width="100%" 
             textAlign="center"
-            border="none"
-            bg="transparent"
-            color="black"
-            width="100%"
-            outline="none"
-            value={
-              (isFirstLetterRevealed ? answer.charAt(0) : answer.charAt(0)) +
-              answer.slice(1) +
-              Array(currentQuestion.question.length - answer.length).fill("_").join("")
-            }
-            readOnly
-            sx={{
-              '::placeholder': {
-                color: 'black',
-              },
-              WebkitTapHighlightColor: 'transparent',
-              WebkitUserSelect: 'none',
-              userSelect: 'none',
-            }}
-          />
+            minH="40px"
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+          >
+            {isFirstLetterRevealed ? (
+              <Text as="span" color="gold" fontWeight="bold">{answer.charAt(0)}</Text>
+            ) : (
+              answer.charAt(0)
+            )}
+            {answer.slice(1)}
+            {Array(currentQuestion.question.length - answer.length).fill("_").join("")}
+          </Text>
           <Box
             as="input"
             position="absolute"
@@ -125,12 +119,10 @@ function SoloPlayPage({ userInfo }) {
             opacity={0}
             type="text"
             autoComplete="off"
-            // 防止输入框获得焦点时页面滚动
             onFocus={(e) => {
               e.target.style.transform = 'translateY(-100vh)';
               e.target.style.position = 'absolute';
             }}
-            // 失去焦点时恢复位置
             onBlur={(e) => {
               e.target.style.transform = 'none';
               e.target.style.position = 'absolute';
