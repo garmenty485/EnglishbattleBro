@@ -41,8 +41,8 @@ NODE_ENV=development
 
 ### 生產環境
 bash
-npm run build
-npm start
+- npm run build
+- npm start
 
 
 ## API 路由
