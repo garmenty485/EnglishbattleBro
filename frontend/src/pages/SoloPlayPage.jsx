@@ -27,14 +27,14 @@ function SoloPlayPage({ userInfo }) {
 
   return (
     <Container
-      maxWidth="500px"
+      maxWidth={{ base: "95%", md: "500px" }}
       width="100%"
       margin="0 auto"
-      padding="20px"
+      padding={{ base: "10px", md: "20px" }}
       border="4px solid"
       borderColor="black"
       borderRadius="8px"
-      minH="90vh"
+      minH={{ base: "100vh", md: "90vh" }}
       bg="yellow.100"
     >
       {/* 视图代码保持不变 */}
@@ -61,7 +61,15 @@ function SoloPlayPage({ userInfo }) {
         </Flex>
       </Flex>
 
-      <Box bg="yellow.400" color="white" p={4} borderRadius="md" mb={4} w="450px">
+      {/* Score Display */}
+      <Box 
+        bg="yellow.400" 
+        color="white" 
+        p={4} 
+        borderRadius="md" 
+        mb={4} 
+        w={{ base: "100%", md: "450px" }}
+      >
         <Text fontSize="3xl">
           💰 <Text as="span" fontWeight="bold" color="black">{score}</Text>
           {showScoreBonus && (
@@ -88,15 +96,22 @@ function SoloPlayPage({ userInfo }) {
         </Text>
       </Box>
 
+      {/* Answer Input Area */}
       <Flex justify="center" mb={4} position="relative">
-        <Box bg="pink.500" color="black" p={4} borderRadius="md" position="relative">
+        <Box 
+          bg="pink.500" 
+          color="black" 
+          p={{ base: 2, md: 4 }} 
+          borderRadius="md" 
+          width={{ base: "100%", md: "auto" }}
+        >
           <Text 
-            fontSize="2xl" 
-            letterSpacing={4} 
+            fontSize={{ base: "xl", md: "2xl" }}
+            letterSpacing={{ base: 2, md: 4 }}
+            minH={{ base: "32px", md: "40px" }}
             pointerEvents="none" 
             width="100%" 
             textAlign="center"
-            minH="40px"
             display="flex"
             alignItems="center"
             justifyContent="center"
@@ -136,28 +151,44 @@ function SoloPlayPage({ userInfo }) {
         )}
       </Flex>
 
-      <Flex justify="center" mb={1} mt={10}>
-        <Box bg="pink.500" color="black" p={4} borderRadius="md" mb={4} w="90%" maxW="700px" textAlign="center">
-          <Text fontSize="lg" whiteSpace="pre-wrap" fontFamily="Comic Sans MS" color="yellow.300">{currentQuestion.definition1}</Text>
+      {/* Definitions */}
+      <Flex justify="center" mb={1} mt={{ base: 6, md: 10 }}>
+        <Box 
+          bg="pink.500" 
+          p={{ base: 3, md: 4 }} 
+          borderRadius="md" 
+          w={{ base: "100%", md: "90%" }}
+          textAlign="center"
+        >
+          <Text fontSize={{ base: "md", md: "lg" }} whiteSpace="pre-wrap" fontFamily="Comic Sans MS" color="yellow.300" minH={{ base: "50px", md: "60px" }}>
+            {currentQuestion.definition1}
+          </Text>
         </Box>
       </Flex>
 
       <Flex justify="center" mb={4}>
         <Box bg="pink.500" color="black" p={4} borderRadius="md" mb={2} w="90%" maxW="700px" textAlign="center" opacity={isSecondDefinitionRevealed ? 1 : 0.5}>
-          <Text fontSize="lg" whiteSpace="pre-wrap" fontFamily="Comic Sans MS" color="yellow.300">{isSecondDefinitionRevealed ? currentQuestion.definition2 : "** another definition **"}</Text>
+          <Text fontSize="lg" whiteSpace="pre-wrap" fontFamily="Comic Sans MS" color="yellow.300" minH={{ base: "50px", md: "60px" }}>
+            {isSecondDefinitionRevealed ? currentQuestion.definition2 : "** another definition **"}
+          </Text>
         </Box>
       </Flex>
 
-      <Box p={4} borderRadius="md" mb={4} textAlign="center">
+      {/* Options */}
+      <Box w={{ base: "300px", sm: "320px", md: "350px" }} maxW="95%" p={{ base: 2, md: 4 }} textAlign="center" mx="auto">
         <Text fontSize="lg" fontWeight="bold" fontFamily="Comic Sans MS" color="pink.500">🛎️ Options 🛎️</Text>
-        <Flex justify="center">
+        <Flex 
+          justify="center" 
+          flexWrap={{ base: "wrap", md: "nowrap" }}
+          gap={{ base: 2, md: 4 }}
+        >
           <Box textAlign="center">
             <Button
-              size="md"
+              size={{ base: "sm", md: "md" }}
               colorScheme="teal"
               borderRadius="full"
               boxShadow="md"
-              m={2}
+              m={{ base: 1, md: 2 }}
               position="relative"
               _hover={{
                 _after: {
@@ -202,11 +233,11 @@ function SoloPlayPage({ userInfo }) {
           </Box>
           <Box textAlign="center">
             <Button
-              size="md"
+              size={{ base: "sm", md: "md" }}
               colorScheme="yellow"
               borderRadius="full"
               boxShadow="md"
-              m={2}
+              m={{ base: 1, md: 2 }}
               position="relative"
               _hover={{
                 _after: {
@@ -251,11 +282,11 @@ function SoloPlayPage({ userInfo }) {
           </Box>
           <Box textAlign="center">
             <Button
-              size="md"
+              size={{ base: "sm", md: "md" }}
               colorScheme="red"
               borderRadius="full"
               boxShadow="md"
-              m={2}
+              m={{ base: 1, md: 2 }}
               position="relative"
               _hover={{
                 _after: {
@@ -301,7 +332,14 @@ function SoloPlayPage({ userInfo }) {
 
       <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
         <ModalOverlay />
-        <ModalContent bg="yellow.100" textAlign="center" border="4px solid" borderColor="yellow.300">
+        <ModalContent 
+          bg="yellow.100" 
+          width={{ base: "90%", md: "400px" }}
+          mx="auto"
+          textAlign="center" 
+          border="4px solid" 
+          borderColor="yellow.300"
+        >
           <ModalHeader fontFamily="Comic Sans MS" color="pink.600">
             🎉🎉🎉&nbsp;&nbsp;&nbsp;&nbsp;COMPLETE&nbsp;&nbsp;&nbsp;&nbsp;🎉🎉🎉
           </ModalHeader>
