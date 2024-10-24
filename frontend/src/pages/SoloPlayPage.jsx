@@ -145,7 +145,7 @@ function SoloPlayPage({ userInfo }) {
           />
         </Box>
         {showHint && (
-          <Box position="absolute" right="-30px" top="-30%" transform="translateY(-50%)" bg="pink.500" color="black" p={2} borderRadius="md" border="2px solid white" boxShadow="5px 5px 0px #000">
+          <Box position="absolute" right="-20px" top="-30%" transform="translateY(-50%)" bg="green.500" color="black" p={2} borderRadius="md" border="2px solid white" boxShadow="5px 5px 0px #000">
             Type the Answer
           </Box>
         )}
@@ -175,7 +175,7 @@ function SoloPlayPage({ userInfo }) {
       </Flex>
 
       {/* Options */}
-      <Box w={{ base: "300px", sm: "320px", md: "350px" }} maxW="95%" p={{ base: 2, md: 4 }} textAlign="center" mx="auto">
+      <Box w={{ base: "365px", sm: "370px", md: "380px" }} maxW="95%" p={{ base: 2, md: 4 }} textAlign="center" mx="auto">
         <Text fontSize="lg" fontWeight="bold" fontFamily="Comic Sans MS" color="pink.500">🛎️ Options 🛎️</Text>
         <Flex 
           justify="center" 
