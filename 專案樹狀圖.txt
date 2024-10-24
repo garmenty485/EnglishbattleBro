@@ -1,0 +1,32 @@
+專案根目錄 /
+├── frontend /           # 前端 React 專案
+│   └── src /
+│       ├── App.jsx    # 主應用組件
+│       ├── main.jsx   # 前端入口點
+│       ├── assets /
+│       │   └── questions.json    # 題目資料
+│       ├── components /           # 共用組件
+│       │   ├── CommonLayout.jsx
+│       │   ├── CustomButton.jsx
+│       │   └── StyledBox.jsx
+│       ├── hooks /
+│       │   ├── useGoogleLoginLogic.jsx
+│       │   ├── useSendRecord.jsx
+│       │   └── useSoloPlayLogic.jsx
+│       └── pages /
+│           ├── BattlePage.jsx
+│           ├── HomePage.jsx
+│           ├── LoggedInHomePage.jsx
+│           └── SoloPlayPage.jsx
+│
+└── backend /           # 後端專案
+    ├── config /
+    │   └── db.js     # 資料庫配置
+    ├── controllers /
+    │   └── recordController.js  # 記錄控制器
+    ├── models /
+    │   └── recordModel.js      # 記錄資料模型
+    ├── routes /
+    │   └── recordRoutes.js     # 記錄相關路由
+    ├── server.js              # 後端入口點
+    └── package.json          # 後端依賴配置
