@@ -1,0 +1,5 @@
+export const SCORE_CONFIG = {
+  BONUS_AMOUNT: 100,
+  PENALTY_AMOUNT: 30,
+  INITIAL_SCORE: 500
+};
