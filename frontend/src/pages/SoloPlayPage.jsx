@@ -1,7 +1,7 @@
 import { Text, Flex, Box, Container, Button, Image, Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalFooter } from "@chakra-ui/react";
 import useSoloPlayLogic from '../hooks/useSoloPlayLogic';
 import useSendRecord from '../hooks/useSendRecord';
-
+import GameOptionButton from '../components/GameOptionButton';
 
 function SoloPlayPage({ userInfo }) {
   const {
@@ -176,157 +176,39 @@ function SoloPlayPage({ userInfo }) {
 
       {/* Options */}
       <Box w={{ base: "365px", sm: "370px", md: "370px" }} maxW="95%" p={{ base: 2, md: 4 }} textAlign="center" mx="auto">
-        <Text fontSize="lg" fontWeight="bold" fontFamily="Comic Sans MS" color="pink.500">🛎️ Options 🛎️</Text>
+        <Text fontSize="lg" fontWeight="bold" fontFamily="Comic Sans MS" color="pink.500">
+          🛎️ Options 🛎️
+        </Text>
         <Flex 
           justify="center" 
           flexWrap={{ base: "wrap", md: "nowrap" }}
           gap={{ base: 2, md: 4 }}
         >
-          <Box textAlign="center">
-            <Button
-              size={{ base: "sm", md: "md" }}
-              colorScheme="teal"
-              borderRadius="full"
-              boxShadow="md"
-              m={{ base: 1, md: 2 }}
-              position="relative"
-              _hover={{
-                _after: {
-                  content: '"Reveal a letter (cost: $30)"',
-                  position: "absolute",
-                  bg: "gray.700",
-                  color: "white",
-                  p: 2,
-                  borderRadius: "md",
-                  mt: 16,
-                  fontSize: "sm",
-                  whiteSpace: "nowrap",
-                  zIndex: 9999
-                }
-              }}
-              onClick={revealFirstLetter}
-              disabled={isButtonDisabled}
-            >
-              💡
-            </Button>
-            <Text
-              position="relative"
-              opacity={isButtonDisabled ? 0.5 : 1}
-              _hover={{
-                _after: {
-                  content: '"Hotkey"',
-                  position: "absolute",
-                  bg: "gray.700",
-                  color: "white",
-                  p: 2,
-                  borderRadius: "md",
-                  mt: 2,
-                  fontSize: "sm",
-                  whiteSpace: "nowrap",
-                  zIndex: 9999,
-                  fontWeight: "bold"
-                }
-              }}
-            >
-              ⬅️
-            </Text>
-          </Box>
-          <Box textAlign="center">
-            <Button
-              size={{ base: "sm", md: "md" }}
-              colorScheme="yellow"
-              borderRadius="full"
-              boxShadow="md"
-              m={{ base: 1, md: 2 }}
-              position="relative"
-              _hover={{
-                _after: {
-                  content: '"Show another definition (cost: $30)"',
-                  position: "absolute",
-                  bg: "gray.700",
-                  color: "white",
-                  p: 2,
-                  borderRadius: "md",
-                  mt: 16,
-                  fontSize: "sm",
-                  whiteSpace: "nowrap",
-                  zIndex: 9999
-                }
-              }}
-              onClick={revealSecondDefinition}
-              disabled={isSecondDefinitionRevealed}
-            >
-              📖
-            </Button>
-            <Text
-              position="relative"
-              opacity={isSecondDefinitionRevealed ? 0.5 : 1}
-              _hover={{
-                _after: {
-                  content: '"Hotkey"',
-                  position: "absolute",
-                  bg: "gray.700",
-                  color: "white",
-                  p: 2,
-                  borderRadius: "md",
-                  mt: 2,
-                  fontSize: "sm",
-                  whiteSpace: "nowrap",
-                  zIndex: 9999,
-                  fontWeight: "bold"
-                }
-              }}
-            >
-              ⬇️
-            </Text>
-          </Box>
-          <Box textAlign="center">
-            <Button
-              size={{ base: "sm", md: "md" }}
-              colorScheme="red"
-              borderRadius="full"
-              boxShadow="md"
-              m={{ base: 1, md: 2 }}
-              position="relative"
-              _hover={{
-                _after: {
-                  content: '"Skip this question"',
-                  position: "absolute",
-                  bg: "gray.700",
-                  color: "white",
-                  p: 2,
-                  borderRadius: "md",
-                  mt: 16,
-                  fontSize: "sm",
-                  whiteSpace: "nowrap",
-                  zIndex: 9999
-                }
-              }}
-              onClick={skipQuestion}
-            >
-              ⏭️
-            </Button>
-            <Text
-              position="relative"
-              _hover={{
-                _after: {
-                  content: '"Hotkey"',
-                  position: "absolute",
-                  bg: "gray.700",
-                  color: "white",
-                  p: 2,
-                  borderRadius: "md",
-                  mt: 2,
-                  fontSize: "sm",
-                  whiteSpace: "nowrap",
-                  zIndex: 9999,
-                  fontWeight: "bold"
-                }
-              }}
-            >
-              ➡️
-            </Text>
-          </Box>
+          <GameOptionButton
+            icon="💡"
+            tooltipText="Reveal a letter (cost: $30)"
+            hotKeyIcon="⬅️"
+            onClick={revealFirstLetter}
+            isDisabled={isButtonDisabled}
+            colorScheme="teal"
+          />
+          
+          <GameOptionButton
+            icon="📖"
+            tooltipText="Show another definition (cost: $30)"
+            hotKeyIcon="⬇️"
+            onClick={revealSecondDefinition}
+            isDisabled={isSecondDefinitionRevealed}
+            colorScheme="yellow"
+          />
+          
+          <GameOptionButton
+            icon="⏭️"
+            tooltipText="Skip this question"
+            hotKeyIcon="➡️"
+            onClick={skipQuestion}
+            colorScheme="red"
+          />
         </Flex>
       </Box>
 
