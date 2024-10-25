@@ -1,12 +1,10 @@
 import { useState } from 'react';
-import { useToast } from "@chakra-ui/react";
 import questions from '../assets/questions.json';
 
 function useQuestionControl() {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [isFirstLetterRevealed, setIsFirstLetterRevealed] = useState(false);
   const [isSecondDefinitionRevealed, setIsSecondDefinitionRevealed] = useState(false);
-  const toast = useToast();
 
   const currentQuestion = questions[currentQuestionIndex];
 

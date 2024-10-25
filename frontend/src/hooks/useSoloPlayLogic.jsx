@@ -1,10 +1,9 @@
 import { useState, useEffect } from "react";
 import { useToast } from "@chakra-ui/react";
 import { useNavigate } from 'react-router-dom';
-import questions from '../assets/questions.json';
-import { SCORE_CONFIG } from '../constants/gameConfig';
-import useScoreManagement from './useScoreManagement'; // 假設有這個 hook
-import useQuestionControl from './useQuestionControl'; // 假設有這個 hook
+import useScoreManagement from './useScoreManagement'; 
+import useQuestionControl from './useQuestionControl'; 
+import useKeyboardControl from './useKeyboardControl'; 
 
 function useSoloPlayLogic(userInfo) {
   const {
@@ -68,37 +67,20 @@ function useSoloPlayLogic(userInfo) {
     revealSecondDefinition(deductPenalty);
   };
 
-  useEffect(() => {
-    if (!isModalOpen) {
-      const handleKeyPress = (e) => {
-        e.preventDefault();
-        if (e.key.match(/^[a-z]$/i)) {
-          if (answer.length < currentQuestion.question.length) {
-            setAnswer(prev => prev + e.key.toLowerCase());
-            setShowHint(false);
-          }
-        } else if (e.key === 'Backspace') {
-          if (answer.length > 1) {
-            setAnswer(prev => prev.slice(0, -1));
-          } else if (answer.length === 1 && !isFirstLetterRevealed) {
-            setAnswer("");
-          }
-        } else if (e.key === 'ArrowLeft') {
-          handleRevealLetter();
-        } else if (e.key === 'ArrowDown') {
-          handleRevealDefinition();
-        } else if (e.key === 'ArrowRight') {
-          handleSkipQuestion();
-        }
-      };
+  // 使用鍵盤控制 hook
+  useKeyboardControl({
+    isModalOpen,
+    answer,
+    questionLength: currentQuestion.question.length,
+    isFirstLetterRevealed,
+    setAnswer,
+    setShowHint,
+    handleRevealLetter,
+    handleRevealDefinition,
+    handleSkipQuestion
+  });
 
-      window.addEventListener("keydown", handleKeyPress);
-
-      return () => {
-        window.removeEventListener("keydown", handleKeyPress);
-      };
-    }
-  }, [answer, currentQuestion.question.length, isFirstLetterRevealed, isSecondDefinitionRevealed, isModalOpen]);
+  // 移除原有的鍵盤事件 useEffect
 
   useEffect(() => {
     if (answer.length === currentQuestion.question.length) {
