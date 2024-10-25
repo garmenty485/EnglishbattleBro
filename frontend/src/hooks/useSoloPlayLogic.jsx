@@ -1,11 +1,22 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useToast } from "@chakra-ui/react";
-import { useNavigate } from 'react-router-dom';
 import useScoreManagement from './useScoreManagement'; 
 import useQuestionControl from './useQuestionControl'; 
 import useKeyboardControl from './useKeyboardControl'; 
+import useGameState from './useGameState';
 
 function useSoloPlayLogic(userInfo) {
+  const toast = useToast();  
+  const {
+    answer,
+    setAnswer,
+    isModalOpen,
+    setIsModalOpen,
+    showHint,
+    setShowHint,
+    handleCloseModal,
+  } = useGameState(userInfo);
+
   const {
     score,
     showScoreBonus,
@@ -25,12 +36,6 @@ function useSoloPlayLogic(userInfo) {
     isLastQuestion
   } = useQuestionControl();
 
-  const [answer, setAnswer] = useState("");
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [showHint, setShowHint] = useState(true);
-  const toast = useToast();
-  const navigate = useNavigate();
-
   const handleSkipQuestion = () => {
     if (isLastQuestion()) {
       setIsModalOpen(true);
@@ -47,15 +52,6 @@ function useSoloPlayLogic(userInfo) {
     }
   };
 
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-    if (userInfo) {
-      navigate('/loggedin');
-    } else {
-      navigate('/');
-    }
-  };
-
   const handleRevealLetter = () => {
     const letter = revealFirstLetter(deductPenalty);
     if (letter) {
@@ -67,7 +63,6 @@ function useSoloPlayLogic(userInfo) {
     revealSecondDefinition(deductPenalty);
   };
 
-  // 使用鍵盤控制 hook
   useKeyboardControl({
     isModalOpen,
     answer,
@@ -79,8 +74,6 @@ function useSoloPlayLogic(userInfo) {
     handleRevealDefinition,
     handleSkipQuestion
   });
-
-  // 移除原有的鍵盤事件 useEffect
 
   useEffect(() => {
     if (answer.length === currentQuestion.question.length) {
