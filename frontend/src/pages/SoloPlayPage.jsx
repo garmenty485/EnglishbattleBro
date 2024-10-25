@@ -175,7 +175,7 @@ function SoloPlayPage({ userInfo }) {
       </Flex>
 
       {/* Options */}
-      <Box w={{ base: "365px", sm: "370px", md: "380px" }} maxW="95%" p={{ base: 2, md: 4 }} textAlign="center" mx="auto">
+      <Box w={{ base: "365px", sm: "370px", md: "370px" }} maxW="95%" p={{ base: 2, md: 4 }} textAlign="center" mx="auto">
         <Text fontSize="lg" fontWeight="bold" fontFamily="Comic Sans MS" color="pink.500">🛎️ Options 🛎️</Text>
         <Flex 
           justify="center" 
@@ -330,7 +330,7 @@ function SoloPlayPage({ userInfo }) {
         </Flex>
       </Box>
 
-      <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
+      <Modal isOpen={isModalOpen} onClose={handleCloseModal} isCentered>
         <ModalOverlay />
         <ModalContent 
           bg="yellow.100" 
@@ -340,8 +340,16 @@ function SoloPlayPage({ userInfo }) {
           border="4px solid" 
           borderColor="yellow.300"
         >
-          <ModalHeader fontFamily="Comic Sans MS" color="pink.600">
-            🎉🎉🎉&nbsp;&nbsp;&nbsp;&nbsp;COMPLETE&nbsp;&nbsp;&nbsp;&nbsp;🎉🎉🎉
+          <ModalHeader
+            fontFamily="Comic Sans MS"
+            color="pink.600"
+            textAlign="center"
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            gap={2}  // 添加間距
+          >
+            🎉🎉🎉 COMPLETE 🎉🎉🎉
           </ModalHeader>
           <ModalBody>
             <Text fontSize="2xl" fontFamily="Comic Sans MS" color="pink.600">Your Score: {score}</Text>

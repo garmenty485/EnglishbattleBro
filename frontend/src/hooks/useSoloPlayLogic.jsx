@@ -76,34 +76,36 @@ function useSoloPlayLogic(userInfo) {
   };
 
   useEffect(() => {
-    const handleKeyPress = (e) => {
-      e.preventDefault();
-      if (e.key.match(/^[a-z]$/i)) {
-        if (answer.length < currentQuestion.question.length) {
-          setAnswer(prev => prev + e.key.toLowerCase());
-          setShowHint(false);
+    if (!isModalOpen) {
+      const handleKeyPress = (e) => {
+        e.preventDefault();
+        if (e.key.match(/^[a-z]$/i)) {
+          if (answer.length < currentQuestion.question.length) {
+            setAnswer(prev => prev + e.key.toLowerCase());
+            setShowHint(false);
+          }
+        } else if (e.key === 'Backspace') {
+          if (answer.length > 1) {
+            setAnswer(prev => prev.slice(0, -1));
+          } else if (answer.length === 1 && !isFirstLetterRevealed) {
+            setAnswer("");
+          }
+        } else if (e.key === 'ArrowLeft') {
+          revealFirstLetter();
+        } else if (e.key === 'ArrowDown') {
+          revealSecondDefinition();
+        } else if (e.key === 'ArrowRight') {
+          skipQuestion();
         }
-      } else if (e.key === 'Backspace') {
-        if (answer.length > 1) {
-          setAnswer(prev => prev.slice(0, -1));
-        } else if (answer.length === 1 && !isFirstLetterRevealed) {
-          setAnswer("");
-        }
-      } else if (e.key === 'ArrowLeft') {
-        revealFirstLetter();
-      } else if (e.key === 'ArrowDown') {
-        revealSecondDefinition();
-      } else if (e.key === 'ArrowRight') {
-        skipQuestion();
-      }
-    };
+      };
 
-    window.addEventListener("keydown", handleKeyPress);
+      window.addEventListener("keydown", handleKeyPress);
 
-    return () => {
-      window.removeEventListener("keydown", handleKeyPress);
-    };
-  }, [answer, currentQuestion.question.length, isFirstLetterRevealed, isSecondDefinitionRevealed]);
+      return () => {
+        window.removeEventListener("keydown", handleKeyPress);
+      };
+    }
+  }, [answer, currentQuestion.question.length, isFirstLetterRevealed, isSecondDefinitionRevealed, isModalOpen]);
 
   useEffect(() => {
     if (answer.length === currentQuestion.question.length) {
@@ -115,7 +117,7 @@ function useSoloPlayLogic(userInfo) {
 
         if (currentQuestionIndex === questions.length - 1) {
           // 最后一题答对后，显示模态框
-          setTimeout(() => setIsModalOpen(true), 400); // 延迟显示模态框，确保加分动画完成
+          setIsModalOpen(true); // 不用延遲了 馬上出來
         } else {
           toast({
             title: "Correct!",
