@@ -3,6 +3,7 @@ import useSoloPlayLogic from '../hooks/useSoloPlayLogic';
 import useSendRecord from '../hooks/useSendRecord';
 import GameOptionButton from '../components/GameOptionButton';
 import GameResultModal from '../components/GameResultModal';
+import DefinitionBox from '../components/DefinitionBox';
 
 function SoloPlayPage({ userInfo }) {
   const {
@@ -153,27 +154,15 @@ function SoloPlayPage({ userInfo }) {
       </Flex>
 
       {/* Definitions */}
-      <Flex justify="center" mb={1} mt={{ base: 6, md: 10 }}>
-        <Box 
-          bg="pink.500" 
-          p={{ base: 3, md: 4 }} 
-          borderRadius="md" 
-          w={{ base: "100%", md: "90%" }}
-          textAlign="center"
-        >
-          <Text fontSize={{ base: "md", md: "lg" }} whiteSpace="pre-wrap" fontFamily="Comic Sans MS" color="yellow.300" minH={{ base: "50px", md: "60px" }}>
-            {currentQuestion.definition1}
-          </Text>
-        </Box>
-      </Flex>
-
-      <Flex justify="center" mb={4}>
-        <Box bg="pink.500" color="black" p={4} borderRadius="md" mb={2} w="90%" maxW="700px" textAlign="center" opacity={isSecondDefinitionRevealed ? 1 : 0.5}>
-          <Text fontSize="lg" whiteSpace="pre-wrap" fontFamily="Comic Sans MS" color="yellow.300" minH={{ base: "50px", md: "60px" }}>
-            {isSecondDefinitionRevealed ? currentQuestion.definition2 : "** another definition **"}
-          </Text>
-        </Box>
-      </Flex>
+      <DefinitionBox 
+        definition={currentQuestion.definition1} 
+      />
+      
+      <DefinitionBox 
+        definition={currentQuestion.definition2}
+        isSecondary
+        isRevealed={isSecondDefinitionRevealed}
+      />
 
       {/* Options */}
       <Box w={{ base: "365px", sm: "370px", md: "370px" }} maxW="95%" p={{ base: 2, md: 4 }} textAlign="center" mx="auto">
