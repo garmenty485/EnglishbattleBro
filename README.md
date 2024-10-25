@@ -34,15 +34,15 @@
 ## 環境變量設置
 
 創建 `.env` 文件：
-PORT=5000
-MONGODB_URI=你的MongoDB連接URL
-NODE_ENV=development
+- PORT=5000
+- MONGODB_URI=你的MongoDB連接URL
+- NODE_ENV=development
 
 
 ### 生產環境
 bash
-npm run build
-npm start
+- npm run build
+- npm start
 
 
 ## API 路由
