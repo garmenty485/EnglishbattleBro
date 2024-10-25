@@ -3,15 +3,21 @@ import { useToast } from "@chakra-ui/react";
 import { useNavigate } from 'react-router-dom';
 import questions from '../assets/questions.json';
 import { SCORE_CONFIG } from '../constants/gameConfig';
+import useScoreManagement from './useScoreManagement'; // 假設有這個 hook
 
 function useSoloPlayLogic(userInfo) {
+  const {
+    score,
+    showScoreBonus,
+    showScorePenalty,
+    addBonus,
+    deductPenalty
+  } = useScoreManagement();
+
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answer, setAnswer] = useState("");
-  const [score, setScore] = useState(SCORE_CONFIG.INITIAL_SCORE); // 修改 score 的初始化
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const [isFirstLetterRevealed, setIsFirstLetterRevealed] = useState(false);
-  const [showScoreBonus, setShowScoreBonus] = useState(false);
-  const [showScorePenalty, setShowScorePenalty] = useState(false);
   const [isSecondDefinitionRevealed, setIsSecondDefinitionRevealed] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showHint, setShowHint] = useState(true);
@@ -21,39 +27,17 @@ function useSoloPlayLogic(userInfo) {
   const currentQuestion = questions[currentQuestionIndex];
 
   const revealFirstLetter = () => {
-    if (score >= SCORE_CONFIG.PENALTY_AMOUNT && !isFirstLetterRevealed) {
+    if (!isFirstLetterRevealed && deductPenalty()) {
       const firstLetter = currentQuestion.question.charAt(0).toLowerCase();
       setAnswer(firstLetter);
-      setScore(prevScore => Number(prevScore) - SCORE_CONFIG.PENALTY_AMOUNT); // 修改所有更新 score 的地方
       setIsButtonDisabled(true);
       setIsFirstLetterRevealed(true);
-      setShowScorePenalty(true);
-      setTimeout(() => setShowScorePenalty(false), 750);
-    } else if (score < SCORE_CONFIG.PENALTY_AMOUNT) {
-      toast({
-        title: "Not enough money!",
-        status: "warning",
-        duration: 2000,
-        isClosable: true,
-        position: "top"
-      });
     }
   };
 
   const revealSecondDefinition = () => {
-    if (score >= SCORE_CONFIG.PENALTY_AMOUNT && !isSecondDefinitionRevealed) {
-      setScore(prevScore => Number(prevScore) - SCORE_CONFIG.PENALTY_AMOUNT); // 修改所有更新 score 的地方
+    if (!isSecondDefinitionRevealed && deductPenalty()) {
       setIsSecondDefinitionRevealed(true);
-      setShowScorePenalty(true);
-      setTimeout(() => setShowScorePenalty(false), 750);
-    } else if (score < SCORE_CONFIG.PENALTY_AMOUNT) {
-      toast({
-        title: "Not enough money!",
-        status: "warning",
-        duration: 2000,
-        isClosable: true,
-        position: "top"
-      });
     }
   };
 
@@ -111,14 +95,9 @@ function useSoloPlayLogic(userInfo) {
   useEffect(() => {
     if (answer.length === currentQuestion.question.length) {
       if (answer === currentQuestion.question) {
-        // 先加分
-        setScore(prevScore => Number(prevScore) + SCORE_CONFIG.BONUS_AMOUNT); // 修改所有更新 score 的地方
-        setShowScoreBonus(true);
-        setTimeout(() => setShowScoreBonus(false), 750);
-
+        addBonus();
         if (currentQuestionIndex === questions.length - 1) {
-          // 最后一题答对后，显示模态框
-          setIsModalOpen(true); // 不用延遲了 馬上出來
+          setIsModalOpen(true);
         } else {
           toast({
             title: "Correct!",
