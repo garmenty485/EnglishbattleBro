@@ -1,7 +1,8 @@
-import { Text, Flex, Box, Container, Button, Image, Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalFooter } from "@chakra-ui/react";
+import { Text, Flex, Box, Container, Button, Image } from "@chakra-ui/react";
 import useSoloPlayLogic from '../hooks/useSoloPlayLogic';
 import useSendRecord from '../hooks/useSendRecord';
 import GameOptionButton from '../components/GameOptionButton';
+import GameResultModal from '../components/GameResultModal';
 
 function SoloPlayPage({ userInfo }) {
   const {
@@ -212,35 +213,11 @@ function SoloPlayPage({ userInfo }) {
         </Flex>
       </Box>
 
-      <Modal isOpen={isModalOpen} onClose={handleCloseModal} isCentered>
-        <ModalOverlay />
-        <ModalContent 
-          bg="yellow.100" 
-          width={{ base: "90%", md: "400px" }}
-          mx="auto"
-          textAlign="center" 
-          border="4px solid" 
-          borderColor="yellow.300"
-        >
-          <ModalHeader
-            fontFamily="Comic Sans MS"
-            color="pink.600"
-            textAlign="center"
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
-            gap={2}  // 添加間距
-          >
-            🎉🎉🎉 COMPLETE 🎉🎉🎉
-          </ModalHeader>
-          <ModalBody>
-            <Text fontSize="2xl" fontFamily="Comic Sans MS" color="pink.600">Your Score: {score}</Text>
-          </ModalBody>
-          <ModalFooter justifyContent="center">
-            <Button colorScheme="pink" fontFamily="Comic Sans MS" color="yellow.300" onClick={handleCloseModal}>Close</Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+      <GameResultModal 
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        score={score}
+      />
     </Container>
   );
 }
