@@ -12,7 +12,6 @@ function SoloPlayPage({ userInfo }) {
     currentQuestionIndex,
     answer,
     score,
-    isButtonDisabled,
     isFirstLetterRevealed,
     showScoreBonus,
     showScorePenalty,
@@ -20,9 +19,9 @@ function SoloPlayPage({ userInfo }) {
     isModalOpen,
     showHint,
     currentQuestion,
-    revealFirstLetter,
-    revealSecondDefinition,
-    skipQuestion,
+    revealLetter,                // 改為 revealLetter
+    revealSecondDefinition,      // 保持不變
+    handleSkipQuestion,          // 明確表示這是一個事件處理器
     handleCloseModal
   } = useSoloPlayLogic(userInfo);
 
@@ -104,8 +103,8 @@ function SoloPlayPage({ userInfo }) {
             icon="💡"
             tooltipText="Reveal a letter (cost: $30)"
             hotKeyIcon="⬅️"
-            onClick={revealFirstLetter}
-            isDisabled={isButtonDisabled}
+            onClick={revealLetter}    // 改為 revealLetter
+            isDisabled={isFirstLetterRevealed}
             colorScheme="teal"
           />
           
@@ -122,7 +121,7 @@ function SoloPlayPage({ userInfo }) {
             icon="⏭️"
             tooltipText="Skip this question"
             hotKeyIcon="➡️"
-            onClick={skipQuestion}
+            onClick={handleSkipQuestion}
             colorScheme="red"
           />
         </Flex>

@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import questions from '../assets/questions.json';
 import { SCORE_CONFIG } from '../constants/gameConfig';
 import useScoreManagement from './useScoreManagement'; // 假設有這個 hook
+import useQuestionControl from './useQuestionControl'; // 假設有這個 hook
 
 function useSoloPlayLogic(userInfo) {
   const {
@@ -14,42 +15,29 @@ function useSoloPlayLogic(userInfo) {
     deductPenalty
   } = useScoreManagement();
 
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const {
+    currentQuestion,
+    currentQuestionIndex,
+    isFirstLetterRevealed,
+    isSecondDefinitionRevealed,
+    revealFirstLetter,
+    revealSecondDefinition,
+    nextQuestion,
+    isLastQuestion
+  } = useQuestionControl();
+
   const [answer, setAnswer] = useState("");
-  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
-  const [isFirstLetterRevealed, setIsFirstLetterRevealed] = useState(false);
-  const [isSecondDefinitionRevealed, setIsSecondDefinitionRevealed] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showHint, setShowHint] = useState(true);
   const toast = useToast();
   const navigate = useNavigate();
 
-  const currentQuestion = questions[currentQuestionIndex];
-
-  const revealFirstLetter = () => {
-    if (!isFirstLetterRevealed && deductPenalty()) {
-      const firstLetter = currentQuestion.question.charAt(0).toLowerCase();
-      setAnswer(firstLetter);
-      setIsButtonDisabled(true);
-      setIsFirstLetterRevealed(true);
-    }
-  };
-
-  const revealSecondDefinition = () => {
-    if (!isSecondDefinitionRevealed && deductPenalty()) {
-      setIsSecondDefinitionRevealed(true);
-    }
-  };
-
-  const skipQuestion = () => {
-    if (currentQuestionIndex === questions.length - 1) {
+  const handleSkipQuestion = () => {
+    if (isLastQuestion()) {
       setIsModalOpen(true);
     } else {
+      nextQuestion();
       setAnswer("");
-      setCurrentQuestionIndex((prev) => (prev + 1));
-      setIsButtonDisabled(false);
-      setIsFirstLetterRevealed(false);
-      setIsSecondDefinitionRevealed(false);
       toast({
         title: "Question skipped!",
         status: "info",
@@ -58,6 +46,26 @@ function useSoloPlayLogic(userInfo) {
         position: "top"
       });
     }
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    if (userInfo) {
+      navigate('/loggedin');
+    } else {
+      navigate('/');
+    }
+  };
+
+  const handleRevealLetter = () => {
+    const letter = revealFirstLetter(deductPenalty);
+    if (letter) {
+      setAnswer(letter);
+    }
+  };
+
+  const handleRevealDefinition = () => {
+    revealSecondDefinition(deductPenalty);
   };
 
   useEffect(() => {
@@ -76,11 +84,11 @@ function useSoloPlayLogic(userInfo) {
             setAnswer("");
           }
         } else if (e.key === 'ArrowLeft') {
-          revealFirstLetter();
+          handleRevealLetter();
         } else if (e.key === 'ArrowDown') {
-          revealSecondDefinition();
+          handleRevealDefinition();
         } else if (e.key === 'ArrowRight') {
-          skipQuestion();
+          handleSkipQuestion();
         }
       };
 
@@ -96,7 +104,7 @@ function useSoloPlayLogic(userInfo) {
     if (answer.length === currentQuestion.question.length) {
       if (answer === currentQuestion.question) {
         addBonus();
-        if (currentQuestionIndex === questions.length - 1) {
+        if (isLastQuestion()) {
           setIsModalOpen(true);
         } else {
           toast({
@@ -107,10 +115,7 @@ function useSoloPlayLogic(userInfo) {
             position: "top"
           });
           setAnswer("");
-          setCurrentQuestionIndex((prev) => (prev + 1));
-          setIsButtonDisabled(false);
-          setIsFirstLetterRevealed(false);
-          setIsSecondDefinitionRevealed(false);
+          nextQuestion();
         }
       } else {
         toast({
@@ -123,7 +128,7 @@ function useSoloPlayLogic(userInfo) {
         setAnswer(isFirstLetterRevealed ? currentQuestion.question.charAt(0).toLowerCase() : "");
       }
     }
-  }, [answer, currentQuestion, toast, isFirstLetterRevealed, currentQuestionIndex]);
+  }, [answer, currentQuestion, toast, isFirstLetterRevealed]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -133,20 +138,10 @@ function useSoloPlayLogic(userInfo) {
     return () => clearTimeout(timer);
   }, []);
 
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-    if (userInfo) {
-      navigate('/loggedin');
-    } else {
-      navigate('/');
-    }
-  };
-
   return {
     currentQuestionIndex,
     answer,
     score,
-    isButtonDisabled,
     isFirstLetterRevealed,
     showScoreBonus,
     showScorePenalty,
@@ -154,9 +149,9 @@ function useSoloPlayLogic(userInfo) {
     isModalOpen,
     showHint,
     currentQuestion,
-    revealFirstLetter,
-    revealSecondDefinition,
-    skipQuestion,
+    revealLetter: handleRevealLetter,
+    revealSecondDefinition: handleRevealDefinition,
+    handleSkipQuestion,
     handleCloseModal
   };
 }
