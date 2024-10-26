@@ -19,6 +19,7 @@ function BattleModal({ isOpen, onClose }) {
   const [battleCode, setBattleCode] = useState("");
   const [isWaiting, setIsWaiting] = useState(false);
   const [isRandomMatch, setIsRandomMatch] = useState(false);
+  const [copySuccess, setCopySuccess] = useState(false);
 
   // 生成隨機代碼
   const generateBattleCode = () => {
@@ -43,7 +44,41 @@ function BattleModal({ isOpen, onClose }) {
   };
 
   const handleCopyCode = () => {
-    navigator.clipboard.writeText(battleCode);
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(battleCode)
+        .then(() => {
+          setCopySuccess(true);
+        })
+        .catch((err) => {
+          console.error("Failed to copy: ", err);
+          fallbackCopyTextToClipboard(battleCode);
+        });
+    } else {
+      fallbackCopyTextToClipboard(battleCode);
+    }
+  };
+
+  const fallbackCopyTextToClipboard = (text) => {
+    const textArea = document.createElement("textarea");
+    textArea.value = text;
+    textArea.style.position = "fixed";
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+
+    try {
+      const successful = document.execCommand('copy');
+      if (successful) {
+        setCopySuccess(true);
+      } else {
+        alert("Unable to copy battle code. Please copy it manually: " + battleCode);
+      }
+    } catch (err) {
+      console.error("Fallback: Oops, unable to copy", err);
+      alert("Unable to copy battle code. Please copy it manually: " + battleCode);
+    }
+
+    document.body.removeChild(textArea);
   };
 
   return (
@@ -87,7 +122,7 @@ function BattleModal({ isOpen, onClose }) {
 
               <HStack width="100%" spacing={2}>
                 <Input
-                  placeholder="Enter Code"
+                  placeholder="Code"
                   onChange={(e) => setBattleCode(e.target.value.toUpperCase())}
                   maxLength={6}
                   textAlign="center"
@@ -134,7 +169,7 @@ function BattleModal({ isOpen, onClose }) {
                     <span>
                       {battleCode}
                       <br />
-                      (press to copy code)
+                      {copySuccess ? "(Copied!!!)" : "(Tap to copy code)"}
                     </span>
                   }
                   onClick={handleCopyCode}
@@ -168,6 +203,7 @@ function BattleModal({ isOpen, onClose }) {
                   setIsWaiting(false);
                   setBattleCode("");
                   setIsRandomMatch(false);
+                  setCopySuccess(false);
                 }}
                 colorScheme="red"
                 width="100%"
