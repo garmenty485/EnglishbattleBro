@@ -1,5 +1,5 @@
 //暫時為空 未來使用
-// // 對戰模式 useSendRecord
+// // 以下僅為測試內容
 
 import useSendRecord from '../hooks/useSendRecord';
 

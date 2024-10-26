@@ -1,12 +1,15 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useDisclosure } from "@chakra-ui/react";
 import CommonLayout from '../components/CommonLayout';
 import CustomButton from '../components/CustomButton';
+import BattleModal from '../components/BattleModal';
 import useGoogleLoginLogic from '../hooks/useGoogleLoginLogic';
 
 function HomePage({ onLogin }) {
   const navigate = useNavigate();
   const login = useGoogleLoginLogic(onLogin);
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const handleSoloPlay = () => {
     navigate('/soloplay');
@@ -26,7 +29,14 @@ function HomePage({ onLogin }) {
       />
       <CustomButton
         icon="⚔️"
-        text="Battle with Friend (Guest Mode)"
+        text="Battle Mode (Guest)"
+        onClick={onOpen}
+      />
+
+      <BattleModal 
+        isOpen={isOpen} 
+        onClose={onClose}
+        userInfo={null}
       />
     </CommonLayout>
   );

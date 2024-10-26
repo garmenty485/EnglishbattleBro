@@ -1,14 +1,16 @@
 import React from 'react';
-import { Image } from "@chakra-ui/react";
+import { Image, useDisclosure } from "@chakra-ui/react";
 import { useNavigate } from 'react-router-dom';
 import CommonLayout from '../components/CommonLayout';
 import CustomButton from '../components/CustomButton';
+import BattleModal from '../components/BattleModal';
 
 function LoggedInHomePage({ userInfo }) {
   const navigate = useNavigate();
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const handleSoloPlay = () => {
-    navigate('/soloplay'); // 跳转到 SoloPlayPage
+    navigate('/soloplay');
   };
 
   return (
@@ -20,11 +22,18 @@ function LoggedInHomePage({ userInfo }) {
       <CustomButton
         icon="🏃‍♀️"
         text="Solo Play"
-        onClick={handleSoloPlay} // 绑定点击事件
+        onClick={handleSoloPlay}
       />
       <CustomButton
         icon="⚔️"
-        text="Battle with Friend"
+        text="Battle Mode (PvP)"
+        onClick={onOpen}
+      />
+
+      <BattleModal 
+        isOpen={isOpen} 
+        onClose={onClose}
+        userInfo={userInfo}
       />
     </CommonLayout>
   );
