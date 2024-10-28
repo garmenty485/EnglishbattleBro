@@ -12,7 +12,11 @@ function useGameActions({
   revealFirstLetter,
   revealSecondDefinition,
   deductPenalty,
-  addBonus
+  addBonus,
+  socket,  // 新增 socket 參數
+  battleCode,  // 新增 battleCode 參數
+  currentSocketId,  // 新增 currentSocketId 參數
+  currentQuestionIndex  // 新增 currentQuestionIndex 參數
 }) {
   const toast = useToast();
 
@@ -47,6 +51,16 @@ function useGameActions({
   useEffect(() => {
     if (answer.length === currentQuestion.question.length) {
       if (answer === currentQuestion.question) {
+        // 答對時，發送答題結果到服務器
+        if (socket.current) {
+          socket.current.emit('answerSubmitted', {
+            roomCode: battleCode,
+            socketId: currentSocketId,
+            questionIndex: currentQuestionIndex,
+            isCorrect: true
+          });
+        }
+
         addBonus();
         if (isLastQuestion()) {
           setIsModalOpen(true);

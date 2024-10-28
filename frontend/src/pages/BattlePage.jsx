@@ -1,31 +1,63 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Text, Flex, Box, Container, Image } from "@chakra-ui/react";
-import useSoloPlayLogic from '../hooks/useSoloPlayLogic'; // 假設你有類似的邏輯 hook
+import useBattlePlayLogic from '../hooks/useBattlePlayLogic';
 import GameOptionButton from '../components/GameOptionButton';
 import GameResultModal from '../components/GameResultModal';
 import DefinitionBox from '../components/DefinitionBox';
 import AnswerInput from '../components/AnswerInput';
 import ScoreDisplay from '../components/ScoreDisplay';
+import io from 'socket.io-client';
 
 function BattlePage() {
   const location = useLocation();
   const { userInfo, battleCode, players, currentSocketId } = location.state || {};
+  const socket = useRef(null);
+  console.log('socket', socket);
+  const [answeredQuestions, setAnsweredQuestions] = useState(new Map());
+  const [isSocketReady, setIsSocketReady] = useState(false);
 
   // 確定誰是對手
   const rival = players?.playerA.socketId === currentSocketId 
     ? players.playerB 
     : players.playerA;
 
-  // 使用從 BattleModal 傳來的數據，而不是重新建立 socket 連接
+  // 先建立連接
   useEffect(() => {
-    console.log('Battle Page Info:', {
-      battleCode,
-      currentPlayer: currentSocketId,
-      players
-    });
-  }, [battleCode, currentSocketId, players]); // 確保依賴數據變化時才會重新執行
+    socket.current = io('http://localhost:5000');
+    console.log('Socket connected:', socket.current.id);
 
+    if (battleCode) {
+      socket.current.emit('rejoinRoom', {
+        roomCode: battleCode,
+        socketId: currentSocketId
+      });
+    }
+    
+    setIsSocketReady(true);
+
+    return () => {
+      if (socket.current) {
+        socket.current.disconnect();
+        setIsSocketReady(false);
+      }
+    };
+  }, [battleCode, currentSocketId]);
+
+  // 再設置事件監聽
+  useEffect(() => {
+    if (!isSocketReady) return;
+    
+    socket.current.on('rivalAnswered', ({ questionIndex, isCorrect }) => {
+      if (isCorrect) {
+        setAnsweredQuestions(prev => new Map(prev).set(questionIndex, true));
+      }
+    });
+
+    return () => socket.current?.off('rivalAnswered');
+  }, [isSocketReady]);
+
+  // 最後使用 battleLogic
   const {
     currentQuestionIndex,
     answer,
@@ -41,7 +73,11 @@ function BattlePage() {
     revealSecondDefinition,
     handleSkipQuestion,
     handleCloseModal
-  } = useSoloPlayLogic(userInfo); // 使用類似的邏輯 hook
+  } = useBattlePlayLogic(userInfo, {
+    socket: isSocketReady ? socket : null,
+    battleCode,
+    currentSocketId
+  }); 
 
   return (
     <Container
@@ -117,9 +153,11 @@ function BattlePage() {
       />
 
       {/* 顯示對手已回答的提示 */}
-      <Text fontSize="md" color="red" textAlign="center" mt={4}>
-        Your rival got 3x scores for answering this question first! 😢
-      </Text>
+      {answeredQuestions.get(currentQuestionIndex) && (
+        <Text fontSize="md" color="red" textAlign="center" mt={4}>
+          Your rival gained +300 scores for answering this question first! 😢
+        </Text>
+      )}
 
       <DefinitionBox
         definition={currentQuestion.definition1}

@@ -83,13 +83,13 @@ function BattleModal({ isOpen, onClose, userInfo }) {
         }
       });
 
-      navigate('/battle', {
-        state: {
+      navigate('/battle', { 
+        state: { 
           userInfo,
           battleCode: roomCode,
           players,
-          currentSocketId: socket.current.id  // 添加當前玩家的 socketId
-        }
+          currentSocketId: socket.current.id,
+        } 
       });
     });
   };

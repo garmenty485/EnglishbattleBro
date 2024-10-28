@@ -86,9 +86,28 @@ io.on('connection', (socket) => {
     }
   });
 
+  // 當玩家回答題目時
+  socket.on('answerSubmitted', ({ roomCode, socketId, questionIndex, isCorrect }) => {
+    // 通知房間內的其他玩家
+    socket.to(roomCode).emit('rivalAnswered', {
+      questionIndex,
+      isCorrect
+    });
+    
+    console.log(`Player ${socketId} answered question ${questionIndex} (correct: ${isCorrect})`);
+  });
+
+  // 當玩家重新加入房間時
+  socket.on('rejoinRoom', ({ roomCode, socketId }) => {
+    console.log(`Player ${socketId} rejoining room ${roomCode}`);
+    socket.join(roomCode);
+    });
+
   // 當用戶斷開連接時
   socket.on('disconnect', () => {
     console.log('User disconnected:', socket.id); // 打印用戶斷開連接的ID
+    // 從等待列表中移除斷開連接的玩家
+    waitingPlayers = waitingPlayers.filter(player => player.socketId !== socket.id);
   });
 });
 
