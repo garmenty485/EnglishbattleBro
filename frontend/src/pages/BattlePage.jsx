@@ -65,7 +65,7 @@ function BattlePage() {
           ) : (
             <Flex align="center" gap={2}>
               <Text fontFamily="Comic Sans MS" color="pink.600" fontSize="xl" fontWeight="bold">
-                Guest
+                Guest Mode
               </Text>
             </Flex>
           )}
@@ -95,8 +95,8 @@ function BattlePage() {
             </Flex>
           ) : (
             <Flex align="center" gap={2}>
-              <Text fontFamily="Comic Sans MS" color="red" fontSize="3xl" fontWeight="bold">
-                Rival: Guest
+              <Text fontFamily="Comic Sans MS" color="red" fontSize="1xl" fontWeight="bold">
+                Rival:Guest
               </Text>
             </Flex>
           )}
