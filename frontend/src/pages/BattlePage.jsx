@@ -12,12 +12,19 @@ function BattlePage() {
   const location = useLocation();
   const { userInfo, battleCode, players, currentSocketId } = location.state || {};
 
+  // 確定誰是對手
+  const rival = players?.playerA.socketId === currentSocketId 
+    ? players.playerB 
+    : players.playerA;
+
   // 使用從 BattleModal 傳來的數據，而不是重新建立 socket 連接
-  console.log('Battle Page Info:', {
-    battleCode,
-    currentPlayer: currentSocketId,
-    players
-  });
+  useEffect(() => {
+    console.log('Battle Page Info:', {
+      battleCode,
+      currentPlayer: currentSocketId,
+      players
+    });
+  }, [battleCode, currentSocketId, players]); // 確保依賴數據變化時才會重新執行
 
   const {
     currentQuestionIndex,
@@ -49,15 +56,22 @@ function BattlePage() {
       bg="yellow.100"
     >
       <Flex justify="space-between" align="center" mb={4} position="relative">
+        {/* 左側：當前玩家 */}
         <Box>
           {userInfo ? (
-            <Image src={userInfo.picture} boxSize="40px" borderRadius="full" />
+            <Flex align="center" gap={2}>
+              <Image src={userInfo.picture} boxSize="40px" borderRadius="full" />
+            </Flex>
           ) : (
-            <Text fontFamily="Comic Sans MS" color="pink.600" fontSize="xl" fontWeight="bold">
-              Guest Mode
-            </Text>
+            <Flex align="center" gap={2}>
+              <Text fontFamily="Comic Sans MS" color="pink.600" fontSize="xl" fontWeight="bold">
+                Guest
+              </Text>
+            </Flex>
           )}
         </Box>
+
+        {/* 中間：題號 */}
         <Flex
           position="absolute"
           left="50%"
@@ -69,6 +83,24 @@ function BattlePage() {
             #{currentQuestionIndex + 1}
           </Text>
         </Flex>
+
+        {/* 右側：對手 */}
+        <Box>
+          {rival?.userInfo ? (
+            <Flex align="center" gap={2}>
+              <Text fontFamily="Comic Sans MS" color="red" fontSize="3xl" fontWeight="bold">
+                Rival:
+              </Text>
+              <Image src={rival.userInfo.picture} boxSize="40px" borderRadius="full" />
+            </Flex>
+          ) : (
+            <Flex align="center" gap={2}>
+              <Text fontFamily="Comic Sans MS" color="red" fontSize="3xl" fontWeight="bold">
+                Rival: Guest
+              </Text>
+            </Flex>
+          )}
+        </Box>
       </Flex>
 
       <ScoreDisplay
@@ -85,8 +117,8 @@ function BattlePage() {
       />
 
       {/* 顯示對手已回答的提示 */}
-      <Text fontSize="md" color="red.500" textAlign="center" mt={4}>
-        Your rival already answered this question! 😢
+      <Text fontSize="md" color="red" textAlign="center" mt={4}>
+        Your rival got 3x scores for answering this question first! 😢
       </Text>
 
       <DefinitionBox
