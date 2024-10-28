@@ -46,20 +46,44 @@ if (process.env.NODE_ENV === 'production') {
     });
 }
 
+// 存儲等待匹配的玩家
+let waitingPlayers = [];
+
 // Socket.io 連接處理
 io.on('connection', (socket) => {
   console.log('A user connected:', socket.id); // 當用戶連接時打印用戶ID
 
-  // 當用戶加入房間時
-  socket.on('joinRoom', (roomId) => {
-    socket.join(roomId); // 加入指定的房間
-    console.log(`User ${socket.id} joined room ${roomId}`); // 打印用戶加入的房間ID
-  });
+  // 當用戶請求隨機匹配時
+  socket.on('joinRandomMatch', (data) => {
+    console.log('Player requesting match:', data);
 
-  // 當用戶離開房間時
-  socket.on('leaveRoom', (roomId) => {
-    socket.leave(roomId); // 離開指定的房間
-    console.log(`User ${socket.id} left room ${roomId}`); // 打印用戶離開的房間ID
+    // 如果已經有玩家在等待
+    if (waitingPlayers.length > 0) {
+      const opponent = waitingPlayers.shift(); // 取出第一個等待的玩家
+      const roomCode = `room_${Date.now()}`; // 生成房間代碼
+
+      // 準備玩家信息
+      const players = {
+        playerA: {
+          socketId: opponent.socketId,
+          userInfo: opponent.userInfo
+        },
+        playerB: {
+          socketId: data.socketId,
+          userInfo: data.userInfo
+        }
+      };
+
+      // 通知兩個玩家匹配成功
+      io.to(opponent.socketId).emit('matchFound', roomCode, players);
+      io.to(data.socketId).emit('matchFound', roomCode, players);
+      
+      console.log('Match found:', { roomCode, players });
+    } else {
+      // 如果沒有其他玩家，加入等待列表
+      waitingPlayers.push(data);
+      console.log('Player added to waiting list:', data);
+    }
   });
 
   // 當用戶斷開連接時

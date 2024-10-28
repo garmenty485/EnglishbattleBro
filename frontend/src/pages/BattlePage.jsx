@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { Text, Flex, Box, Container, Image } from "@chakra-ui/react";
-import { io } from 'socket.io-client';
 import useSoloPlayLogic from '../hooks/useSoloPlayLogic'; // 假設你有類似的邏輯 hook
 import GameOptionButton from '../components/GameOptionButton';
 import GameResultModal from '../components/GameResultModal';
@@ -8,7 +8,17 @@ import DefinitionBox from '../components/DefinitionBox';
 import AnswerInput from '../components/AnswerInput';
 import ScoreDisplay from '../components/ScoreDisplay';
 
-function BattlePage({ userInfo }) {
+function BattlePage() {
+  const location = useLocation();
+  const { userInfo, battleCode, players, currentSocketId } = location.state || {};
+
+  // 使用從 BattleModal 傳來的數據，而不是重新建立 socket 連接
+  console.log('Battle Page Info:', {
+    battleCode,
+    currentPlayer: currentSocketId,
+    players
+  });
+
   const {
     currentQuestionIndex,
     answer,
@@ -25,28 +35,6 @@ function BattlePage({ userInfo }) {
     handleSkipQuestion,
     handleCloseModal
   } = useSoloPlayLogic(userInfo); // 使用類似的邏輯 hook
-
-  useEffect(() => {
-    const socket = io('http://localhost:5000');
-
-    socket.on('connect', () => {
-      console.log('Connected to server:', socket.id);
-      socket.emit('joinRoom', 'battle_room_001');
-    });
-
-    socket.on('rivalAnswered', () => {
-      // 這裡可以更新狀態以顯示對手已回答
-    });
-
-    socket.on('disconnect', () => {
-      console.log('Disconnected from server');
-    });
-
-    return () => {
-      socket.emit('leaveRoom', 'battle_room_001');
-      socket.disconnect();
-    };
-  }, []);
 
   return (
     <Container
