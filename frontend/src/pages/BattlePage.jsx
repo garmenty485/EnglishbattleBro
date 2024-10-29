@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Text, Flex, Box, Container, Image } from "@chakra-ui/react";
 import useBattlePlayLogic from '../hooks/useBattlePlayLogic';
@@ -7,57 +7,35 @@ import GameResultModal from '../components/GameResultModal';
 import DefinitionBox from '../components/DefinitionBox';
 import AnswerInput from '../components/AnswerInput';
 import ScoreDisplay from '../components/ScoreDisplay';
-import io from 'socket.io-client';
+import { useSocket } from '../context/SocketContext';
 
 function BattlePage() {
   const location = useLocation();
   const { userInfo, battleCode, players, currentSocketId } = location.state || {};
-  const socket = useRef(null);
-  console.log('socket', socket);
+  const socket = useSocket();  // 使用 Context 中的 socket
   const [answeredQuestions, setAnsweredQuestions] = useState(new Map());
-  const [isSocketReady, setIsSocketReady] = useState(false);
 
   // 確定誰是對手
   const rival = players?.playerA.socketId === currentSocketId 
     ? players.playerB 
     : players.playerA;
 
-  // 先建立連接
+  // 設置事件監聽
   useEffect(() => {
-    socket.current = io('http://localhost:5000');
-    console.log('Socket connected:', socket.current.id);
-
-    if (battleCode) {
-      socket.current.emit('rejoinRoom', {
-        roomCode: battleCode,
-        socketId: currentSocketId
-      });
-    }
+    if (!socket) return;
     
-    setIsSocketReady(true);
-
-    return () => {
-      if (socket.current) {
-        socket.current.disconnect();
-        setIsSocketReady(false);
-      }
-    };
-  }, [battleCode, currentSocketId]);
-
-  // 再設置事件監聽
-  useEffect(() => {
-    if (!isSocketReady) return;
-    
-    socket.current.on('rivalAnswered', ({ questionIndex, isCorrect }) => {
+    socket.on('rivalAnswered', ({ questionIndex, isCorrect }) => {
       if (isCorrect) {
         setAnsweredQuestions(prev => new Map(prev).set(questionIndex, true));
       }
     });
 
-    return () => socket.current?.off('rivalAnswered');
-  }, [isSocketReady]);
+    return () => {
+      socket?.off('rivalAnswered');
+    };
+  }, [socket]);
 
-  // 最後使用 battleLogic
+  // 使用 battleLogic
   const {
     currentQuestionIndex,
     answer,
@@ -74,7 +52,7 @@ function BattlePage() {
     handleSkipQuestion,
     handleCloseModal
   } = useBattlePlayLogic(userInfo, {
-    socket: isSocketReady ? socket : null,
+    socket,
     battleCode,
     currentSocketId
   }); 

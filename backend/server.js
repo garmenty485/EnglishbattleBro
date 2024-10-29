@@ -62,6 +62,13 @@ io.on('connection', (socket) => {
       const opponent = waitingPlayers.shift(); // 取出第一個等待的玩家
       const roomCode = `room_${Date.now()}`; // 生成房間代碼
 
+      // 將兩個玩家加入同一個房間
+      socket.join(roomCode);
+      const opponentSocket = io.sockets.sockets.get(opponent.socketId);
+      if (opponentSocket) {
+        opponentSocket.join(roomCode);
+      }
+
       // 準備玩家信息
       const players = {
         playerA: {
@@ -75,9 +82,7 @@ io.on('connection', (socket) => {
       };
 
       // 通知兩個玩家匹配成功
-      io.to(opponent.socketId).emit('matchFound', roomCode, players);
-      io.to(data.socketId).emit('matchFound', roomCode, players);
-      
+      io.to(roomCode).emit('matchFound', roomCode, players);
       console.log('Match found:', { roomCode, players });
     } else {
       // 如果沒有其他玩家，加入等待列表
@@ -88,26 +93,34 @@ io.on('connection', (socket) => {
 
   // 當玩家回答題目時
   socket.on('answerSubmitted', ({ roomCode, socketId, questionIndex, isCorrect }) => {
+    // 確保玩家在房間中
+    const rooms = [...socket.rooms];
+    if (!rooms.includes(roomCode)) {
+      socket.join(roomCode);
+    }
+
     // 通知房間內的其他玩家
     socket.to(roomCode).emit('rivalAnswered', {
       questionIndex,
-      isCorrect
+      isCorrect,
+      socketId
     });
     
-    console.log(`Player ${socketId} answered question ${questionIndex} (correct: ${isCorrect})`);
+    console.log(`Player ${socketId} answered question ${questionIndex} (correct: ${isCorrect}) in room ${roomCode}`);
   });
-
-  // 當玩家重新加入房間時
-  socket.on('rejoinRoom', ({ roomCode, socketId }) => {
-    console.log(`Player ${socketId} rejoining room ${roomCode}`);
-    socket.join(roomCode);
-    });
 
   // 當用戶斷開連接時
   socket.on('disconnect', () => {
     console.log('User disconnected:', socket.id); // 打印用戶斷開連接的ID
     // 從等待列表中移除斷開連接的玩家
     waitingPlayers = waitingPlayers.filter(player => player.socketId !== socket.id);
+    
+    // 通知所有相關房間中的其他玩家
+    socket.rooms.forEach(room => {
+      if (room !== socket.id) {
+        socket.to(room).emit('playerDisconnected', socket.id);
+      }
+    });
   });
 });
 

@@ -12,18 +12,18 @@ import {
   Box,
 } from "@chakra-ui/react";
 import { useState, useRef } from "react";
-import { io } from "socket.io-client";
 import { useNavigate } from 'react-router-dom';  // 添加這行
 import CustomButton from './CustomButton';
 import LoadingDots from './LoadingDots';
+import { useSocket } from '../context/SocketContext';
 
 function BattleModal({ isOpen, onClose, userInfo }) {
   const navigate = useNavigate();  // 添加這行
+  const socket = useSocket();
   const [battleCode, setBattleCode] = useState("");
   const [isWaiting, setIsWaiting] = useState(false);
   const [isRandomMatch, setIsRandomMatch] = useState(false);
   const [copySuccess, setCopySuccess] = useState(false);
-  const socket = useRef(null);
 
   // 生成隨機代碼
   const generateBattleCode = () => {
@@ -43,52 +43,25 @@ function BattleModal({ isOpen, onClose, userInfo }) {
   };
 
   const handleMatchRandom = () => {
-    console.log('Initiating random match...'); 
+    if (!socket) return;
+    
     setIsWaiting(true);
     setIsRandomMatch(true);
     
-    // 建立 socket 連接
-    console.log('Setting up socket connection...'); 
-    socket.current = io('http://localhost:5000');
-
-    // 監聽連接成功事件
-    socket.current.on('connect', () => {
-      console.log('Player Info:', {
-        type: userInfo ? 'Logged User' : 'Guest',
-        socketId: socket.current.id,
-        userInfo: userInfo || 'No user info (Guest Mode)'
-      });
-      
-      // 連接成功後發送匹配請求，同時傳送 userInfo 和 socketId
-      socket.current.emit('joinRandomMatch', { 
-        userInfo,
-        socketId: socket.current.id 
-      });
-      console.log('Random match request sent with user info:', userInfo);
+    // 發送匹配請求
+    socket.emit('joinRandomMatch', { 
+      userInfo,
+      socketId: socket.id 
     });
 
-    // 添加導航邏輯
-    socket.current.on('matchFound', (roomCode, players) => {
-      // 更詳細的日誌
-      console.log('Match found!', {
-        roomCode,
-        currentPlayer: socket.current.id,  // 當前玩家的 socketId
-        playerA: {
-          socketId: players.playerA.socketId,
-          type: players.playerA.userInfo ? 'Logged User' : 'Guest'
-        },
-        playerB: {
-          socketId: players.playerB.socketId,
-          type: players.playerB.userInfo ? 'Logged User' : 'Guest'
-        }
-      });
-
+    // 監聽匹配成功事件
+    socket.on('matchFound', (roomCode, players) => {
       navigate('/battle', { 
         state: { 
           userInfo,
           battleCode: roomCode,
           players,
-          currentSocketId: socket.current.id,
+          currentSocketId: socket.id,
         } 
       });
     });
@@ -134,9 +107,9 @@ function BattleModal({ isOpen, onClose, userInfo }) {
 
   // 當用戶取消匹配或關閉 Modal 時斷開連接
   const handleCancel = () => {
-    if (socket.current) {
+    if (socket) {
       console.log('Disconnecting socket...');
-      socket.current.disconnect();
+      socket.disconnect();
       console.log('Socket disconnected');
     }
     setIsWaiting(false);

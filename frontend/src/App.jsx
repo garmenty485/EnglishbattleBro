@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { GoogleOAuthProvider } from '@react-oauth/google';
+import { SocketProvider } from './context/SocketContext';
 import HomePage from './pages/HomePage';
 import LoggedInHomePage from './pages/LoggedInHomePage';
 import SoloPlayPage from './pages/SoloPlayPage';
@@ -31,14 +32,16 @@ function App() {
 
   return (
     <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
-      <Router>
-        <Routes>
-          <Route path="/" element={<HomePage onLogin={handleLogin} />} />
-          <Route path="/loggedin" element={<LoggedInHomePage userInfo={userInfo} />} />
-          <Route path="/soloplay" element={<SoloPlayPage userInfo={userInfo} />} />
-          <Route path="/battle" element={<BattlePage />} /> {/* 新增这一行 */}
-        </Routes>
-      </Router>
+      <SocketProvider>
+        <Router>
+          <Routes>
+            <Route path="/" element={<HomePage onLogin={handleLogin} />} />
+            <Route path="/loggedin" element={<LoggedInHomePage userInfo={userInfo} />} />
+            <Route path="/soloplay" element={<SoloPlayPage userInfo={userInfo} />} />
+            <Route path="/battle" element={<BattlePage />} />
+          </Routes>
+        </Router>
+      </SocketProvider>
     </GoogleOAuthProvider>
   );
 }

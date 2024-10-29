@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useCallback } from 'react';
 import { useToast } from "@chakra-ui/react";
 
 function useGameActions({
@@ -13,12 +13,30 @@ function useGameActions({
   revealSecondDefinition,
   deductPenalty,
   addBonus,
-  socket,  // 新增 socket 參數
-  battleCode,  // 新增 battleCode 參數
-  currentSocketId,  // 新增 currentSocketId 參數
-  currentQuestionIndex  // 新增 currentQuestionIndex 參數
+  socket,  // 現在接收的是 Context 中的 socket
+  battleCode,
+  currentSocketId,
+  currentQuestionIndex
 }) {
   const toast = useToast();
+
+  // 將發送答案邏輯抽出為獨立函數
+  const sendAnswer = useCallback((isCorrect) => {
+    if (socket && battleCode) {
+      console.log('Sending answer:', {
+        roomCode: battleCode,
+        socketId: currentSocketId,
+        questionIndex: currentQuestionIndex,
+        isCorrect
+      });
+      socket.emit('answerSubmitted', {
+        roomCode: battleCode,
+        socketId: currentSocketId,
+        questionIndex: currentQuestionIndex,
+        isCorrect
+      });
+    }
+  }, [socket, battleCode, currentSocketId, currentQuestionIndex]);
 
   const handleSkipQuestion = () => {
     if (isLastQuestion()) {
@@ -47,21 +65,16 @@ function useGameActions({
     revealSecondDefinition(deductPenalty);
   };
 
-  // 答案检查
+  // 答案檢查
   useEffect(() => {
+    if (!answer || !currentQuestion) return;
+    
     if (answer.length === currentQuestion.question.length) {
       if (answer === currentQuestion.question) {
-        // 答對時，發送答題結果到服務器
-        if (socket.current) {
-          socket.current.emit('answerSubmitted', {
-            roomCode: battleCode,
-            socketId: currentSocketId,
-            questionIndex: currentQuestionIndex,
-            isCorrect: true
-          });
-        }
-
+        // 答對
+        sendAnswer(true);
         addBonus();
+        
         if (isLastQuestion()) {
           setIsModalOpen(true);
         } else {
@@ -76,6 +89,8 @@ function useGameActions({
           nextQuestion();
         }
       } else {
+        // 答錯也發送結果
+        sendAnswer(false);
         toast({
           title: "Incorrect!",
           status: "error",
@@ -86,7 +101,18 @@ function useGameActions({
         setAnswer(isFirstLetterRevealed ? currentQuestion.question.charAt(0).toLowerCase() : "");
       }
     }
-  }, [answer, currentQuestion, isFirstLetterRevealed]);
+  }, [
+    answer, 
+    currentQuestion, 
+    isFirstLetterRevealed, 
+    sendAnswer, 
+    isLastQuestion, 
+    addBonus, 
+    nextQuestion, 
+    setAnswer, 
+    setIsModalOpen,
+    toast
+  ]);
 
   return {
     handleSkipQuestion,
