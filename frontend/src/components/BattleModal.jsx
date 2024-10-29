@@ -26,7 +26,7 @@ function BattleModal({ isOpen, onClose, userInfo }) {
   const [copySuccess, setCopySuccess] = useState(false);
 
   // 生成隨機代碼
-  const generateBattleCode = () => {
+  const genCode = () => {
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#@$%';
     let code = '';
     for (let i = 0; i < 6; i++) {
@@ -36,13 +36,13 @@ function BattleModal({ isOpen, onClose, userInfo }) {
   };
 
   const handleCreate = () => {
-    const newCode = generateBattleCode();
+    const newCode = genCode();
     setBattleCode(newCode);
     setIsWaiting(true);
     setIsRandomMatch(false);
   };
 
-  const handleMatchRandom = () => {
+  const matchRandom = () => {
     if (!socket) return;
     
     setIsWaiting(true);
@@ -61,13 +61,13 @@ function BattleModal({ isOpen, onClose, userInfo }) {
           userInfo,
           battleCode: roomCode,
           players,
-          currentSocketId: socket.id,
+          socketId: socket.id,
         } 
       });
     });
   };
 
-  const handleCopyCode = () => {
+  const copyCode = () => {
     if (navigator.clipboard && navigator.clipboard.writeText) {
       navigator.clipboard.writeText(battleCode)
         .then(() => {
@@ -75,14 +75,14 @@ function BattleModal({ isOpen, onClose, userInfo }) {
         })
         .catch((err) => {
           console.error("Failed to copy: ", err);
-          fallbackCopyTextToClipboard(battleCode);
+          fallbackCopy(battleCode);
         });
     } else {
-      fallbackCopyTextToClipboard(battleCode);
+      fallbackCopy(battleCode);
     }
   };
 
-  const fallbackCopyTextToClipboard = (text) => {
+  const fallbackCopy = (text) => {
     const textArea = document.createElement("textarea");
     textArea.value = text;
     textArea.style.position = "fixed";
@@ -106,7 +106,7 @@ function BattleModal({ isOpen, onClose, userInfo }) {
   };
 
   // 當用戶取消匹配或關閉 Modal 時斷開連接
-  const handleCancel = () => {
+  const cancel = () => {
     if (socket) {
       console.log('Disconnecting socket...');
       socket.disconnect();
@@ -194,7 +194,7 @@ function BattleModal({ isOpen, onClose, userInfo }) {
                 text="Match a random player"
                 width="100%"
                 colorScheme="teal"
-                onClick={handleMatchRandom}
+                onClick={matchRandom}
               />
             </VStack>
           ) : (
@@ -209,7 +209,7 @@ function BattleModal({ isOpen, onClose, userInfo }) {
                       {copySuccess ? "(Copied!!!)" : "(Tap to copy code)"}
                     </span>
                   }
-                  onClick={handleCopyCode}
+                  onClick={copyCode}
                   width="100%"
                 />
               )}
@@ -236,7 +236,7 @@ function BattleModal({ isOpen, onClose, userInfo }) {
               <CustomButton
                 icon="❌"
                 text="Cancel"
-                onClick={handleCancel}
+                onClick={cancel}
                 colorScheme="red"
                 width="100%"
               />

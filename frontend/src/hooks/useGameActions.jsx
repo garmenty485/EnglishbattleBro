@@ -5,18 +5,18 @@ function useGameActions({
   answer,
   setAnswer,
   setIsModalOpen,
-  currentQuestion,
+  question,
   isLastQuestion,
-  isFirstLetterRevealed,
+  isLetterShown,
   nextQuestion,
-  revealFirstLetter,
-  revealSecondDefinition,
+  showFirstLetter,
+  showSecondDef,
   deductPenalty,
   addBonus,
   socket,  // 現在接收的是 Context 中的 socket
   battleCode,
-  currentSocketId,
-  currentQuestionIndex
+  socketId,
+  questionIndex
 }) {
   const toast = useToast();
 
@@ -25,20 +25,20 @@ function useGameActions({
     if (socket && battleCode) {
       console.log('Sending answer:', {
         roomCode: battleCode,
-        socketId: currentSocketId,
-        questionIndex: currentQuestionIndex,
+        socketId: socketId,
+        questionIndex: questionIndex,
         isCorrect
       });
       socket.emit('answerSubmitted', {
         roomCode: battleCode,
-        socketId: currentSocketId,
-        questionIndex: currentQuestionIndex,
+        socketId: socketId,
+        questionIndex: questionIndex,
         isCorrect
       });
     }
-  }, [socket, battleCode, currentSocketId, currentQuestionIndex]);
+  }, [socket, battleCode, socketId, questionIndex]);
 
-  const handleSkipQuestion = () => {
+  const skipQuestion = () => {
     if (isLastQuestion()) {
       setIsModalOpen(true);
     } else {
@@ -54,23 +54,23 @@ function useGameActions({
     }
   };
 
-  const handleRevealLetter = () => {
-    const letter = revealFirstLetter(deductPenalty);
+  const showLetter = () => {
+    const letter = showFirstLetter(deductPenalty);
     if (letter) {
       setAnswer(letter);
     }
   };
 
-  const handleRevealDefinition = () => {
-    revealSecondDefinition(deductPenalty);
+  const showDef = () => {
+    showSecondDef(deductPenalty);
   };
 
   // 答案檢查
   useEffect(() => {
-    if (!answer || !currentQuestion) return;
+    if (!answer || !question) return;
     
-    if (answer.length === currentQuestion.question.length) {
-      if (answer === currentQuestion.question) {
+    if (answer.length === question.question.length) {
+      if (answer === question.question) {
         // 答對
         sendAnswer(true);
         addBonus();
@@ -98,13 +98,13 @@ function useGameActions({
           isClosable: true,
           position: "top"
         });
-        setAnswer(isFirstLetterRevealed ? currentQuestion.question.charAt(0).toLowerCase() : "");
+        setAnswer(isLetterShown ? question.question.charAt(0).toLowerCase() : "");
       }
     }
   }, [
     answer, 
-    currentQuestion, 
-    isFirstLetterRevealed, 
+    question, 
+    isLetterShown, 
     sendAnswer, 
     isLastQuestion, 
     addBonus, 
@@ -115,9 +115,9 @@ function useGameActions({
   ]);
 
   return {
-    handleSkipQuestion,
-    handleRevealLetter,
-    handleRevealDefinition
+    skipQuestion,
+    showLetter,
+    showDef
   };
 }
 

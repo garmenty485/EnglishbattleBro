@@ -9,19 +9,19 @@ import ScoreDisplay from '../components/ScoreDisplay';
 
 function SoloPlayPage({ userInfo }) {
   const {
-    currentQuestionIndex,
+    questionIndex,
     answer,
     score,
-    isFirstLetterRevealed,
-    showScoreBonus,
-    showScorePenalty,
-    isSecondDefinitionRevealed,
+    isLetterShown,
+    showBonus,
+    showPenalty,
+    isDefShown,
     isModalOpen,
     showHint,
-    currentQuestion,
+    question,
     revealLetter,                // 改為 revealLetter
-    revealSecondDefinition,      // 保持不變
-    handleSkipQuestion,          // 明確表示這是一個事件處理器
+    showSecondDef,      // 保持不變
+    skipQuestion,          // 明確表示這是一個事件處理器
     handleCloseModal
   } = useSoloPlayLogic(userInfo);
 
@@ -59,34 +59,34 @@ function SoloPlayPage({ userInfo }) {
           align="center"
         >
           <Text fontFamily="Comic Sans MS" color="pink.600" textShadow="2px 2px #FFA07A" fontSize="3xl" fontWeight="bold">
-            #{currentQuestionIndex + 1}
+            #{questionIndex + 1}
           </Text>
         </Flex>
       </Flex>
 
       <ScoreDisplay 
         score={score}
-        showScoreBonus={showScoreBonus}
-        showScorePenalty={showScorePenalty}
+        showBonus={showBonus}
+        showPenalty={showPenalty}
       />
 
       {/* Answer Input Area */}
       <AnswerInput 
         answer={answer}
-        currentQuestion={currentQuestion}
-        isFirstLetterRevealed={isFirstLetterRevealed}
+        question={question}
+        isLetterShown={isLetterShown}
         showHint={showHint}
       />
 
       {/* Definitions */}
       <DefinitionBox 
-        definition={currentQuestion.definition1} 
+        definition={question.definition1} 
       />
       
       <DefinitionBox 
-        definition={currentQuestion.definition2}
+        definition={question.definition2}
         isSecondary
-        isRevealed={isSecondDefinitionRevealed}
+        isRevealed={isDefShown}
       />
 
       {/* Options */}
@@ -104,7 +104,7 @@ function SoloPlayPage({ userInfo }) {
             tooltipText="Reveal a letter (cost: $30)"
             hotKeyIcon="⬅️"
             onClick={revealLetter}    // 改為 revealLetter
-            isDisabled={isFirstLetterRevealed}
+            isDisabled={isLetterShown}
             colorScheme="teal"
           />
           
@@ -112,8 +112,8 @@ function SoloPlayPage({ userInfo }) {
             icon="📖"
             tooltipText="Show another definition (cost: $30)"
             hotKeyIcon="⬇️"
-            onClick={revealSecondDefinition}
-            isDisabled={isSecondDefinitionRevealed}
+            onClick={showSecondDef}
+            isDisabled={isDefShown}
             colorScheme="yellow"
           />
           
@@ -121,7 +121,7 @@ function SoloPlayPage({ userInfo }) {
             icon="⏭️"
             tooltipText="Skip this question"
             hotKeyIcon="➡️"
-            onClick={handleSkipQuestion}
+            onClick={skipQuestion}
             colorScheme="red"
           />
         </Flex>

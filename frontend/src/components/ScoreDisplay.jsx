@@ -3,8 +3,8 @@ import { SCORE_CONFIG } from '../constants/gameConfig';  // 從共用文件引�
 
 function ScoreDisplay({
   score,
-  showScoreBonus,
-  showScorePenalty
+  showBonus,
+  showPenalty
 }) {
   return (
     <Box
@@ -21,7 +21,7 @@ function ScoreDisplay({
           {score}
         </Text>
 
-        {showScoreBonus && (
+        {showBonus && (
           <Text
             as="span"
             fontWeight="bold"
@@ -33,7 +33,7 @@ function ScoreDisplay({
           </Text>
         )}
 
-        {showScorePenalty && (
+        {showPenalty && (
           <Text
             as="span"
             fontWeight="bold"

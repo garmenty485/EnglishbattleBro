@@ -2,23 +2,23 @@ import { useState } from 'react';
 import questions from '../assets/questions.json';
 
 function useQuestionControl() {
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [isFirstLetterRevealed, setIsFirstLetterRevealed] = useState(false);
-  const [isSecondDefinitionRevealed, setIsSecondDefinitionRevealed] = useState(false);
+  const [questionIndex, setCurrentQuestionIndex] = useState(0);
+  const [isLetterShown, setIsFirstLetterRevealed] = useState(false);
+  const [isDefShown, setIsSecondDefinitionRevealed] = useState(false);
 
-  const currentQuestion = questions[currentQuestionIndex];
+  const question = questions[questionIndex];
 
-  const revealFirstLetter = (deductPenalty) => {
-    if (!isFirstLetterRevealed && deductPenalty()) {
-      const firstLetter = currentQuestion.question.charAt(0).toLowerCase();
+  const showFirstLetter = (deductPenalty) => {
+    if (!isLetterShown && deductPenalty()) {
+      const firstLetter = question.question.charAt(0).toLowerCase();
       setIsFirstLetterRevealed(true);
       return firstLetter;
     }
     return null;
   };
 
-  const revealSecondDefinition = (deductPenalty) => {
-    if (!isSecondDefinitionRevealed && deductPenalty()) {
+  const showSecondDef = (deductPenalty) => {
+    if (!isDefShown && deductPenalty()) {
       setIsSecondDefinitionRevealed(true);
       return true;
     }
@@ -26,7 +26,7 @@ function useQuestionControl() {
   };
 
   const nextQuestion = () => {
-    if (currentQuestionIndex < questions.length - 1) {
+    if (questionIndex < questions.length - 1) {
       setCurrentQuestionIndex(prev => prev + 1);
       setIsFirstLetterRevealed(false);
       setIsSecondDefinitionRevealed(false);
@@ -41,16 +41,16 @@ function useQuestionControl() {
   };
 
   const isLastQuestion = () => {
-    return currentQuestionIndex === questions.length - 1;
+    return questionIndex === questions.length - 1;
   };
 
   return {
-    currentQuestion,
-    currentQuestionIndex,
-    isFirstLetterRevealed,
-    isSecondDefinitionRevealed,
-    revealFirstLetter,
-    revealSecondDefinition,
+    question,
+    questionIndex,
+    isLetterShown,
+    isDefShown,
+    showFirstLetter,
+    showSecondDef,
     nextQuestion,
     resetQuestionState,
     isLastQuestion

@@ -4,12 +4,12 @@ function useKeyboardControl({
   isModalOpen,
   answer,
   questionLength,
-  isFirstLetterRevealed,
+  isLetterShown,
   setAnswer,
   setShowHint,
-  handleRevealLetter,
-  handleRevealDefinition,
-  handleSkipQuestion
+  showLetter,
+  showDef,
+  skipQuestion
 }) {
   useEffect(() => {
     if (!isModalOpen) {
@@ -23,22 +23,22 @@ function useKeyboardControl({
         } else if (e.key === 'Backspace') {
           if (answer.length > 1) {
             setAnswer(prev => prev.slice(0, -1));
-          } else if (answer.length === 1 && !isFirstLetterRevealed) {
+          } else if (answer.length === 1 && !isLetterShown) {
             setAnswer("");
           }
         } else if (e.key === 'ArrowLeft') {
-          handleRevealLetter();
+          showLetter();
         } else if (e.key === 'ArrowDown') {
-          handleRevealDefinition();
+          showDef();
         } else if (e.key === 'ArrowRight') {
-          handleSkipQuestion();
+          skipQuestion();
         }
       };
 
       window.addEventListener("keydown", handleKeyPress);
       return () => window.removeEventListener("keydown", handleKeyPress);
     }
-  }, [answer, questionLength, isFirstLetterRevealed, isModalOpen]);
+  }, [answer, questionLength, isLetterShown, isModalOpen]);
 }
 
 export default useKeyboardControl;

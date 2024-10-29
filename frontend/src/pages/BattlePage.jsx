@@ -11,12 +11,12 @@ import { useSocket } from '../context/SocketContext';
 
 function BattlePage() {
   const location = useLocation();
-  const { userInfo, battleCode, players, currentSocketId } = location.state || {};
+  const { userInfo, battleCode, players, socketId } = location.state || {};
   const socket = useSocket();  // 使用 Context 中的 socket
-  const [answeredQuestions, setAnsweredQuestions] = useState(new Map());
+  const [answeredQ, setAnsweredQuestions] = useState(new Map());
 
   // 確定誰是對手
-  const rival = players?.playerA.socketId === currentSocketId 
+  const rival = players?.playerA.socketId === socketId 
     ? players.playerB 
     : players.playerA;
 
@@ -37,24 +37,24 @@ function BattlePage() {
 
   // 使用 battleLogic
   const {
-    currentQuestionIndex,
+    questionIndex,
     answer,
     score,
-    isFirstLetterRevealed,
-    showScoreBonus,
-    showScorePenalty,
-    isSecondDefinitionRevealed,
+    isLetterShown,
+    showBonus,
+    showPenalty,
+    isDefShown,
     isModalOpen,
     showHint,
-    currentQuestion,
+    question,
     revealLetter,
-    revealSecondDefinition,
-    handleSkipQuestion,
+    showSecondDef,
+    skipQuestion,
     handleCloseModal
   } = useBattlePlayLogic(userInfo, {
     socket,
     battleCode,
-    currentSocketId
+    socketId
   }); 
 
   return (
@@ -94,7 +94,7 @@ function BattlePage() {
           align="center"
         >
           <Text fontFamily="Comic Sans MS" color="pink.600" textShadow="2px 2px #FFA07A" fontSize="3xl" fontWeight="bold">
-            #{currentQuestionIndex + 1}
+            #{questionIndex + 1}
           </Text>
         </Flex>
 
@@ -119,32 +119,32 @@ function BattlePage() {
 
       <ScoreDisplay
         score={score}
-        showScoreBonus={showScoreBonus}
-        showScorePenalty={showScorePenalty}
+        showBonus={showBonus}
+        showPenalty={showPenalty}
       />
 
       <AnswerInput
         answer={answer}
-        currentQuestion={currentQuestion}
-        isFirstLetterRevealed={isFirstLetterRevealed}
+        question={question}
+        isLetterShown={isLetterShown}
         showHint={showHint}
       />
 
       {/* 顯示對手已回答的提示 */}
-      {answeredQuestions.get(currentQuestionIndex) && (
+      {answeredQ.get(questionIndex) && (
         <Text fontSize="md" color="red" textAlign="center" mt={4}>
           Your rival gained +300 scores for answering this question first! 😢
         </Text>
       )}
 
       <DefinitionBox
-        definition={currentQuestion.definition1}
+        definition={question.definition1}
       />
 
       <DefinitionBox
-        definition={currentQuestion.definition2}
+        definition={question.definition2}
         isSecondary
-        isRevealed={isSecondDefinitionRevealed}
+        isRevealed={isDefShown}
       />
 
       <Box w={{ base: "365px", sm: "370px", md: "370px" }} maxW="95%" p={{ base: 2, md: 4 }} textAlign="center" mx="auto">
@@ -161,7 +161,7 @@ function BattlePage() {
             tooltipText="Reveal a letter (cost: $30)"
             hotKeyIcon="⬅️"
             onClick={revealLetter}
-            isDisabled={isFirstLetterRevealed}
+            isDisabled={isLetterShown}
             colorScheme="teal"
           />
 
@@ -169,8 +169,8 @@ function BattlePage() {
             icon="📖"
             tooltipText="Show another definition (cost: $30)"
             hotKeyIcon="⬇️"
-            onClick={revealSecondDefinition}
-            isDisabled={isSecondDefinitionRevealed}
+            onClick={showSecondDef}
+            isDisabled={isDefShown}
             colorScheme="yellow"
           />
 
@@ -178,7 +178,7 @@ function BattlePage() {
             icon="⏭️"
             tooltipText="Skip this question"
             hotKeyIcon="➡️"
-            onClick={handleSkipQuestion}
+            onClick={skipQuestion}
             colorScheme="red"
           />
         </Flex>

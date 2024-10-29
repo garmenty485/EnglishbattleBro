@@ -5,7 +5,7 @@ import useGameState from './useGameState';
 import useGameActions from './useGameActions';
 
 function useBattlePlayLogic(userInfo, battleInfo) {
-  const { socket, battleCode, currentSocketId } = battleInfo;
+  const { socket, battleCode, socketId } = battleInfo;
 
   const {
     answer,
@@ -19,72 +19,72 @@ function useBattlePlayLogic(userInfo, battleInfo) {
 
   const {
     score,
-    showScoreBonus,
-    showScorePenalty,
+    showBonus,
+    showPenalty,
     addBonus,
     deductPenalty
   } = useScoreManagement();
 
   const {
-    currentQuestion,
-    currentQuestionIndex,
-    isFirstLetterRevealed,
-    isSecondDefinitionRevealed,
-    revealFirstLetter,
-    revealSecondDefinition,
+    question,
+    questionIndex,
+    isLetterShown,
+    isDefShown,
+    showFirstLetter,
+    showSecondDef,
     nextQuestion,
     isLastQuestion
   } = useQuestionControl();
 
   const {
-    handleSkipQuestion,
-    handleRevealLetter,
-    handleRevealDefinition
+    skipQuestion,
+    showLetter,
+    showDef
   } = useGameActions({
     answer,
     setAnswer,
     setIsModalOpen,
-    currentQuestion,
+    question,
     isLastQuestion,
-    isFirstLetterRevealed,
+    isLetterShown,
     nextQuestion,
-    revealFirstLetter,
-    revealSecondDefinition,
+    showFirstLetter,
+    showSecondDef,
     deductPenalty,
     addBonus,
     // 添加對戰相關參數
     socket, 
     battleCode,
-    currentSocketId,
-    currentQuestionIndex
+    socketId,
+    questionIndex
   });
 
   useKeyboardControl({
     isModalOpen,
     answer,
-    questionLength: currentQuestion.question.length,
-    isFirstLetterRevealed,
+    questionLength: question.question.length,
+    isLetterShown,
     setAnswer,
     setShowHint,
-    handleRevealLetter,
-    handleRevealDefinition,
-    handleSkipQuestion
+    showLetter,
+    showDef,
+    skipQuestion
   });
 
   return {
-    currentQuestionIndex,
+    questionIndex,
     answer,
     score,
-    isFirstLetterRevealed,
-    showScoreBonus,
-    showScorePenalty,
-    isSecondDefinitionRevealed,
+    isLetterShown,
+    showBonus,
+    showPenalty,
+    isDefShown,
     isModalOpen,
     showHint,
-    currentQuestion,
-    revealLetter: handleRevealLetter,
-    revealSecondDefinition: handleRevealDefinition,
-    handleSkipQuestion,
+    question,
+    revealLetter: showLetter,
+    showSecondDef: showDef,
+    skipQuestion,
     handleCloseModal
   };
 }

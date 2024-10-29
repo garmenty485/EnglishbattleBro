@@ -2,8 +2,8 @@ import { Box, Text, Flex } from "@chakra-ui/react";
 
 function AnswerInput({
   answer,
-  currentQuestion,
-  isFirstLetterRevealed,
+  question,
+  isLetterShown,
   showHint
 }) {
   return (
@@ -26,7 +26,7 @@ function AnswerInput({
           alignItems="center"
           justifyContent="center"
         >
-          {isFirstLetterRevealed ? (
+          {isLetterShown ? (
             <Text as="span" color="gold" fontWeight="bold">
               {answer.charAt(0)}
             </Text>
@@ -34,7 +34,7 @@ function AnswerInput({
             answer.charAt(0)
           )}
           {answer.slice(1)}
-          {Array(currentQuestion.question.length - answer.length)
+          {Array(question.question.length - answer.length)
             .fill(" _")
             .join("")}
         </Text>

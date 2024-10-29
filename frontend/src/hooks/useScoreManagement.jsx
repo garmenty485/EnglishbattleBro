@@ -4,8 +4,8 @@ import { SCORE_CONFIG } from '../constants/gameConfig';
 
 function useScoreManagement() {
   const [score, setScore] = useState(SCORE_CONFIG.INITIAL_SCORE);
-  const [showScoreBonus, setShowScoreBonus] = useState(false);
-  const [showScorePenalty, setShowScorePenalty] = useState(false);
+  const [showBonus, setShowScoreBonus] = useState(false);
+  const [showPenalty, setShowScorePenalty] = useState(false);
   const toast = useToast();
 
   const addBonus = () => {
@@ -34,8 +34,8 @@ function useScoreManagement() {
 
   return {
     score,
-    showScoreBonus,
-    showScorePenalty,
+    showBonus,
+    showPenalty,
     addBonus,
     deductPenalty
   };
