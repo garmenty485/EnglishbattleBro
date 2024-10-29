@@ -19,7 +19,7 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:5173", // Vite 的默認端口
+    origin: ["http://localhost:5173", "http://172.20.10.3:5173"], // Vite 的默認端口與手機測試入口
     methods: ["GET", "POST"]
   }
 });
@@ -48,28 +48,26 @@ if (process.env.NODE_ENV === 'production') {
 
 // 存儲等待匹配的玩家
 let waitingPlayers = [];
+// 存儲創建的房間
+const rooms = new Map();
 
-// Socket.io 連接處理
 io.on('connection', (socket) => {
   console.log('A user connected:', socket.id); // 當用戶連接時打印用戶ID
 
-  // 當用戶請求隨機匹配時
+  // 隨機配對邏輯
   socket.on('joinRandomMatch', (data) => {
     console.log('Player requesting match:', data);
 
-    // 如果已經有玩家在等待
     if (waitingPlayers.length > 0) {
-      const opponent = waitingPlayers.shift(); // 取出第一個等待的玩家
-      const roomCode = `room_${Date.now()}`; // 生成房間代碼
-
-      // 將兩個玩家加入同一個房間
+      const opponent = waitingPlayers.shift();
+      const roomCode = `room_${Date.now()}`;
+      
       socket.join(roomCode);
       const opponentSocket = io.sockets.sockets.get(opponent.socketId);
       if (opponentSocket) {
         opponentSocket.join(roomCode);
       }
 
-      // 準備玩家信息
       const players = {
         playerA: {
           socketId: opponent.socketId,
@@ -81,14 +79,48 @@ io.on('connection', (socket) => {
         }
       };
 
-      // 通知兩個玩家匹配成功
-      io.to(roomCode).emit('matchFound', roomCode, players);
+      // 改用 matchSuccess
+      io.to(roomCode).emit('matchSuccess', { roomCode, players });
       console.log('Match found:', { roomCode, players });
     } else {
-      // 如果沒有其他玩家，加入等待列表
       waitingPlayers.push(data);
       console.log('Player added to waiting list:', data);
     }
+  });
+
+  // 創建房間邏輯
+  socket.on('createRoom', ({ roomCode, userInfo, socketId }) => {
+    rooms.set(roomCode, {
+      playerA: { socketId, userInfo },
+      playerB: null
+    });
+    socket.join(roomCode);
+  });
+
+  // 加入房間邏輯
+  socket.on('joinRoom', ({ roomCode, userInfo, socketId }) => {
+    const room = rooms.get(roomCode);
+    if (!room) {
+      socket.emit('error', { message: '房間不存在' });
+      return;
+    }
+    
+    if (room.playerB) {
+      socket.emit('error', { message: '房間已滿' });
+      return;
+    }
+
+    room.playerB = { socketId, userInfo };
+    socket.join(roomCode);
+    
+    // 使用相同的 matchSuccess 事件
+    io.to(roomCode).emit('matchSuccess', {
+      roomCode,
+      players: {
+        playerA: room.playerA,
+        playerB: room.playerB
+      }
+    });
   });
 
   // 當玩家回答題目時

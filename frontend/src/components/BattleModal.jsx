@@ -11,19 +11,20 @@ import {
   Text,
   Box,
 } from "@chakra-ui/react";
-import { useState, useRef } from "react";
-import { useNavigate } from 'react-router-dom';  // 添加這行
+import { useState, useRef, useEffect } from "react";
+import { useNavigate } from 'react-router-dom';
 import CustomButton from './CustomButton';
 import LoadingDots from './LoadingDots';
 import { useSocket } from '../context/SocketContext';
 
 function BattleModal({ isOpen, onClose, userInfo }) {
-  const navigate = useNavigate();  // 添加這行
+  const navigate = useNavigate();
   const socket = useSocket();
   const [battleCode, setBattleCode] = useState("");
   const [isWaiting, setIsWaiting] = useState(false);
   const [isRandomMatch, setIsRandomMatch] = useState(false);
   const [copySuccess, setCopySuccess] = useState(false);
+  const [inputCode, setInputCode] = useState("");
 
   // 生成隨機代碼
   const genCode = () => {
@@ -39,7 +40,30 @@ function BattleModal({ isOpen, onClose, userInfo }) {
     const newCode = genCode();
     setBattleCode(newCode);
     setIsWaiting(true);
-    setIsRandomMatch(false);
+    
+    // 發送創建房間請求到服務器
+    socket.emit('createRoom', {
+      roomCode: newCode,
+      userInfo,
+      socketId: socket.id
+    });
+  };
+
+  const joinRoom = () => {
+    if (!inputCode) {
+      toast({
+        title: "請輸入房間代碼",
+        status: "warning",
+        duration: 2000,
+      });
+      return;
+    }
+    
+    socket.emit('joinRoom', {
+      roomCode: inputCode,
+      userInfo,
+      socketId: socket.id
+    });
   };
 
   const matchRandom = () => {
@@ -48,24 +72,31 @@ function BattleModal({ isOpen, onClose, userInfo }) {
     setIsWaiting(true);
     setIsRandomMatch(true);
     
-    // 發送匹配請求
     socket.emit('joinRandomMatch', { 
       userInfo,
       socketId: socket.id 
     });
+  };
 
-    // 監聽匹配成功事件
-    socket.on('matchFound', (roomCode, players) => {
-      navigate('/battle', { 
-        state: { 
+  // 監聽匹配成功事件
+  useEffect(() => {
+    if (!socket) return;
+
+    socket.on('matchSuccess', ({ roomCode, players }) => {
+      navigate('/battle', {
+        state: {
           userInfo,
           battleCode: roomCode,
           players,
-          socketId: socket.id,
-        } 
+          socketId: socket.id
+        }
       });
     });
-  };
+
+    return () => {
+      socket.off('matchSuccess');
+    };
+  }, [socket, navigate, userInfo]);
 
   const copyCode = () => {
     if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -89,45 +120,28 @@ function BattleModal({ isOpen, onClose, userInfo }) {
     document.body.appendChild(textArea);
     textArea.focus();
     textArea.select();
-
     try {
-      const successful = document.execCommand('copy');
-      if (successful) {
-        setCopySuccess(true);
-      } else {
-        alert("Unable to copy battle code. Please copy it manually: " + battleCode);
-      }
+      document.execCommand('copy');
+      setCopySuccess(true);
     } catch (err) {
       console.error("Fallback: Oops, unable to copy", err);
-      alert("Unable to copy battle code. Please copy it manually: " + battleCode);
     }
-
     document.body.removeChild(textArea);
   };
 
-  // 當用戶取消匹配或關閉 Modal 時斷開連接
   const cancel = () => {
-    if (socket) {
-      console.log('Disconnecting socket...');
-      socket.disconnect();
-      console.log('Socket disconnected');
-    }
     setIsWaiting(false);
     setIsRandomMatch(false);
-    setCopySuccess(false);
     setBattleCode("");
+    setCopySuccess(false);
+    if (socket) {
+      socket.emit('cancelMatch');
+    }
   };
 
   return (
-    <Modal
-      isOpen={isOpen}
-      onClose={onClose}
-      isCentered
-    >
-      <ModalOverlay
-        bg="blackAlpha.300"
-        backdropFilter="blur(10px)"
-      />
+    <Modal isOpen={isOpen} onClose={onClose} isCentered>
+      <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px)" />
       <ModalContent
         bg="yellow.100"
         border="4px solid"
@@ -136,31 +150,27 @@ function BattleModal({ isOpen, onClose, userInfo }) {
         p={4}
         mx={4}
       >
-        <ModalHeader
-          textAlign="center"
-          fontFamily="Comic Sans MS"
-          fontSize="2xl"
-          color="pink.600"
-          pb={2}
-        >
-          ⚔️ Battle Mode ⚔️
-        </ModalHeader>
-        <ModalCloseButton />
-
-        <ModalBody pb={6}>
+        <ModalHeader textAlign="center">Battle Mode ⚔️</ModalHeader>
+        <ModalBody>
           {!isWaiting ? (
             <VStack spacing={6}>
               <CustomButton
-                icon="🎯"
-                text="Build a room"
+                icon="🎮"
+                text="Create Room"
                 onClick={handleCreate}
                 width="100%"
+                colorScheme="blue"
               />
-
+              
+              <Text fontSize="lg" color="gray.700" textAlign="center">
+                - OR -
+              </Text>
+              
               <HStack width="100%" spacing={2}>
                 <Input
                   placeholder="Code"
-                  onChange={(e) => setBattleCode(e.target.value.toUpperCase())}
+                  value={inputCode}
+                  onChange={(e) => setInputCode(e.target.value.toUpperCase())}
                   maxLength={6}
                   textAlign="center"
                   fontSize="24px"
@@ -175,26 +185,23 @@ function BattleModal({ isOpen, onClose, userInfo }) {
                 <CustomButton
                   icon="🔍"
                   text="Join"
+                  onClick={joinRoom}
                   width="145px"
                   height="60px"
                   colorScheme="red"
                 />
               </HStack>
               
-              <Text
-                fontFamily="Comic Sans MS"
-                fontSize="lg"
-                color="gray.700"
-                textAlign="center"
-              >
+              <Text fontSize="lg" color="gray.700" textAlign="center">
                 - OR -
               </Text>
+              
               <CustomButton
                 icon="🎲"
                 text="Match a random player"
+                onClick={matchRandom}
                 width="100%"
                 colorScheme="teal"
-                onClick={matchRandom}
               />
             </VStack>
           ) : (
@@ -225,11 +232,7 @@ function BattleModal({ isOpen, onClose, userInfo }) {
                 <LoadingDots />
               </Text>
               {!isRandomMatch && (
-                <Text
-                  fontSize="md"
-                  color="gray.600"
-                  textAlign="center"
-                >
+                <Text fontSize="md" color="gray.600" textAlign="center">
                   Share this code with your friend!
                 </Text>
               )}

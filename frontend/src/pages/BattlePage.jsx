@@ -133,7 +133,7 @@ function BattlePage() {
       {/* 顯示對手已回答的提示 */}
       {answeredQ.get(questionIndex) && (
         <Text fontSize="md" color="red" textAlign="center" mt={4}>
-          Your rival gained +300 scores for answering this question first! 😢
+          Your rival gained +$300 for answering this question first! 😢
         </Text>
       )}
 
