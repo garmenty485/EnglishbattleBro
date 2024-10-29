@@ -10,6 +10,7 @@ import {
   HStack,
   Text,
   Box,
+  useToast,
 } from "@chakra-ui/react";
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
@@ -20,6 +21,7 @@ import { useSocket } from '../context/SocketContext';
 function BattleModal({ isOpen, onClose, userInfo }) {
   const navigate = useNavigate();
   const socket = useSocket();
+  const toast = useToast();
   const [battleCode, setBattleCode] = useState("");
   const [isWaiting, setIsWaiting] = useState(false);
   const [isRandomMatch, setIsRandomMatch] = useState(false);
@@ -52,7 +54,7 @@ function BattleModal({ isOpen, onClose, userInfo }) {
   const joinRoom = () => {
     if (!inputCode) {
       toast({
-        title: "請輸入房間代碼",
+        title: "Enter the room code, please.",
         status: "warning",
         duration: 2000,
       });
