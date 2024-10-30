@@ -7,12 +7,19 @@ export const SocketProvider = ({ children }) => {
   const [socket, setSocket] = useState(null);
 
   useEffect(() => {
-    // 根據當前環境選擇連接地址
-    const serverUrl = window.location.hostname === 'localhost' 
-      ? 'http://localhost:5000'
-      : `http://${window.location.hostname}:5000`;
-      
-    const newSocket = io(serverUrl);
+    let serverUrl;
+    if (process.env.NODE_ENV === 'production') {
+      serverUrl = 'https://englishbattlebro.onrender.com';
+    } else {
+      serverUrl = window.location.hostname === 'localhost'
+        ? 'http://localhost:5000'
+        : `http://${window.location.hostname}:5000`;
+    }
+
+    const newSocket = io(serverUrl, {
+      transports: ['websocket'],
+      upgrade: false
+    });
     setSocket(newSocket);
 
     return () => {

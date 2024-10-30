@@ -84,6 +84,28 @@ function BattleModal({ isOpen, onClose, userInfo }) {
   useEffect(() => {
     if (!socket) return;
 
+    socket.on('connect_error', (error) => {
+      console.error('Connection error:', error);
+      toast({
+        title: "Connection Error",
+        description: "Failed to connect to game server",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    });
+
+    socket.on('error', (error) => {
+      console.error('Socket error:', error);
+      toast({
+        title: "Error",
+        description: error.message,
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    });
+
     socket.on('matchSuccess', ({ roomCode, players }) => {
       navigate('/battle', {
         state: {
@@ -97,8 +119,10 @@ function BattleModal({ isOpen, onClose, userInfo }) {
 
     return () => {
       socket.off('matchSuccess');
+      socket.off('connect_error');
+      socket.off('error');
     };
-  }, [socket, navigate, userInfo]);
+  }, [socket, navigate, userInfo, toast]);
 
   const copyCode = () => {
     if (navigator.clipboard && navigator.clipboard.writeText) {

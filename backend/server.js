@@ -19,12 +19,22 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: ["http://localhost:5173", "http://172.20.10.3:5173"], // Vite 的默認端口與手機測試入口
+    origin: [
+      "http://localhost:5173",
+      "http://172.20.10.3:5173", 
+      "https://englishbattlebro.onrender.com"
+    ],
     methods: ["GET", "POST"]
   }
 });
 
-app.use(cors());
+app.use(cors({
+  origin: [
+    "http://localhost:5173",
+    "http://172.20.10.3:5173",
+    "https://englishbattlebro.onrender.com"
+  ]
+}));
 app.use(express.json());
 
 // API 路由
@@ -52,7 +62,15 @@ let waitingPlayers = [];
 const rooms = new Map();
 
 io.on('connection', (socket) => {
-  console.log('A user connected:', socket.id); // 當用戶連接時打印用戶ID
+  console.log('A user connected:', socket.id);
+
+  socket.on('error', (error) => {
+    console.error('Socket error:', error);
+  });
+
+  socket.on('connect_error', (error) => {
+    console.error('Connection error:', error);
+  });
 
   // 隨機配對邏輯
   socket.on('joinRandomMatch', (data) => {
