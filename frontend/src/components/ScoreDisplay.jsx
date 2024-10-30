@@ -1,10 +1,10 @@
 import { Box, Text } from "@chakra-ui/react";
-import { SCORE_CONFIG } from '../constants/gameConfig';  // 從共用文件引入
+import { SCORE_CONFIG } from '../constants/gameConfig';
 
 function ScoreDisplay({
   score,
-  showBonus,
-  showPenalty
+  showBonus,  // 現在這個值是實際的加分金額
+  showPenalty,
 }) {
   return (
     <Box
@@ -21,7 +21,7 @@ function ScoreDisplay({
           {score}
         </Text>
 
-        {showBonus && (
+        {showBonus > 0 && (
           <Text
             as="span"
             fontWeight="bold"
@@ -29,7 +29,7 @@ function ScoreDisplay({
             bgGradient="linear(to-r, red.500, yellow.500, green.500, blue.500, purple.500)"
             bgClip="text"
           >
-            + ${SCORE_CONFIG.BONUS_AMOUNT}
+            + ${showBonus}
           </Text>
         )}
 

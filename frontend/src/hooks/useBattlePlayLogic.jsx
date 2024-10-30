@@ -39,7 +39,8 @@ function useBattlePlayLogic(userInfo, battleInfo) {
   const {
     skipQuestion,
     showLetter,
-    showDef
+    showDef,
+    answeredQuestions
   } = useGameActions({
     answer,
     setAnswer,
@@ -86,7 +87,8 @@ function useBattlePlayLogic(userInfo, battleInfo) {
     revealLetter: showLetter,
     showSecondDef: showDef,
     skipQuestion,
-    handleCloseModal
+    handleCloseModal,
+    answeredQuestions
   };
 }
 

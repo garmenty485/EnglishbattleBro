@@ -50,7 +50,8 @@ function BattlePage() {
     revealLetter,
     showSecondDef,
     skipQuestion,
-    handleCloseModal
+    handleCloseModal,
+    answeredQuestions
   } = useBattlePlayLogic(userInfo, {
     socket,
     battleCode,
@@ -121,6 +122,8 @@ function BattlePage() {
         score={score}
         showBonus={showBonus}
         showPenalty={showPenalty}
+        questionIndex={questionIndex}
+        answeredQ={answeredQuestions}  // 傳入 answeredQ
       />
 
       <AnswerInput

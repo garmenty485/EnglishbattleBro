@@ -4,14 +4,14 @@ import { SCORE_CONFIG } from '../constants/gameConfig';
 
 function useScoreManagement() {
   const [score, setScore] = useState(SCORE_CONFIG.INITIAL_SCORE);
-  const [showBonus, setShowScoreBonus] = useState(false);
+  const [showBonus, setShowScoreBonus] = useState(0);  // 改為數字，0 表示不顯示
   const [showPenalty, setShowScorePenalty] = useState(false);
   const toast = useToast();
 
-  const addBonus = () => {
-    setScore(prevScore => Number(prevScore) + SCORE_CONFIG.BONUS_AMOUNT);
-    setShowScoreBonus(true);
-    setTimeout(() => setShowScoreBonus(false), 750);
+  const addBonus = (bonusAmount) => {
+    setScore(prevScore => Number(prevScore) + bonusAmount);
+    setShowScoreBonus(bonusAmount);  // 直接傳入實際的加分金額
+    setTimeout(() => setShowScoreBonus(0), 750);
   };
 
   const deductPenalty = () => {

@@ -1,5 +1,6 @@
-import { useEffect, useCallback } from 'react';
+import { useEffect, useCallback, useState } from 'react';
 import { useToast } from "@chakra-ui/react";
+import { SCORE_CONFIG } from '../constants/gameConfig';
 
 function useGameActions({
   answer,
@@ -20,6 +21,22 @@ function useGameActions({
   questionIndex
 }) {
   const toast = useToast();
+  const [answeredQuestions, setAnsweredQuestions] = useState(new Map());
+
+  // 監聽對手答題狀態
+  useEffect(() => {
+    if (!socket) return;
+    
+    socket.on('rivalAnswered', ({ questionIndex, isCorrect }) => {
+      if (isCorrect) {
+        setAnsweredQuestions(prev => new Map(prev).set(questionIndex, true));
+      }
+    });
+
+    return () => {
+      socket?.off('rivalAnswered');
+    };
+  }, [socket]);
 
   // 將發送答案邏輯抽出為獨立函數
   const sendAnswer = useCallback((isCorrect) => {
@@ -75,13 +92,18 @@ function useGameActions({
       if (answer === question.question) {
         // 答對
         sendAnswer(true);
-        addBonus();
+        
+        // 檢查對手是否已經答對這題
+        const rivalAnsweredCorrect = answeredQuestions.get(questionIndex);
+        
+        // 根據對手答題情況決定加分
+        addBonus(rivalAnsweredCorrect ? SCORE_CONFIG.BONUS_AMOUNT : SCORE_CONFIG.FIRST_BONUS_AMOUNT);
         
         if (isLastQuestion()) {
           setIsModalOpen(true);
         } else {
           toast({
-            title: "Correct!",
+            title: rivalAnsweredCorrect ? "Correct! (+$100)" : "Faster than rival and correct! (+$300)",
             status: "success",
             duration: 1500,
             isClosable: true,
@@ -113,13 +135,16 @@ function useGameActions({
     nextQuestion, 
     setAnswer, 
     setIsModalOpen,
-    toast
+    toast,
+    questionIndex,
+    answeredQuestions
   ]);
 
   return {
     skipQuestion,
     showLetter,
-    showDef
+    showDef,
+    answeredQuestions
   };
 }
 
