@@ -56,7 +56,8 @@ function useBattlePlayLogic(userInfo, battleInfo) {
     socket, 
     battleCode,
     socketId,
-    questionIndex
+    questionIndex,
+    isModalOpen
   });
 
   useKeyboardControl({

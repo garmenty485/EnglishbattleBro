@@ -49,7 +49,8 @@ function useSoloPlayLogic(userInfo) {
     showFirstLetter,
     showSecondDef,
     deductPenalty,
-    addBonus
+    addBonus,
+    isModalOpen
   });
 
   useKeyboardControl({

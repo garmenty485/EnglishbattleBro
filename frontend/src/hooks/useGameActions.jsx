@@ -4,6 +4,7 @@ import { useToast } from "@chakra-ui/react";
 function useGameActions({
   answer,
   setAnswer,
+  isModalOpen,
   setIsModalOpen,
   question,
   isLastQuestion,
@@ -68,6 +69,7 @@ function useGameActions({
   // 答案檢查
   useEffect(() => {
     if (!answer || !question) return;
+    if (isModalOpen) return;
     
     if (answer.length === question.question.length) {
       if (answer === question.question) {
