@@ -1,4 +1,4 @@
-import { Box, Text, Flex } from "@chakra-ui/react";
+import { Box, Text, Flex, useMediaQuery } from "@chakra-ui/react";
 
 function AnswerInput({
   answer,
@@ -6,6 +6,9 @@ function AnswerInput({
   isLetterShown,
   showHint
 }) {
+  // 檢查是否在手機或平板裝置上（小於 768px 的寬度）
+  const [isMobileOrTablet] = useMediaQuery("(max-width: 768px)");
+
   return (
     <Flex justify="center" mb={4} position="relative">
       <Box
@@ -39,25 +42,27 @@ function AnswerInput({
             .join("")}
         </Text>
 
-        <Box
-          as="input"
-          position="absolute"
-          top={0}
-          left={0}
-          width="100%"
-          height="100%"
-          opacity={0}
-          type="text"
-          autoComplete="off"
-          onFocus={(e) => {
-            e.target.style.transform = 'translateY(-100vh)';
-            e.target.style.position = 'absolute';
-          }}
-          onBlur={(e) => {
-            e.target.style.transform = 'none';
-            e.target.style.position = 'absolute';
-          }}
-        />
+        {isMobileOrTablet && (
+          <Box
+            as="input"
+            position="absolute"
+            top={0}
+            left={0}
+            width="100%"
+            height="100%"
+            opacity={0}
+            type="text"
+            autoComplete="off"
+            onFocus={(e) => {
+              e.target.style.transform = 'translateY(-100vh)';
+              e.target.style.position = 'absolute';
+            }}
+            onBlur={(e) => {
+              e.target.style.transform = 'none';
+              e.target.style.position = 'absolute';
+            }}
+          />
+        )}
       </Box>
 
       {showHint && (
