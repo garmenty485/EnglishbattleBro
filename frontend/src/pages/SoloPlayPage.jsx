@@ -1,5 +1,5 @@
 import { Text, Flex, Box, Container, Button, Image, Center, Spinner, useToast } from "@chakra-ui/react";
-import { useState, useEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import useSoloPlayLogic from '../hooks/useSoloPlayLogic';
 import useSendRecord from '../hooks/useSendRecord';
 import GameOptionButton from '../components/GameOptionButton';
@@ -12,6 +12,7 @@ function SoloPlayPage({ userInfo }) {
   const [questions, setQuestions] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const toast = useToast();
+  const fetchedRef = useRef(false);
   
   // 始終調用 hook，但傳入空數組作為預設值
   const gameLogic = useSoloPlayLogic(userInfo, questions || []);
@@ -20,6 +21,9 @@ function SoloPlayPage({ userInfo }) {
 
   useEffect(() => {
     const fetchQuestions = async () => {
+      if (fetchedRef.current) return; // 如果已經獲取過，直接返回
+      fetchedRef.current = true;
+
       try {
         console.log('開始獲取題目...');
         const response = await fetch('/api/questions/random?count=10');
