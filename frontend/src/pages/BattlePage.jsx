@@ -8,6 +8,7 @@ import DefinitionBox from '../components/DefinitionBox';
 import AnswerInput from '../components/AnswerInput';
 import ScoreDisplay from '../components/ScoreDisplay';
 import { useSocket } from '../context/SocketContext';
+import useSendRecord from '../hooks/useSendRecord';
 
 function BattlePage() {
   const location = useLocation();
@@ -57,6 +58,8 @@ function BattlePage() {
     battleCode,
     socketId
   }); 
+
+  useSendRecord(isModalOpen, score, userInfo, 'battle', battleCode, rival);
 
   return (
     <Container

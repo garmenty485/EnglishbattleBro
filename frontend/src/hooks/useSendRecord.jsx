@@ -2,14 +2,18 @@ import { useEffect } from 'react';
 import axios from 'axios';
 import questions from '../assets/questions.json';
 
-function useSendRecord(isModalOpen, score, userInfo, gameType = 'solo', battleId = null) {
+function useSendRecord(isModalOpen, score, userInfo, gameType = 'solo', battleId = null, rival = null) {
   useEffect(() => {
     if (!isModalOpen) return;
 
     const sendRecordToBackend = async () => {
       try {
-        if (!userInfo) {
-          console.log('Guest mode: record not saved');
+        // 在对战模式下，即使是访客也需要发送记录
+        if (
+          (!userInfo && gameType === 'solo') ||
+          (gameType === 'battle' && !userInfo && (!rival?.userInfo))
+        ) {
+          console.log('Record not saved: Either solo guest or both players are guests');
           return;
         }
 
@@ -23,13 +27,13 @@ function useSendRecord(isModalOpen, score, userInfo, gameType = 'solo', battleId
           gameType,
           ...(battleId && { battleId }),
           player1: {
-            googleId: userInfo.email,
-            googleName: userInfo.name,
-            picture: userInfo.picture,
+            googleId: userInfo?.email || 'guest',
+            googleName: userInfo?.name || 'Guest Player',
+            picture: userInfo?.picture || null,
             score: score
           },
           words,
-          submitted: gameType === 'solo'
+          completed: gameType === 'solo'
         };
 
         console.log('Sending record data:', recordData);
@@ -39,7 +43,7 @@ function useSendRecord(isModalOpen, score, userInfo, gameType = 'solo', battleId
             'Content-Type': 'application/json'
           }
         });
-        
+
         console.log('Record sent successfully:', response.data);
         console.log('userInfo check', userInfo);
       } catch (error) {

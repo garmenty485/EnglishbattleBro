@@ -3,7 +3,7 @@ import Record from '../models/recordModel.js';
 export const createRecord = async (req, res) => {
   try {
     // 改用更清楚的命名
-    const { gameType, battleId, player1: currentPlayer, words, submitted } = req.body;
+    const { gameType, battleId, player1: currentPlayer, words, completed } = req.body;
 
     if (gameType === 'battle' && battleId) {
       // 使用 findOneAndUpdate 来确保原子性操作
@@ -15,10 +15,10 @@ export const createRecord = async (req, res) => {
             battleId,
             words,
             player1: currentPlayer,  // 這裡比較清楚：把當前玩家設為 player1
-            submitted: false
+            completed: false
           }
         },
-        { 
+        {
           upsert: true,
           new: true,
           setDefaultsOnInsert: true
@@ -31,10 +31,12 @@ export const createRecord = async (req, res) => {
           { battleId },
           {
             player2: currentPlayer,  // 把當前玩家設為 player2
-            submitted: true,
-            winnerId: record.player1.score > currentPlayer.score 
-              ? record.player1.googleId 
-              : currentPlayer.googleId
+            completed: true,
+            winnerId: record.player1.score > currentPlayer.score
+              ? record.player1.googleId
+              : record.player1.score < currentPlayer.score
+                ? currentPlayer.googleId
+                : 'tie'  // 当分数相等时，设置为平手
           },
           { new: true }
         );
@@ -54,9 +56,9 @@ export const createRecord = async (req, res) => {
 
   } catch (error) {
     console.error('Error in createRecord:', error);
-    return res.status(400).json({ 
+    return res.status(400).json({
       message: error.message,
-      details: error.stack 
+      details: error.stack
     });
   }
 };
@@ -65,13 +67,22 @@ export const getBattleRecord = async (req, res) => {
   try {
     const { battleId } = req.params;
     const record = await Record.findOne({ battleId });
-    
+
     if (!record) {
       return res.status(404).json({ message: 'Battle record not found' });
     }
-    
+
     res.json(record);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
 };
+
+//export const deleteAllRecords = async (req, res) => {
+//  try {
+//    await Record.deleteMany({});
+//    res.json({ message: '所有記錄已成功刪除' });
+//  } catch (error) {
+//    res.status(400).json({ message: error.message });
+//  }
+//};

@@ -13,7 +13,7 @@ const recordSchema = mongoose.Schema({
     unique: true,     // 確保對戰ID唯一
     sparse: true      // 允許非對戰模式為 null
   },
-  
+
   // 玩家資訊
   player1: {
     googleId: {
@@ -30,7 +30,7 @@ const recordSchema = mongoose.Schema({
       required: true
     }
   },
-  
+
   // 對手資訊（對戰模式用）
   player2: {
     googleId: String,
@@ -38,17 +38,17 @@ const recordSchema = mongoose.Schema({
     picture: String,
     score: Number
   },
-  
+
   // 遊戲內容
   words: [{
     word: String,
     definition1: String,
     definition2: String
   }],
-  
+
   // 對戰相關（對戰模式用）
   winnerId: String,
-  submitted: {
+  completed: {
     type: Boolean,
     default: true  // 單人模式直接設為 true
   }
