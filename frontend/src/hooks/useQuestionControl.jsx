@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 
 function useQuestionControl(questions) {  // 接收题目数组作为参数
   const [questionIndex, setCurrentQuestionIndex] = useState(0);
   const [isLetterShown, setIsFirstLetterRevealed] = useState(false);
   const [isDefShown, setIsSecondDefinitionRevealed] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);  // 新增狀態
 
   const question = questions[questionIndex];
 
@@ -26,9 +27,18 @@ function useQuestionControl(questions) {  // 接收题目数组作为参数
 
   const nextQuestion = () => {
     if (questionIndex < questions.length - 1) {
+      setIsUpdating(true);  // 開始更新
+      console.log('進入下一題:開始更新狀態');
       setCurrentQuestionIndex(prev => prev + 1);
       setIsFirstLetterRevealed(false);
       setIsSecondDefinitionRevealed(false);
+      
+      // 使用 setTimeout 確保狀態已更新
+      setTimeout(() => {
+        setIsUpdating(false);  // 更新完成
+        console.log('進入下一題:更新完成');
+      }, 100);
+      
       return true;
     }
     return false;
@@ -52,7 +62,8 @@ function useQuestionControl(questions) {  // 接收题目数组作为参数
     showSecondDef,
     nextQuestion,
     resetQuestionState,
-    isLastQuestion
+    isLastQuestion,
+    isUpdating  // 導出新狀態
   };
 }
 

@@ -9,12 +9,17 @@ function useKeyboardControl({
   setShowHint,
   showLetter,
   showDef,
-  skipQuestion
+  skipQuestion,
+  isUpdating  // 新增這個參數
 }) {
   useEffect(() => {
     if (!isModalOpen) {
       const handleKeyPress = (e) => {
         e.preventDefault();
+        
+        // 如果正在更新狀態，不處理任何鍵盤事件
+        if (isUpdating) return;
+
         if (e.key.match(/^[a-z]$/i)) {
           if (answer.length < questionLength) {
             setAnswer(prev => prev + e.key.toLowerCase());
@@ -38,7 +43,7 @@ function useKeyboardControl({
       window.addEventListener("keydown", handleKeyPress);
       return () => window.removeEventListener("keydown", handleKeyPress);
     }
-  }, [answer, questionLength, isLetterShown, isModalOpen]);
+  }, [answer, questionLength, isLetterShown, isModalOpen, isUpdating]);
 }
 
 export default useKeyboardControl;

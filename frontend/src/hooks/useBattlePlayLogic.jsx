@@ -33,7 +33,8 @@ function useBattlePlayLogic(userInfo, battleInfo) {
     showFirstLetter,
     showSecondDef,
     nextQuestion,
-    isLastQuestion
+    isLastQuestion,
+    isUpdating
   } = useQuestionControl(questions);
 
   const {
@@ -53,24 +54,25 @@ function useBattlePlayLogic(userInfo, battleInfo) {
     showSecondDef,
     deductPenalty,
     addBonus,
-    // 添加對戰相關參數
     socket, 
     battleCode,
     socketId,
     questionIndex,
-    isModalOpen
+    isModalOpen,
+    isUpdating
   });
 
   useKeyboardControl({
     isModalOpen,
     answer,
-    questionLength: question.question.length,
+    questionLength: question?.question.length || 0,
     isLetterShown,
     setAnswer,
     setShowHint,
     showLetter,
     showDef,
-    skipQuestion
+    skipQuestion,
+    isUpdating
   });
 
   return {
@@ -87,8 +89,9 @@ function useBattlePlayLogic(userInfo, battleInfo) {
     revealLetter: showLetter,
     showSecondDef: showDef,
     skipQuestion,
-    handleCloseModal,
-    answeredQuestions
+    handleCloseModal: () => setIsModalOpen(false),
+    answeredQuestions,
+    isUpdating
   };
 }
 

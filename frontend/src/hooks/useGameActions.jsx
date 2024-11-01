@@ -18,7 +18,8 @@ function useGameActions({
   socket,  // 現在接收的是 Context 中的 socket
   battleCode,
   socketId,
-  questionIndex
+  questionIndex,
+  isUpdating
 }) {
   const toast = useToast();
   const [answeredQuestions, setAnsweredQuestions] = useState(new Map());
@@ -73,6 +74,8 @@ function useGameActions({
   };
 
   const showLetter = () => {
+    console.log('狀態是否正在更新:', isUpdating);
+    if (isUpdating) return;
     const letter = showFirstLetter(deductPenalty);
     if (letter) {
       setAnswer(letter);
