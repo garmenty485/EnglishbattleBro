@@ -12,7 +12,7 @@ import useSendRecord from '../hooks/useSendRecord';
 
 function BattlePage() {
   const location = useLocation();
-  const { userInfo, battleCode, players, socketId } = location.state || {};
+  const { userInfo, battleCode, players, socketId, questions } = location.state || {};
   const socket = useSocket();  // 使用 Context 中的 socket
   const [answeredQ, setAnsweredQuestions] = useState(new Map());
 
@@ -56,7 +56,8 @@ function BattlePage() {
   } = useBattlePlayLogic(userInfo, {
     socket,
     battleCode,
-    socketId
+    socketId,
+    questions
   }); 
 
   useSendRecord(isModalOpen, score, userInfo, 'battle', battleCode, rival);

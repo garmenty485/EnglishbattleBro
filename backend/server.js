@@ -5,12 +5,19 @@ import recordRoutes from './routes/recordRoutes.js';
 import cors from 'cors';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { readFileSync } from 'fs';
+import { dirname, join } from 'path';
 import http from 'http';
 import { Server } from 'socket.io';
 
 // ES Module 中獲取 __dirname
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const __dirname = dirname(__filename);
+
+// 讀取 JSON 文件
+const allQuestions = JSON.parse(
+  readFileSync(join(__dirname, './allQuestions.json'), 'utf8')
+);
 
 dotenv.config();
 connectDB();
@@ -59,7 +66,13 @@ if (process.env.NODE_ENV === 'production') {
 // 存儲等待匹配的玩家
 let waitingPlayers = [];
 // 存儲創建的房間
-const rooms = new Map();
+const rooms = new Map(); // { roomCode: { playerA, playerB, questions: [] } }
+
+// 隨機抽題函數
+function getRandomQuestions(allQuestions, count) {
+  const shuffled = [...allQuestions].sort(() => 0.5 - Math.random());
+  return shuffled.slice(0, count);
+}
 
 io.on('connection', (socket) => {
   console.log('A user connected:', socket.id);
@@ -79,6 +92,7 @@ io.on('connection', (socket) => {
     if (waitingPlayers.length > 0) {
       const opponent = waitingPlayers.shift();
       const roomCode = `room_${Date.now()}`;
+      const randomQuestions = getRandomQuestions(allQuestions, 10);
       
       socket.join(roomCode);
       const opponentSocket = io.sockets.sockets.get(opponent.socketId);
@@ -98,7 +112,11 @@ io.on('connection', (socket) => {
       };
 
       // 改用 matchSuccess
-      io.to(roomCode).emit('matchSuccess', { roomCode, players });
+      io.to(roomCode).emit('matchSuccess', { 
+        roomCode, 
+        players,
+        questions: randomQuestions 
+      });
       console.log('Match found:', { roomCode, players });
     } else {
       waitingPlayers.push(data);
@@ -108,9 +126,11 @@ io.on('connection', (socket) => {
 
   // 創建房間邏輯
   socket.on('createRoom', ({ roomCode, userInfo, socketId }) => {
+    const randomQuestions = getRandomQuestions(allQuestions, 10);
     rooms.set(roomCode, {
       playerA: { socketId, userInfo },
-      playerB: null
+      playerB: null,
+      questions: randomQuestions
     });
     socket.join(roomCode);
   });
@@ -137,7 +157,8 @@ io.on('connection', (socket) => {
       players: {
         playerA: room.playerA,
         playerB: room.playerB
-      }
+      },
+      questions: room.questions
     });
   });
 

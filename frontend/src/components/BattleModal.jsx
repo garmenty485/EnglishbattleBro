@@ -106,13 +106,14 @@ function BattleModal({ isOpen, onClose, userInfo }) {
       });
     });
 
-    socket.on('matchSuccess', ({ roomCode, players }) => {
+    socket.on('matchSuccess', ({ roomCode, players, questions }) => {
       navigate('/battle', {
         state: {
           userInfo,
           battleCode: roomCode,
           players,
-          socketId: socket.id
+          socketId: socket.id,
+          questions
         }
       });
     });

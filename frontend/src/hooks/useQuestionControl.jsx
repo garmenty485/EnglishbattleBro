@@ -1,7 +1,6 @@
 import { useState } from 'react';
-import questions from '../assets/questions.json';
 
-function useQuestionControl() {
+function useQuestionControl(questions) {  // 接收题目数组作为参数
   const [questionIndex, setCurrentQuestionIndex] = useState(0);
   const [isLetterShown, setIsFirstLetterRevealed] = useState(false);
   const [isDefShown, setIsSecondDefinitionRevealed] = useState(false);

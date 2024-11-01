@@ -5,7 +5,7 @@ import useGameState from './useGameState';
 import useGameActions from './useGameActions';
 
 function useBattlePlayLogic(userInfo, battleInfo) {
-  const { socket, battleCode, socketId } = battleInfo;
+  const { socket, battleCode, socketId, questions } = battleInfo;
 
   const {
     answer,
@@ -34,7 +34,7 @@ function useBattlePlayLogic(userInfo, battleInfo) {
     showSecondDef,
     nextQuestion,
     isLastQuestion
-  } = useQuestionControl();
+  } = useQuestionControl(questions);
 
   const {
     skipQuestion,
