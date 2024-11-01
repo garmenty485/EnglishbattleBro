@@ -4,7 +4,27 @@ import useKeyboardControl from './useKeyboardControl';
 import useGameState from './useGameState';
 import useGameActions from './useGameActions';
 
-function useSoloPlayLogic(userInfo) {
+function useSoloPlayLogic(userInfo, questions) {
+  // 添加空值檢查，如果 questions 為空，返回默認值
+  if (!questions) {
+    return {
+      questionIndex: 0,
+      score: 0,
+      isModalOpen: false,
+      answer: '',
+      isLetterShown: false,
+      showBonus: false,
+      showPenalty: false,
+      isDefShown: false,
+      showHint: false,
+      question: null,
+      revealLetter: () => {},
+      showSecondDef: () => {},
+      skipQuestion: () => {},
+      handleCloseModal: () => {}
+    };
+  }
+
   const {
     answer,
     setAnswer,
@@ -31,8 +51,9 @@ function useSoloPlayLogic(userInfo) {
     showFirstLetter,
     showSecondDef,
     nextQuestion,
-    isLastQuestion
-  } = useQuestionControl();
+    isLastQuestion,
+    isUpdating  // 添加 isUpdating
+  } = useQuestionControl(questions);
 
   const {
     skipQuestion,
@@ -41,6 +62,7 @@ function useSoloPlayLogic(userInfo) {
   } = useGameActions({
     answer,
     setAnswer,
+    isModalOpen,
     setIsModalOpen,
     question,
     isLastQuestion,
@@ -50,19 +72,20 @@ function useSoloPlayLogic(userInfo) {
     showSecondDef,
     deductPenalty,
     addBonus,
-    isModalOpen
+    isUpdating  // 傳入 isUpdating
   });
 
   useKeyboardControl({
     isModalOpen,
     answer,
-    questionLength: question.question.length,
+    questionLength: question?.question?.length || 0,  // 添加空值檢查
     isLetterShown,
     setAnswer,
     setShowHint,
     showLetter,
     showDef,
-    skipQuestion
+    skipQuestion,
+    isUpdating  // 傳入 isUpdating
   });
 
   return {

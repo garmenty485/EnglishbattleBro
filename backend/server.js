@@ -74,6 +74,24 @@ function getRandomQuestions(allQuestions, count) {
   return shuffled.slice(0, count);
 }
 
+// 隨機題目路由
+app.get('/api/questions/random', async (req, res) => {
+  try {
+    const count = parseInt(req.query.count) || 10;
+
+    // 使用已有的 getRandomQuestions 函數
+    const randomQuestions = getRandomQuestions(allQuestions, count);
+
+    res.json(randomQuestions);
+  } catch (error) {
+    console.error('Error getting random questions:', error);
+    res.status(500).json({
+      error: 'Failed to get random questions',
+      details: error.message
+    });
+  }
+});
+
 io.on('connection', (socket) => {
   console.log('A user connected:', socket.id);
 

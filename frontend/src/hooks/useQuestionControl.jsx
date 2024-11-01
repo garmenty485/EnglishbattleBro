@@ -6,7 +6,7 @@ function useQuestionControl(questions) {  // 接收题目数组作为参数
   const [isDefShown, setIsSecondDefinitionRevealed] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);  // 新增狀態
 
-  const question = questions[questionIndex];
+  const question = questions.length > 0 ? questions[questionIndex] : null;
 
   const showFirstLetter = (deductPenalty) => {
     if (!isLetterShown && deductPenalty()) {

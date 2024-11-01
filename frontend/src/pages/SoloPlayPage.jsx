@@ -1,4 +1,5 @@
-import { Text, Flex, Box, Container, Button, Image } from "@chakra-ui/react";
+import { Text, Flex, Box, Container, Button, Image, Center, Spinner, useToast } from "@chakra-ui/react";
+import { useState, useEffect } from 'react';
 import useSoloPlayLogic from '../hooks/useSoloPlayLogic';
 import useSendRecord from '../hooks/useSendRecord';
 import GameOptionButton from '../components/GameOptionButton';
@@ -8,25 +9,56 @@ import AnswerInput from '../components/AnswerInput';
 import ScoreDisplay from '../components/ScoreDisplay';
 
 function SoloPlayPage({ userInfo }) {
-  const {
-    questionIndex,
-    answer,
-    score,
-    isLetterShown,
-    showBonus,
-    showPenalty,
-    isDefShown,
-    isModalOpen,
-    showHint,
-    question,
-    revealLetter,                // 改為 revealLetter
-    showSecondDef,      // 保持不變
-    skipQuestion,          // 明確表示這是一個事件處理器
-    handleCloseModal
-  } = useSoloPlayLogic(userInfo);
+  const [questions, setQuestions] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const toast = useToast();
+  
+  // 始終調用 hook，但傳入空數組作為預設值
+  const gameLogic = useSoloPlayLogic(userInfo, questions || []);
+
+  useSendRecord(gameLogic?.isModalOpen || false, gameLogic?.score || 0, userInfo);
+
+  useEffect(() => {
+    const fetchQuestions = async () => {
+      try {
+        console.log('開始獲取題目...');
+        const response = await fetch('/api/questions/random?count=10');
+        console.log('API 響應狀態:', response.status);
+        
+        if (!response.ok) throw new Error('Failed to fetch questions');
+        const data = await response.json();
+        console.log('獲取到的題目:', data);
+        
+        if (!Array.isArray(data) || data.length === 0) {
+          throw new Error('Invalid questions data');
+        }
+        
+        setQuestions(data);
+        console.log('題目設置完成');
+      } catch (error) {
+        console.error('Error fetching questions:', error);
+        toast({
+          title: "Error",
+          description: "Failed to load questions", 
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchQuestions();
+  }, [toast]);
+
+  // 修改加載條件
+  if (isLoading || !questions) {
+    return <Center h="100vh"><Spinner size="xl" /></Center>;
+  }
 
   // 使用 useSendRecord hook
-  useSendRecord(isModalOpen, score, userInfo);
+
 
   return (
     <Container
@@ -40,7 +72,6 @@ function SoloPlayPage({ userInfo }) {
       minH={{ base: "100vh", md: "90vh" }}
       bg="yellow.100"
     >
-      {/* 视图代码保持不变 */}
       <Flex justify="space-between" align="center" mb={4} position="relative">
         <Box>
           {userInfo ? (
@@ -59,37 +90,42 @@ function SoloPlayPage({ userInfo }) {
           align="center"
         >
           <Text fontFamily="Comic Sans MS" color="pink.600" textShadow="2px 2px #FFA07A" fontSize="3xl" fontWeight="bold">
-            #{questionIndex + 1}
+            #{gameLogic.questionIndex + 1}
           </Text>
         </Flex>
       </Flex>
 
-      <ScoreDisplay 
-        score={score}
-        showBonus={showBonus}
-        showPenalty={showPenalty}
-      />
+      {gameLogic && (
+        <ScoreDisplay 
+          score={gameLogic.score}
+          showBonus={gameLogic.showBonus}
+          showPenalty={gameLogic.showPenalty}
+        />
+      )}
 
-      {/* Answer Input Area */}
-      <AnswerInput 
-        answer={answer}
-        question={question}
-        isLetterShown={isLetterShown}
-        showHint={showHint}
-      />
+      {gameLogic && (
+        <AnswerInput 
+          answer={gameLogic.answer}
+          question={gameLogic.question}
+          isLetterShown={gameLogic.isLetterShown}
+          showHint={gameLogic.showHint}
+        />
+      )}
 
-      {/* Definitions */}
-      <DefinitionBox 
-        definition={question.definition1} 
-      />
+      {gameLogic && (
+        <DefinitionBox 
+          definition={gameLogic.question.definition1} 
+        />
+      )}
       
-      <DefinitionBox 
-        definition={question.definition2}
-        isSecondary
-        isRevealed={isDefShown}
-      />
+      {gameLogic && (
+        <DefinitionBox 
+          definition={gameLogic.question.definition2}
+          isSecondary
+          isRevealed={gameLogic.isDefShown}
+        />
+      )}
 
-      {/* Options */}
       <Box w={{ base: "365px", sm: "370px", md: "370px" }} maxW="95%" p={{ base: 2, md: 4 }} textAlign="center" mx="auto">
         <Text fontSize="lg" fontWeight="bold" fontFamily="Comic Sans MS" color="pink.500">
           🛎️ Options 🛎️
@@ -103,8 +139,8 @@ function SoloPlayPage({ userInfo }) {
             icon="💡"
             tooltipText="Reveal a letter (cost: $30)"
             hotKeyIcon="⬅️"
-            onClick={revealLetter}    // 改為 revealLetter
-            isDisabled={isLetterShown}
+            onClick={gameLogic.revealLetter}
+            isDisabled={gameLogic.isLetterShown}
             colorScheme="teal"
           />
           
@@ -112,8 +148,8 @@ function SoloPlayPage({ userInfo }) {
             icon="📖"
             tooltipText="Show another definition (cost: $30)"
             hotKeyIcon="⬇️"
-            onClick={showSecondDef}
-            isDisabled={isDefShown}
+            onClick={gameLogic.showSecondDef}
+            isDisabled={gameLogic.isDefShown}
             colorScheme="yellow"
           />
           
@@ -121,17 +157,19 @@ function SoloPlayPage({ userInfo }) {
             icon="⏭️"
             tooltipText="Skip this question"
             hotKeyIcon="➡️"
-            onClick={skipQuestion}
+            onClick={gameLogic.skipQuestion}
             colorScheme="red"
           />
         </Flex>
       </Box>
 
-      <GameResultModal 
-        isOpen={isModalOpen}
-        onClose={handleCloseModal}
-        score={score}
-      />
+      {gameLogic && (
+        <GameResultModal 
+          isOpen={gameLogic.isModalOpen}
+          onClose={gameLogic.handleCloseModal}
+          score={gameLogic.score}
+        />
+      )}
     </Container>
   );
 }
