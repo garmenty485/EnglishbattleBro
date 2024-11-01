@@ -9,10 +9,13 @@ function useGameState(userInfo) {
   const navigate = useNavigate();
 
   const handleCloseModal = () => {
+    console.log("關閉 modal");
     setIsModalOpen(false);
     if (userInfo) {
+      console.log("導航到google玩家登入頁面");
       navigate('/loggedin');
     } else {
+      console.log("導航到匿名玩家登入頁面");
       navigate('/');
     }
   };

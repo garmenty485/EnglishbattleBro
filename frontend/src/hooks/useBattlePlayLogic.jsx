@@ -89,7 +89,7 @@ function useBattlePlayLogic(userInfo, battleInfo) {
     revealLetter: showLetter,
     showSecondDef: showDef,
     skipQuestion,
-    handleCloseModal: () => setIsModalOpen(false),
+    handleCloseModal,
     answeredQuestions,
     isUpdating
   };
