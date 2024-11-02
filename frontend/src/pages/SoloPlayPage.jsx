@@ -17,7 +17,7 @@ function SoloPlayPage({ userInfo }) {
   // 始終調用 hook，但傳入空數組作為預設值
   const gameLogic = useSoloPlayLogic(userInfo, questions || []);
 
-  useSendRecord(gameLogic?.isModalOpen || false, gameLogic?.score || 0, userInfo);
+  useSendRecord(gameLogic?.isModalOpen || false, gameLogic?.score || 0, userInfo, 'solo', null, null, questions);
 
   useEffect(() => {
     const fetchQuestions = async () => {

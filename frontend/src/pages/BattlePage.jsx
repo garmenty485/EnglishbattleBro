@@ -67,7 +67,7 @@ function BattlePage() {
     questions
   }); 
 
-  useSendRecord(isModalOpen, score, userInfo, 'battle', battleCode, rival);
+  useSendRecord(isModalOpen, score, userInfo, 'battle', battleCode, rival, questions);
 
   return (
     <Container
