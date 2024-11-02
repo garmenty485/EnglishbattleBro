@@ -47,28 +47,6 @@ app.use(express.json());
 // API 路由
 app.use('/api/records', recordRoutes);
 
-// 判斷環境
-if (process.env.NODE_ENV === 'production') {
-    // 提供前端靜態檔案
-    app.use(express.static(path.join(__dirname, '../frontend/dist')));
-
-    // 所有非 API 的請求都返回前端的 index.html
-    app.get('*', (req, res) => {
-        res.sendFile(path.resolve(__dirname, '../frontend/dist', 'index.html'));
-    });
-} else {
-    // 開發環境下的測試路由
-    app.get('/', (req, res) => {
-        res.send('API is running...');
-    });
-}
-
-// 存儲等待匹配的玩家
-let waitingPlayers = [];
-// 存儲創建的房間
-const rooms = new Map(); // { roomCode: { playerA, playerB, questions: [] } }
-
-// 隨機抽題函數
 function getRandomQuestions(allQuestions, count) {
   const shuffled = [...allQuestions].sort(() => 0.5 - Math.random());
   return shuffled.slice(0, count);
@@ -91,6 +69,27 @@ app.get('/api/questions/random', async (req, res) => {
     });
   }
 });
+
+// 判斷環境
+if (process.env.NODE_ENV === 'production') {
+    // 提供前端靜態檔案
+    app.use(express.static(path.join(__dirname, '../frontend/dist')));
+
+    // 所有非 API 的請求都返回前端的 index.html
+    app.get('*', (req, res) => {
+        res.sendFile(path.resolve(__dirname, '../frontend/dist', 'index.html'));
+    });
+} else {
+    // 開發環境下的測試路由
+    app.get('/', (req, res) => {
+        res.send('API is running...');
+    });
+}
+
+// 存儲等待匹配的玩家
+let waitingPlayers = [];
+// 存儲創建的房間
+const rooms = new Map(); // { roomCode: { playerA, playerB, questions: [] } }
 
 io.on('connection', (socket) => {
   console.log('A user connected:', socket.id);
