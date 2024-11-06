@@ -18,6 +18,7 @@ function LoggedInHomePage({ userInfo }) {
       <CustomButton
         icon={<Image src={userInfo?.picture} boxSize="40px" borderRadius="full" mr={4} />}
         text={`${userInfo?.name}'s Records & Words`}
+        onClick={() => navigate('/records', { state: { userInfo } })}
       />
       <CustomButton
         icon="🏃‍♀️"
