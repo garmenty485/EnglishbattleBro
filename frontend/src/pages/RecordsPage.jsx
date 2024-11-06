@@ -1,7 +1,7 @@
 // ... 其他 imports 保持不變
 
 import { useState } from 'react';
-import { Box, Image, Text, Table, Thead, Tbody, Tr, Td, Th, Button } from '@chakra-ui/react';
+import { Box, Image, Text, Table, Thead, Tbody, Tr, Td, Th, Button, Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalCloseButton } from '@chakra-ui/react';
 
 function RecordsPage({ userInfo }) {  // 添加 userInfo 參數
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -19,8 +19,13 @@ function RecordsPage({ userInfo }) {  // 添加 userInfo 參數
     winner: {
       image: ''
     },
-    words: []
+    words: ['apple', 'banana', 'orange', 'grape', 'watermelon'] // 測試用單字
   });
+
+  const handleWordsClick = (words) => {
+    setSelectedWords(words);
+    setIsModalOpen(true);
+  };
 
   return (
     <Box p={5}>
@@ -111,7 +116,7 @@ function RecordsPage({ userInfo }) {  // 添加 userInfo 參數
                   colorScheme="blue"
                   size="xs"  // 改為 xs 使按鈕變小
                   onClick={() => handleWordsClick(record.words)}
-                  isDisabled={record.words.length === 0}
+                  isDisabled={false} // 移除禁用條件
                 >
                   Words
                 </Button>
@@ -121,7 +126,21 @@ function RecordsPage({ userInfo }) {  // 添加 userInfo 參數
         </Tbody>
       </Table>
 
-      {/* Modal 部分保持不變 */}
+      {/* 單字列表 Modal */}
+      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>單字列表</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody pb={6}>
+            {selectedWords.map((word, index) => (
+              <Text key={index} fontSize="lg" mb={2}>
+                {word}
+              </Text>
+            ))}
+          </ModalBody>
+        </ModalContent>
+      </Modal>
     </Box>
   );
 }
