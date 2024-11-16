@@ -7,6 +7,7 @@ import LoggedInHomePage from './pages/LoggedInHomePage';
 import SoloPlayPage from './pages/SoloPlayPage';
 import BattlePage from './pages/BattlePage';
 import RecordsPage from './pages/RecordsPage';
+
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userInfo, setUserInfo] = useState(null);
@@ -30,6 +31,8 @@ function App() {
     setIsLoggedIn(true);
   };
 
+  console.log('App rendering with userInfo:', userInfo);
+
   return (
     <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
       <SocketProvider>
@@ -39,7 +42,12 @@ function App() {
             <Route path="/loggedin" element={<LoggedInHomePage userInfo={userInfo} />} />
             <Route path="/soloplay" element={<SoloPlayPage userInfo={userInfo} />} />
             <Route path="/battle" element={<BattlePage />} />
-            <Route path="/records" element={<RecordsPage userInfo={userInfo} />} />
+            <Route 
+              path="/records" 
+              element={
+                <RecordsPage userInfo={userInfo} />
+              } 
+            />
           </Routes>
         </Router>
       </SocketProvider>

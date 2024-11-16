@@ -78,6 +78,50 @@ export const getBattleRecord = async (req, res) => {
   }
 };
 
+export const getUserRecords = async (req, res) => {
+  try {
+    const { googleId } = req.params;
+    console.log('Backend: Fetching records for googleId:', googleId);
+
+    const records = await Record.find({
+      $or: [
+        { 'player1.googleId': googleId },
+        { 'player2.googleId': googleId }
+      ]
+    })
+    .sort({ createdAt: -1 })
+    .limit(10);
+
+    console.log('Backend: Found records:', records.length);
+    
+    const formattedRecords = records.map(record => {
+      const isPlayer1 = record.player1.googleId === googleId;
+      return {
+        date: record.createdAt,
+        gameType: record.gameType,
+        score: isPlayer1 ? record.player1.score : record.player2.score,
+        rival: !isPlayer1 ? {
+          name: record.player1.googleName,
+          picture: record.player1.picture,
+          score: record.player1.score
+        } : record.player2 ? {
+          name: record.player2.googleName,
+          picture: record.player2.picture,
+          score: record.player2.score
+        } : null,
+        words: record.words,
+        winnerId: record.winnerId
+      };
+    });
+
+    console.log('Backend: Sending formatted records');
+    res.json(formattedRecords);
+  } catch (error) {
+    console.error('Backend Error:', error);
+    res.status(500).json({ message: error.message });
+  }
+};
+
 //export const deleteAllRecords = async (req, res) => {
 //  try {
 //    await Record.deleteMany({});
