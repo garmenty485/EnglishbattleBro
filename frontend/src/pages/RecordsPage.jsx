@@ -175,11 +175,13 @@ function RecordsPage({ userInfo }) {
                 <Td fontSize={{ base: "xs", md: "md" }} fontWeight="bold">
                   <Text
                     color={record.gameType === 'battle' ? 
-                      (record.winnerId === userInfo.email ? 'green.500' : 
+                      (!record.winnerId ? 'gray.500' :
+                       record.winnerId === userInfo.email ? 'green.500' : 
                        record.winnerId === 'tie' ? 'orange.500' : 'red.500') 
                       : 'black'}
                   >
                     {record.gameType === 'battle' ? (
+                      !record.winnerId ? 'Waiting' :
                       record.winnerId === userInfo.email ? 'Win' :
                       record.winnerId === 'tie' ? 'Tie' : 'Loss'
                     ) : '-'}
