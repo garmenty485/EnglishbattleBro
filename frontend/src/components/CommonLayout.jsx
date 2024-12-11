@@ -1,4 +1,5 @@
-import { Heading, VStack, Container, Text } from "@chakra-ui/react";
+import { Heading, VStack, Container, Text, Link, Flex } from "@chakra-ui/react";
+import { FaLinkedin } from "react-icons/fa";
 
 function CommonLayout({ children }) {
   return (
@@ -30,6 +31,26 @@ function CommonLayout({ children }) {
       </Heading>
       <VStack spacing={6} w="100%" align="center">
         {children}
+        
+        <Link
+          href="https://www.linkedin.com/in/chia-ming-hu-683382255/"
+          isExternal
+          display="flex"
+          alignItems="center"
+          color="gray.600"
+          fontSize="sm"
+          opacity={0.7}
+          _hover={{ 
+            opacity: 1,
+            textDecoration: "none" 
+          }}
+          transition="opacity 0.2s"
+          mt="auto"
+          pt={4}
+        >
+          <FaLinkedin size={20} style={{ marginRight: "8px" }}/>
+          <Text>Created by Chia-Ming Hu (Ken)</Text>
+        </Link>
       </VStack>
     </Container>
   );
