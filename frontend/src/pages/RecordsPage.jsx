@@ -51,6 +51,10 @@ function RecordsPage({ userInfo }) {
       borderRadius="8px"
       minH={{ base: "100vh", md: "90vh" }}
       bg="yellow.100"
+      display="flex"  // 新增
+      flexDirection="column"  // 新增
+      justifyContent="flex-start"  // 新增
+      alignItems="stretch"  // 新增
     >
       {/* Player Info Section */}
       <Flex
@@ -60,26 +64,34 @@ function RecordsPage({ userInfo }) {
         gap={4}
         mb={6}
         bg="orange.400"
-        p={6}
+        p={{ base: 4, sm: 6 }}
         borderRadius="md"
         boxShadow="0 4px 6px rgba(0, 0, 0, 0.1)"
+        minH={{ base: "120px", sm: "auto" }}
+        maxW="100%"
+        mx="auto"
       >
         <Image
           src={userInfo?.picture}
           alt={userInfo?.name}
           fallbackSrc="https://via.placeholder.com/100"
-          boxSize={{ base: "80px", sm: "100px" }}
+          boxSize={{ base: "60px", sm: "80px", md: "100px" }}
           borderRadius="full"
           border="3px solid"
           borderColor="white"
           boxShadow="0 0 0 4px rgba(0,0,0,0.2)"
+          flexShrink={0}
         />
         <Text
           color="white"
-          fontSize={{ base: "xl", sm: "3xl" }}
+          fontSize={{ base: "lg", sm: "xl", md: "2xl" }}
           fontWeight="bold"
           textShadow="2px 2px #000"
           textAlign="center"
+          wordBreak="break-word"
+          maxW={{ base: "200px", sm: "400px", md: "600px" }}
+          overflow="hidden"
+          textOverflow="ellipsis"
         >
           {userInfo?.name || 'Unknown Player'}
         </Text>
@@ -93,7 +105,18 @@ function RecordsPage({ userInfo }) {
         boxShadow="lg"
         border="3px solid black"
       >
-        <Table variant="simple" size={{ base: "sm", md: "md" }}>
+        <Table 
+          variant="simple" 
+          size={{ base: "sm", md: "md" }}
+          sx={{
+            '@media screen and (min-width: 768px)': {
+              'td, th': {
+                padding: '6px',
+                lineHeight: '1.2'
+              }
+            }
+          }}
+        >
           <Thead>
             <Tr bg="orange.400">
               <Th color="white" display={{ base: "none", md: "table-cell" }} 
@@ -112,9 +135,16 @@ function RecordsPage({ userInfo }) {
                 bg={index % 2 === 0 ? 'gray.50' : 'white'}
                 _hover={{ bg: 'gray.100' }}
               >
-                <Td display={{ base: "none", md: "table-cell" }} 
-                    fontSize={{ base: "xs", md: "md" }}
-                    fontWeight="bold">
+                <Td 
+                  display={{ base: "none", md: "table-cell" }} 
+                  fontSize={{ base: "xs", md: "md" }}
+                  fontWeight="bold"
+                  sx={{
+                    '@media screen and (min-width: 768px)': {
+                      py: '12px'
+                    }
+                  }}
+                >
                   {formatDistanceToNow(new Date(record.date), { locale: enUS, addSuffix: true })}
                 </Td>
                 <Td fontSize={{ base: "xs", md: "md" }} fontWeight="bold">{record.score}</Td>
