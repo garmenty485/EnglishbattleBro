@@ -1,5 +1,5 @@
 import { useEffect, useCallback, useState } from 'react';
-import { useToast } from "@chakra-ui/react";
+import { useToast, Box, Text, Button, Flex } from "@chakra-ui/react";
 import { SCORE_CONFIG } from '../constants/gameConfig';
 
 function useGameActions({
@@ -64,11 +64,33 @@ function useGameActions({
       nextQuestion();
       setAnswer("");
       toast({
-        title: "Question skipped!",
-        status: "info",
-        duration: 1500,
+        title: "Skipped!",
+        description: `The answer was: "${question.question}"`,
+        status: "info", 
+        duration: 2500,
         isClosable: true,
-        position: "top"
+        position: "top",
+        render: ({ onClose }) => (
+          <Box
+            color="white"
+            p={4}
+            bg="blue.500"
+            borderRadius="md"
+            boxShadow="lg"
+          >
+            <Flex justify="space-between" align="center" mb={2}>
+              <Text fontWeight="bold" fontSize="lg">
+                Skipped!
+              </Text>
+              <Button size="sm" onClick={onClose} variant="ghost" color="white">
+                ✕
+              </Button>
+            </Flex>
+            <Text fontSize="md">
+              The answer was: <Text as="span" fontWeight="bold">"{question.question}"</Text>
+            </Text>
+          </Box>
+        )
       });
     }
   };
