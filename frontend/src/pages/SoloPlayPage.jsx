@@ -30,6 +30,7 @@ function SoloPlayPage({ userInfo }) {
         console.log('API response:', response.status);
         
         if (!response.ok) throw new Error('Failed to fetch questions');
+        const data = await response.json();
         console.log('Successfully fetched questions');
         
         if (!Array.isArray(data) || data.length === 0) {
