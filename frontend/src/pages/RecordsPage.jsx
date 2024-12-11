@@ -183,16 +183,28 @@ function RecordsPage({ userInfo }) {
           <ModalCloseButton color="white" />
           <ModalBody pb={6}>
             {selectedWords.map((word, index) => (
-              <Text
+              <Flex
                 key={index}
+                justify="space-between"
+                align="center"
                 fontSize={{ base: "md", md: "lg" }}
                 mb={2}
                 p={2}
                 bg={index % 2 === 0 ? 'gray.50' : 'white'}
                 borderRadius="md"
               >
-                {word.word}
-              </Text>
+                <Text>{word.word}</Text>
+                <Button
+                  as="a"
+                  href={`https://www.dictionary.com/browse/${word.word}`}
+                  target="_blank"
+                  size="sm"
+                  colorScheme="blue"
+                  ml={4}
+                >
+                  Check dictionary
+                </Button>
+              </Flex>
             ))}
           </ModalBody>
         </ModalContent>
