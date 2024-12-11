@@ -6,7 +6,7 @@ function useGoogleLoginLogic(onLogin) {
 
   const login = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
-      console.log('Login Success:', tokenResponse);
+      // console.log('Login Success:', tokenResponse);
       await onLogin(tokenResponse);
       localStorage.setItem('isLoggedIn', 'true');
       localStorage.setItem('token', tokenResponse.access_token); // 存儲訪問令牌

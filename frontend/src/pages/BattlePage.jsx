@@ -21,13 +21,6 @@ function BattlePage() {
     ? players.playerB 
     : players.playerA;
 
-  // 在載入時輸出所有題目
-  useEffect(() => {
-    if (questions) {
-      console.log('本次對戰題目:', questions);
-    }
-  }, [questions]);
-
   // 設置事件監聽
   useEffect(() => {
     if (!socket) return;

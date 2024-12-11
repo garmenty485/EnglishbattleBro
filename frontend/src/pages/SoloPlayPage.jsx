@@ -25,20 +25,19 @@ function SoloPlayPage({ userInfo }) {
       fetchedRef.current = true;
 
       try {
-        console.log('開始獲取題目...');
+        console.log('start fetching questions...');
         const response = await fetch('/api/questions/random?count=10');
-        console.log('API 響應狀態:', response.status);
+        console.log('API response:', response.status);
         
         if (!response.ok) throw new Error('Failed to fetch questions');
-        const data = await response.json();
-        console.log('獲取到的題目:', data);
+        console.log('Successfully fetched questions');
         
         if (!Array.isArray(data) || data.length === 0) {
           throw new Error('Invalid questions data');
         }
         
         setQuestions(data);
-        console.log('題目設置完成');
+        console.log('questions set');
       } catch (error) {
         console.error('Error fetching questions:', error);
         toast({

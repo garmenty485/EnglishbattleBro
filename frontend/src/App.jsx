@@ -31,7 +31,7 @@ function App() {
     setIsLoggedIn(true);
   };
 
-  console.log('App rendering with userInfo:', userInfo);
+  // console.log('App rendering with userInfo:', userInfo);
 
   return (
     <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
