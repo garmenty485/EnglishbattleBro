@@ -99,7 +99,7 @@ function BattlePage() {
           align="center"
         >
           <Text fontFamily="Comic Sans MS" color="pink.600" textShadow="2px 2px #FFA07A" fontSize="3xl" fontWeight="bold">
-            #{questionIndex + 1}
+            #{questionIndex + 1}/{questions.length}
           </Text>
         </Flex>
 
