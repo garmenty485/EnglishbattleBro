@@ -25,8 +25,12 @@ import {
 import { useRecords } from '../hooks/useRecords';
 import { formatDistanceToNow } from 'date-fns';
 import { enUS } from 'date-fns/locale';
+import { useUserInfo } from '../context/UserInforContext';
 
-function RecordsPage({ userInfo }) {
+
+function RecordsPage() {
+  const { userInfo } = useUserInfo();
+
   const { records, isLoading } = useRecords(userInfo);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedWords, setSelectedWords] = useState([]);

@@ -6,9 +6,11 @@ import GameOptionButton from '../components/GameOptionButton';
 import GameResultModal from '../components/GameResultModal';
 import DefinitionBox from '../components/DefinitionBox';
 import AnswerInput from '../components/AnswerInput';
+import { useUserInfo } from '../context/UserInforContext';
 import ScoreDisplay from '../components/ScoreDisplay';
 
-function SoloPlayPage({ userInfo }) {
+function SoloPlayPage() {
+  const { userInfo } = useUserInfo();
   const [questions, setQuestions] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const toast = useToast();

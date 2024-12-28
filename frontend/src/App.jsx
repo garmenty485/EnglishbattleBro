@@ -7,49 +7,28 @@ import LoggedInHomePage from './pages/LoggedInHomePage';
 import SoloPlayPage from './pages/SoloPlayPage';
 import BattlePage from './pages/BattlePage';
 import RecordsPage from './pages/RecordsPage';
+import { UserInfoProvider } from './context/UserInforContext';
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userInfo, setUserInfo] = useState(null);
-
-  const handleLogin = async (tokenResponse) => {
-    // 使用 Google API 获取用户信息
-    const userInfoResponse = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
-      headers: {
-        Authorization: `Bearer ${tokenResponse.access_token}`,
-      },
-    });
-    const userInfo = await userInfoResponse.json();
-
-    // 将令牌信息添加到 userInfo 对象中
-    const userInfoWithToken = {
-      ...userInfo,
-      token: tokenResponse.access_token, // 添加令牌
-    };
-
-    setUserInfo(userInfoWithToken);
-    setIsLoggedIn(true);
-  };
-
-  // console.log('App rendering with userInfo:', userInfo);
-
   return (
     <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
       <SocketProvider>
-        <Router>
-          <Routes>
-            <Route path="/" element={<HomePage onLogin={handleLogin} />} />
-            <Route path="/loggedin" element={<LoggedInHomePage userInfo={userInfo} />} />
-            <Route path="/soloplay" element={<SoloPlayPage userInfo={userInfo} />} />
-            <Route path="/battle" element={<BattlePage />} />
-            <Route 
-              path="/records" 
-              element={
-                <RecordsPage userInfo={userInfo} />
-              } 
-            />
-          </Routes>
-        </Router>
+        <UserInfoProvider>
+          <Router>
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/loggedin" element={<LoggedInHomePage />} />
+              <Route path="/soloplay" element={<SoloPlayPage />} />
+              <Route path="/battle" element={<BattlePage />} />
+              <Route 
+                path="/records" 
+                element={
+                  <RecordsPage  />
+                } 
+                />
+            </Routes>
+          </Router>
+        </UserInfoProvider>
       </SocketProvider>
     </GoogleOAuthProvider>
   );

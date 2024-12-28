@@ -4,8 +4,12 @@ import { useNavigate } from 'react-router-dom';
 import CommonLayout from '../components/CommonLayout';
 import CustomButton from '../components/CustomButton';
 import BattleModal from '../components/BattleModal';
+import { useUserInfo } from '../context/UserInforContext';
 
-function LoggedInHomePage({ userInfo }) {
+
+function LoggedInHomePage() {
+  const { userInfo } = useUserInfo();
+
   const navigate = useNavigate();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -31,8 +35,8 @@ function LoggedInHomePage({ userInfo }) {
         onClick={onOpen}
       />
 
-      <BattleModal 
-        isOpen={isOpen} 
+      <BattleModal
+        isOpen={isOpen}
         onClose={onClose}
         userInfo={userInfo}
       />
