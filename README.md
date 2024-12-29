@@ -3,14 +3,15 @@
 ## Background
 
 This project was created by a complete beginner who:
-1. wanted to practice English vocabulary with English-to-English definition
+1. Wanted to practice English vocabulary with English-to-English definition
 2. Watched "MERN Stack Tutorial with Deployment – Beginner's Course" on YouTube
 (https://www.youtube.com/watch?v=O3BUHwfHf84&t=4441s)
 3. Utilized Cursor AI for coding assistance
 4. Built the entire application from scratch
 5. Successfully deployed it on Render
 
-Try it now: [English Battle Bro](https://englishbattlebro.onrender.com/)
+Try it now on desktop or mobile: [English Battle Bro](https://englishbattlebro.onrender.com/)
+
 Author's profile: https://www.linkedin.com/in/chia-ming-hu-683382255/
 
 ## Features
