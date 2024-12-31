@@ -275,11 +275,6 @@
         "definition2": "a team of eleven players for football (soccer), cricket or hockey"
     },
     {
-        "question": "English",
-        "definition1": "of, relating to, or characteristic ofEnglandor its inhabitants, institutions, etc.",
-        "definition2": "belonging or relating to, or spoken or written in, the English language"
-    },
-    {
         "question": "equal",
         "definition1": "the same in size, quantity, value, etc. as something else",
         "definition2": "having the same rights or being treated the same as other people, without differences such as race, religion or sex being considered"
@@ -690,19 +685,9 @@
         "definition2": "the northern part of a country, a region or the world"
     },
     {
-        "question": "O.K.",
-        "definition1": "all right; proceeding normally; satisfactory or under control",
-        "definition2": "correct, permissible, or acceptable; meeting standards"
-    },
-    {
         "question": "off",
         "definition1": "used to say that something has been removed or become separated",
         "definition2": "not connected or functioning"
-    },
-    {
-        "question": "OK",
-        "definition1": "all right; proceeding normally; satisfactory or under control",
-        "definition2": "correct, permissible, or acceptable; meeting standards"
     },
     {
         "question": "okay",
@@ -3255,11 +3240,6 @@
         "definition2": "now; as soon as this"
     },
     {
-        "question": "according to",
-        "definition1": "in agreement or accord with",
-        "definition2": "consistent with; in conformity with"
-    },
-    {
         "question": "against",
         "definition1": "opposing or disagreeing with somebody/something",
         "definition2": "not to the advantage or favour of somebody/something"
@@ -3398,11 +3378,6 @@
         "question": "apple",
         "definition1": "a round fruit with shiny red or green skin that is fairly hard and white inside",
         "definition2": "a child usually behaves in a similar way to his or her parent(s)"
-    },
-    {
-        "question": "April",
-        "definition1": "the fourth month of the year, containing 30 days.Apr.",
-        "definition2": "a first name."
     },
     {
         "question": "area",
@@ -3650,11 +3625,6 @@
         "definition2": "a son or daughter of any age"
     },
     {
-        "question": "Christmas",
-        "definition1": "the annual festival of the Christian church commemorating the birth of Jesus celebrated on December 25 and now generally observed as a legal holiday and, for many, an occasion for exchanging gifts.",
-        "definition2": "Christmastime."
-    },
-    {
         "question": "church",
         "definition1": "a building where Christians go to attend services, pray, etc.",
         "definition2": "a service or services in a church"
@@ -3683,11 +3653,6 @@
         "question": "coffee",
         "definition1": "the roasted seeds (called coffee beans) of a tropical bush; a powder made from them",
         "definition2": "a hot drink made from coffee powder and boiling water. It may be drunk with milk and/or sugar added."
-    },
-    {
-        "question": "Coke",
-        "definition1": "the solid product resulting from the destructive distillation of coal in an oven or closed chamber or by imperfect combustion, consisting principally of carbon used chiefly as a fuel in metallurgy to reduce metallic oxides to metals.",
-        "definition2": "to convert into or become coke."
     },
     {
         "question": "cola",
@@ -3758,11 +3723,6 @@
         "question": "death",
         "definition1": "the fact of somebody dying or being killed",
         "definition2": "the end of life; the state of being dead"
-    },
-    {
-        "question": "December",
-        "definition1": "the twelfth month of the year, containing 31 days.Dec.",
-        "definition2": "the twelfth and last month of the year, consisting of 31 days"
     },
     {
         "question": "desk",
@@ -3870,11 +3830,6 @@
         "definition2": "a group consisting of one or two parents, their children and close relations"
     },
     {
-        "question": "February",
-        "definition1": "the second month of the year, ordinarily containing 28 days, but containing 29 days in leap years.Feb.",
-        "definition2": "the second month of the year, consisting of 28 or (in a leap year) 29 days"
-    },
-    {
         "question": "feeling",
         "definition1": "something that you feel through the mind or through the senses",
         "definition2": "a person’s emotions rather than their thoughts or ideas"
@@ -3888,11 +3843,6 @@
         "question": "forest",
         "definition1": "a large area of land that is thickly covered with trees",
         "definition2": "a mass of tall narrow objects that are close together"
-    },
-    {
-        "question": "Friday",
-        "definition1": "the sixth day of the week, following Thursday.",
-        "definition2": "the sixth day of the week; fifth day of the working week"
     },
     {
         "question": "friend",
@@ -4040,11 +3990,6 @@
         "definition2": "a picture or an impression in your mind of what somebody/something is like"
     },
     {
-        "question": "January",
-        "definition1": "the first month of the year, containing 31 days.Jan.",
-        "definition2": "the first month of the year, consisting of 31 days"
-    },
-    {
         "question": "job",
         "definition1": "work for which you receive regular payment",
         "definition2": "a particular task or piece of work that you have to do"
@@ -4058,16 +4003,6 @@
         "question": "juice",
         "definition1": "the liquid that comes from fruit or vegetables; a drink made from this",
         "definition2": "the liquid that comes out of a piece of meat when it is cooked"
-    },
-    {
-        "question": "July",
-        "definition1": "the seventh month of the year, containing 31 days.Jul.",
-        "definition2": "the seventh month of the year, consisting of 31 days"
-    },
-    {
-        "question": "June",
-        "definition1": "the sixth month of the year, containing 30 days.Jun.",
-        "definition2": "a female given name."
     },
     {
         "question": "keeper",
@@ -4165,11 +4100,6 @@
         "definition2": "Anatomy, Zoology.a structure, characteristic of mammals, that comprises one or moremammary glandswith an associated nipple or teat, usually rudimentary unless developed and activated for the secretion of milk in the female after the birth of young."
     },
     {
-        "question": "May",
-        "definition1": "(used to express possibility)",
-        "definition2": "(used to express opportunity or permission)"
-    },
-    {
         "question": "meat",
         "definition1": "the soft part of an animal or a bird that can be eaten as food; a particular type of this",
         "definition2": "the important or interesting part of something"
@@ -4193,11 +4123,6 @@
         "question": "moment",
         "definition1": "a very short period of time",
         "definition2": "an exact point in time"
-    },
-    {
-        "question": "Monday",
-        "definition1": "the second day of the week, following Sunday.",
-        "definition2": "the second day of the week; first day of the working week"
     },
     {
         "question": "money",
@@ -4305,24 +4230,9 @@
         "definition2": "very little; something that is not at all important or interesting"
     },
     {
-        "question": "November",
-        "definition1": "the eleventh month of the year, containing 30 days.",
-        "definition2": "a word used in communications to represent the letterN.Nov."
-    },
-    {
         "question": "ocean",
         "definition1": "the mass of salt water that covers most of the earth’s surface",
         "definition2": "one of the five large areas that the ocean is divided into"
-    },
-    {
-        "question": "o'clock",
-        "definition1": "of, by, or according to theclock(used in specifying the hour of the day)",
-        "definition2": "according to a method for indicating relative position whereby a plane in space is considered to be numbered as a clock's face, with 12 o'clock considered as directly ahead in horizontal position or straight up in vertical position."
-    },
-    {
-        "question": "October",
-        "definition1": "the tenth month of the year, containing 31 days.Oct.",
-        "definition2": "British.ale or beer traditionally brewed in this month."
     },
     {
         "question": "office",
@@ -4455,11 +4365,6 @@
         "definition2": "the number of items sold"
     },
     {
-        "question": "Saturday",
-        "definition1": "the seventh day of the week, following Friday.",
-        "definition2": "the seventh and last day of the week the Jewish Sabbath"
-    },
-    {
         "question": "scene",
         "definition1": "the place where something happens, especially something unpleasant",
         "definition2": "an event or a situation that you see, especially one of a particular type"
@@ -4478,11 +4383,6 @@
         "question": "self",
         "definition1": "the type of person you are, especially the way you normally behave, look or feel",
         "definition2": "a person’s personality or character that makes them different from other people"
-    },
-    {
-        "question": "September",
-        "definition1": "the ninth month of the year, containing 30 days.Sept., Sep.",
-        "definition2": "the ninth month of the year, consisting of 30 days"
     },
     {
         "question": "shark",
@@ -4610,11 +4510,6 @@
         "definition2": "you must not take too seriously a small sign that something is happening or will happen in the future, because the situation could change"
     },
     {
-        "question": "Sunday",
-        "definition1": "the first day of the week, observed as the Sabbath by most Christian sects.",
-        "definition2": "of, relating to, or characteristic of Sunday."
-    },
-    {
         "question": "table",
         "definition1": "a piece of furniture that consists of a flat top supported by legs",
         "definition2": "the people sitting at a table for a meal or to play cards, etc."
@@ -4645,11 +4540,6 @@
         "definition2": "a person’s mind and all the ideas that they have in it when they are thinking"
     },
     {
-        "question": "Thursday",
-        "definition1": "the fifth day of the week, following Wednesday.Th., Thur., Thurs.",
-        "definition2": "the fifth day of the week; fourth day of the working week"
-    },
-    {
         "question": "tone",
         "definition1": "the quality of somebody’s voice, especially expressing a particular emotion",
         "definition2": "the general character and attitude of something such as a piece of writing, or the atmosphere of an event"
@@ -4663,16 +4553,6 @@
         "question": "tree",
         "definition1": "a tall plant that can live a long time. Trees have a thick central wooden trunk from which branches grow, usually with leaves on them",
         "definition2": "a child usually behaves in a similar way to his or her parent(s)"
-    },
-    {
-        "question": "T-shirt",
-        "definition1": "a lightweight, usually knitted, pullover shirt, close-fitting and with a round neckline and short sleeves, worn as an undershirt or outer garment.",
-        "definition2": "a lightweight simple garment for the upper body, usually short-sleeved"
-    },
-    {
-        "question": "Tuesday",
-        "definition1": "the third day of the week, following Monday.",
-        "definition2": "the third day of the week; second day of the working week"
     },
     {
         "question": "uncle",
@@ -4693,11 +4573,6 @@
         "question": "way",
         "definition1": "a method, style or manner of doing something",
         "definition2": "a particular manner or style of behaviour"
-    },
-    {
-        "question": "Wednesday",
-        "definition1": "the fourth day of the week, following Tuesday.",
-        "definition2": "the fourth day of the week; third day of the working week"
     },
     {
         "question": "week",
@@ -4748,11 +4623,6 @@
         "question": "writer",
         "definition1": "a person whose job is writing books, stories, articles, etc.",
         "definition2": "a person who has written a particular thing"
-    },
-    {
-        "question": "Xmas",
-        "definition1": "Often Offensive.Christmas.",
-        "definition2": "informal."
     },
     {
         "question": "year",
@@ -5703,11 +5573,6 @@
         "question": "battle",
         "definition1": "a fight between armies, ships or planes, especially during a war; a violent fight between groups of people",
         "definition2": "a competition, an argument or a struggle between people or groups of people trying to win power or control"
-    },
-    {
-        "question": "BBQ",
-        "definition1": "barbecue.",
-        "definition2": "barbecue"
     },
     {
         "question": "bead",
@@ -7680,11 +7545,6 @@
         "definition2": "an offensive word for a person who is physically alive but not capable of much mental or physical activity, for example because of an accident or illness"
     },
     {
-        "question": "café",
-        "definition1": "a small, unpretentious restaurant, often with exterior seating on a patio or extending onto the sidewalk.",
-        "definition2": "coffee"
-    },
-    {
         "question": "calendar",
         "definition1": "a page or series of pages showing the days, weeks and months of a particular year, especially one that you hang on a wall",
         "definition2": "a record of what you have to do each day; the book or piece of software in which you record this"
@@ -7818,11 +7678,6 @@
         "question": "completion",
         "definition1": "the act or process of finishing something; the state of being finished and complete",
         "definition2": "the formal act of completing the sale of property, for example the sale of a house"
-    },
-    {
-        "question": "Confucius",
-        "definition1": "Kǔng Qiū,551? b.c.–478? b.c.,Chinese philosopher and teacher.",
-        "definition2": "Confucius551 bc479 bcMChinesePHILOSOPHY philosopherEDUCATION teacher of ethicsChinese nameKong ZiorK'ung Fu-tse.551–479bc, Chinese philosopher and teacher of ethics (seeConfucianism). His doctrines were compiled after his death under the titleThe Analects of Confucius"
     },
     {
         "question": "congratulation",
@@ -8465,11 +8320,6 @@
         "definition2": "a person who has magic powers"
     },
     {
-        "question": "Mandarin",
-        "definition1": "(in the Chinese Empire) a member of any of the nine ranks of public officials, each distinguished by a particular kind of button worn on the cap.",
-        "definition2": "(initial capital letter)the standard Chinese language."
-    },
-    {
         "question": "manner",
         "definition1": "behaviour that is considered to be polite in a particular society or culture",
         "definition2": "the way that something is done or happens"
@@ -9023,11 +8873,6 @@
         "question": "symbol",
         "definition1": "a person, an object, an event, etc. that represents a more general quality or situation",
         "definition2": "a sign, number, letter, etc. that has a fixed meaning, especially in science, mathematics and music"
-    },
-    {
-        "question": "table tennis",
-        "definition1": "a game resembling tennis, played on a table with small paddles and a hollow celluloid or plastic ball.",
-        "definition2": "a miniature form of tennis played on a table with small bats and a light hollow ball"
     },
     {
         "question": "talent",
@@ -12145,11 +11990,6 @@
         "definition2": "the round or curved part of an object"
     },
     {
-        "question": "Bible",
-        "definition1": "the collection of sacred writings of the Christian religion, comprising the Old and New Testaments.",
-        "definition2": "Hebrew Bible(def)."
-    },
-    {
         "question": "billion",
         "definition1": "1 000 000 000; one thousand million",
         "definition2": "a very large amount"
@@ -12278,11 +12118,6 @@
         "question": "chimney",
         "definition1": "a structure through which smoke or steam is carried up away from a fire, etc. and through the roof of a building; the part of this that is above the roof",
         "definition2": "a narrow opening in an area of rock that a person can climb up"
-    },
-    {
-        "question": "China",
-        "definition1": "a translucent ceramic material, biscuit-fired at a high temperature, its glaze fired at a low temperature.",
-        "definition2": "any porcelain ware."
     },
     {
         "question": "circus",
@@ -13010,11 +12845,6 @@
         "definition2": "a small ball of coloured glass that children roll along the ground in a game"
     },
     {
-        "question": "March",
-        "definition1": "to walk with regular and measured tread, as soldiers on parade; advance in step in an organized body.",
-        "definition2": "to walk in a stately, deliberate manner"
-    },
-    {
         "question": "math",
         "definition1": "mathematics, especially as a subject in school",
         "definition2": "the process of calculating using numbers"
@@ -13710,11 +13540,6 @@
         "definition2": "a special piece of clothing that covers the upper part of the body"
     },
     {
-        "question": "vice-president",
-        "definition1": "the person below the president of a country in rank, who takes control of the country if the president is not able to",
-        "definition2": "a person in charge of a particular part of a business company"
-    },
-    {
         "question": "victim",
         "definition1": "a person who has been attacked, injured or killed as the result of a crime, a disease, an accident, etc.",
         "definition2": "a person who has been tricked"
@@ -13768,11 +13593,6 @@
         "question": "wrist",
         "definition1": "the joint between the hand and the arm",
         "definition2": "a warning or mild punishment"
-    },
-    {
-        "question": "X-ray",
-        "definition1": "Physics.",
-        "definition2": "a radiograph made by x-rays."
     },
     {
         "question": "abstract",
@@ -15215,11 +15035,6 @@
         "definition2": "a message sent by email"
     },
     {
-        "question": "e-mail",
-        "definition1": "short forelectronic mail",
-        "definition2": "to contact (a person) by electronic mail"
-    },
-    {
         "question": "embarrass",
         "definition1": "to make somebody feel shy, uncomfortable or ashamed, especially in a social situation",
         "definition2": "to cause problems or difficulties for somebody"
@@ -16295,11 +16110,6 @@
         "definition2": "a military vehicle or ship that carries soldiers or equipment from one place to another"
     },
     {
-        "question": "CD",
-        "definition1": "candela; candelas.",
-        "definition2": "Alsocd.cord; cords."
-    },
-    {
         "question": "celebration",
         "definition1": "a special event that people organize in order to celebrate something",
         "definition2": "the act of celebrating something"
@@ -16393,11 +16203,6 @@
         "question": "community",
         "definition1": "all the people who live in a particular area, country, etc. when talked about as a group",
         "definition2": "a group of people who share the same religion, race, job, etc."
-    },
-    {
-        "question": "compact disk",
-        "definition1": "an optical disk approximately 4.75 inches (12 centimeters) in diameter, on which a program, data, music, etc., is digitally encoded for a laser beam to scan, decode, and transmit to a playback system, computer monitor, or television set.CD",
-        "definition2": "A small optical disk on which data such as music, text, or graphic images is digitally encoded."
     },
     {
         "question": "companion",
@@ -17110,11 +16915,6 @@
         "definition2": "if one thing has an interaction with another, or if there is an interaction between two things, the two things have an effect on each other"
     },
     {
-        "question": "Internet",
-        "definition1": "Usuallythe internet(except when used before a noun).a vast computer network linking smaller computer networks worldwide includes commercial, educational, governmental, and other networks, all of which use the same set of communications protocols",
-        "definition2": "the internet"
-    },
-    {
         "question": "interruption",
         "definition1": "something that temporarily stops an activity or a situation; a time when an activity is stopped",
         "definition2": "the act of interrupting somebody/something and of stopping them from speaking"
@@ -17218,11 +17018,6 @@
         "question": "luxury",
         "definition1": "the fact of enjoying special and expensive things, particularly food and drink, clothes and places",
         "definition2": "a thing that is expensive and pleasant but not essential"
-    },
-    {
-        "question": "ma'am",
-        "definition1": "madam(def1).",
-        "definition2": "(in Britain) a term used in addressing the queen or a royal princess."
     },
     {
         "question": "machinery",
@@ -17748,11 +17543,6 @@
         "question": "transportation",
         "definition1": "a system for carrying people or goods from one place to another using vehicles, roads, etc.",
         "definition2": "a vehicle or method of travel"
-    },
-    {
-        "question": "tug-of-war",
-        "definition1": "a sporting event in which two teams pull at opposite ends of a rope until one team drags the other over a line on the ground",
-        "definition2": "a situation in which two people or groups try very hard to get or keep the same thing"
     },
     {
         "question": "typist",
@@ -20370,11 +20160,6 @@
         "definition2": "to make an unpleasant situation worse"
     },
     {
-        "question": "AI",
-        "definition1": "artificial intelligence",
-        "definition2": "relating to or produced with the aid of a computer, robot, programmed device, or software application able to perform operations and tasks analogous to human learning and decision making"
-    },
-    {
         "question": "airway",
         "definition1": "the passage from the nose and throat to the lungs, through which you breathe",
         "definition2": "a route regularly used by planes"
@@ -20580,11 +20365,6 @@
         "definition2": "the state of being famous"
     },
     {
-        "question": "Centigrade",
-        "definition1": "divided into 100 degrees, as a scale.",
-        "definition2": "(initial capital letter)Celsius(def2).cent.C"
-    },
-    {
         "question": "ceremony",
         "definition1": "a public or religious occasion that includes a series of formal or traditional actions",
         "definition2": "formal behaviour; traditional actions and words used on particular formal occasions"
@@ -20593,16 +20373,6 @@
         "question": "chairman",
         "definition1": "the person in charge of a meeting, who tells people when they can speak, etc.",
         "definition2": "the person in charge of a committee, a company, etc."
-    },
-    {
-        "question": "check-in",
-        "definition1": "to go to a desk in a hotel, an airport, etc. and tell an official there that you have arrived",
-        "definition2": "to leave bags or cases with an official to be put on a plane or train"
-    },
-    {
-        "question": "check-out",
-        "definition1": "to be found to be true or acceptable after being examined",
-        "definition2": "to pay your bill and leave a hotel, etc."
     },
     {
         "question": "checkup",
@@ -20868,21 +20638,6 @@
         "question": "fabric",
         "definition1": "material made by weaving wool, cotton, silk, etc., used for making clothes, curtains, etc. and for covering furniture",
         "definition2": "the basic structure of a society, an organization, etc. that enables it to function successfully"
-    },
-    {
-        "question": "Fahrenheit",
-        "definition1": "Ga·bri·el Da·ni·el[gah, -b, r, ee-el , dah, -nee-el],1686–1736,German physicist devised a temperature scale and introduced the use of mercury in thermometers.",
-        "definition2": "noting, pertaining to, or measured according to a temperature scaleFahrenheitscalein which 32° represents the ice point and 212° the steam point.F"
-    },
-    {
-        "question": "fiancé",
-        "definition1": "a man engaged to be married.",
-        "definition2": "a man who is engaged to be married"
-    },
-    {
-        "question": "fiancée",
-        "definition1": "a woman engaged to be married.",
-        "definition2": "a woman who is engaged to be married"
     },
     {
         "question": "fiber",
@@ -23825,11 +23580,6 @@
         "definition2": "something that makes you slightly angry"
     },
     {
-        "question": "Antarctic",
-        "definition1": "Sometimesantarctic.of, at, or near theSouth Pole.",
-        "definition2": "the Antarctic,the continent of Antarctica along with theSouthern Ocean."
-    },
-    {
         "question": "antenna",
         "definition1": "either of the two long thin parts on the heads of some insects and some animals that live in shells, used to feel and touch things with",
         "definition2": "a piece of equipment made of wire or long straight pieces of metal for receiving or sending radio and television signals"
@@ -23838,11 +23588,6 @@
         "question": "anticipation",
         "definition1": "the fact of seeing that something might happen in the future and perhaps doing something about it now",
         "definition2": "a feeling of excitement about something (usually something good) that is going to happen"
-    },
-    {
-        "question": "Arctic",
-        "definition1": "Sometimesarc·tic.of, relating to, or located at or near the North Pole",
-        "definition2": "Sometimesarc·tic.coming from the North Pole or the Arctic region"
     },
     {
         "question": "artery",
@@ -24555,11 +24300,6 @@
         "definition2": "a person who studies languages or linguistics"
     },
     {
-        "question": "liquid crystal display",
-        "definition1": "a flat-screen display in which an array of liquid-crystal elements can be selectively activated to generate an image, an electric field applied to each element altering its optical properties; it is used, for example, in portable computers, digital watches, and calculatorsLCD",
-        "definition2": "SeeLCD"
-    },
-    {
         "question": "literacy",
         "definition1": "the ability to read and write",
         "definition2": "knowledge or skills in a specific area"
@@ -25243,10 +24983,5 @@
         "question": "windshield",
         "definition1": "the window across the front of a vehicle",
         "definition2": "a glass or plastic screen that provides protection from the wind, for example at the front of a motorcycle"
-    },
-    {
-        "question": "Xerox",
-        "definition1": "a brand name for a copying machine for reproducing printed, written, or pictorial matter by xerography.",
-        "definition2": "(sometimes lowercase)a copy made on a xerographic copying machine."
     }
 ]

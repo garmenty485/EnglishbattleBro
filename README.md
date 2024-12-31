@@ -16,7 +16,7 @@ Author's profile: https://www.linkedin.com/in/chia-ming-hu-683382255/
 
 ## Features
 
-- **Over 6000 Simple Words but most of them are basic**: Definitions are scraped from well-known English-to-English dictionaries
+- **Over 5000 Words but most of them are basic**: Definitions are scraped from well-known English-to-English dictionaries
 - **Easy to Play**: Play with your keyboard and it's like hangman 
 - **Solo Practice Mode**: play at your own pace
 - **Real-time Battle Mode**: Compete with other players in real-time
