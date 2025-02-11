@@ -25178,6 +25178,17 @@
         "question": "scapegoat",
         "definition1": "a person who is blamed for something bad that someone else has done or for some failure.",
         "definition2": "a person or group made to bear the blame for others or to suffer in their place."
+    },
+    {
+        "question": "collateral",
+        "definition1": "something pledged as security for repayment of a loan, to be forfeited in the event of a default.",
+        "definition2": "valuable property owned by someone who wants to borrow money, that they agree will become the property of the company or person who lends the money if the debt is not paid back."
+    },
+    {
+        "question": "consortium",
+        "definition1": "an association of two or more individuals or organizations formed to undertake a specific project or business activity.",
+        "definition2": "a cooperative arrangement among groups or companies to achieve a common goal."
     }
+    
 
 ]
